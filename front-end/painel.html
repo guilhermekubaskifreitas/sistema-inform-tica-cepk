@@ -603,13 +603,14 @@
   </main>
 </div>
 
+<script src="api.js"></script>
 <script>
   (function () {
     "use strict";
 
     // Dados do usuário logado (simulação — substituir por sessão real)
     const urlParams = new URLSearchParams(location.search);
-    const storedEmail = urlParams.get("email") || localStorage.getItem("cepk_user_email") || sessionStorage.getItem("cepk_user_email") || "";
+    const storedEmail = (urlParams.get("email") || localStorage.getItem("cepk_user_email") || sessionStorage.getItem("cepk_user_email") || "").trim().toLowerCase();
 
     // Proteção de rota: sem sessão ativa → volta para o login, lembrando a aba atual
     if (!storedEmail) {
@@ -642,6 +643,35 @@
       }
     }
 
+    function saveReservas(email, reservas) {
+      let all = {};
+      try { all = JSON.parse(localStorage.getItem("cepk_reservas") || "{}"); } catch (err) { all = {}; }
+      all[email] = reservas;
+      localStorage.setItem("cepk_reservas", JSON.stringify(all));
+    }
+
+    function normalizeReserva(reserva) {
+      return window.CEPKApi && window.CEPKApi.normalizeReservation ? window.CEPKApi.normalizeReservation(reserva) : reserva;
+    }
+
+    let syncEmAndamento = false;
+    async function syncReservasApi() {
+      if (syncEmAndamento || !window.CEPKApi || typeof window.CEPKApi.reservations !== "function") return;
+      syncEmAndamento = true;
+      try {
+        const result = await window.CEPKApi.reservations();
+        if (!result.ok || !result.data || !Array.isArray(result.data.reservations)) return;
+        const apiReservas = result.data.reservations.filter((r) => !r.professorEmail || String(r.professorEmail).toLowerCase() === storedEmail);
+        const merged = window.CEPKApi.mergeReservations
+          ? window.CEPKApi.mergeReservations(getReservas(storedEmail), apiReservas)
+          : apiReservas.map(normalizeReserva);
+        saveReservas(storedEmail, merged);
+        renderTabelas();
+      } finally {
+        syncEmAndamento = false;
+      }
+    }
+
     function escHtml(v) {
       return String(v).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     }
@@ -666,7 +696,7 @@
     }
 
     function renderTabelas() {
-      const reservas = getReservas(user.email);
+      const reservas = getReservas(user.email).map(normalizeReserva);
       const dashBody = document.getElementById("dash-reservas-body");
       const resBody = document.getElementById("reservas-body");
 
@@ -793,13 +823,17 @@
     });
 
     // Logout
-    document.getElementById("linkLogout").addEventListener("click", (e) => {
+    document.getElementById("linkLogout").addEventListener("click", async (e) => {
       e.preventDefault();
       if (confirm("Deseja realmente sair do sistema?")) {
-        localStorage.removeItem("cepk_user_name");
-        localStorage.removeItem("cepk_user_email");
-        sessionStorage.removeItem("cepk_user_name");
-        sessionStorage.removeItem("cepk_user_email");
+        if (window.CEPKApi) {
+          await window.CEPKApi.logout();
+          window.CEPKApi.clearSession();
+        }
+        ["cepk_user_name", "cepk_user_email", "cepk_user_pass", "cepk_user_subject", "cepk_user_role", "cepk_prova_token"].forEach((key) => {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        });
         window.location.href = "login.html?dest=" + encodeURIComponent("painel.html" + window.location.hash);
       }
     });
@@ -810,6 +844,9 @@
     const hash = window.location.hash.replace(/^#/, "");
     const abas = { dashboard: "view-dashboard", cadastros: "view-cadastros" };
     showView(abas[hash] || "view-dashboard");
+    syncReservasApi();
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) syncReservasApi(); });
+    window.addEventListener("focus", syncReservasApi);
   })();
 </script>
 </body>

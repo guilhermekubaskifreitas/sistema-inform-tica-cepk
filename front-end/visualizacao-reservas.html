@@ -590,13 +590,14 @@
   </main>
 </div>
 
+<script src="api.js"></script>
 <script>
   (function () {
     "use strict";
 
     // Sessão: sem usuário logado → volta para o login
     const urlParams = new URLSearchParams(location.search);
-    const storedEmail = urlParams.get("email") || localStorage.getItem("cepk_user_email") || sessionStorage.getItem("cepk_user_email") || "";
+    const storedEmail = (urlParams.get("email") || localStorage.getItem("cepk_user_email") || sessionStorage.getItem("cepk_user_email") || "").trim().toLowerCase();
     if (!storedEmail) {
       window.location.href = "login.html?dest=" + encodeURIComponent("visualizacao-reservas.html");
       return;
@@ -611,6 +612,17 @@
       } catch (err) {
         return [];
       }
+    }
+
+    function saveReservas(email, reservas) {
+      let all = {};
+      try { all = JSON.parse(localStorage.getItem("cepk_reservas") || "{}"); } catch (err) { all = {}; }
+      all[email] = reservas;
+      localStorage.setItem("cepk_reservas", JSON.stringify(all));
+    }
+
+    function normalizeReserva(reserva) {
+      return window.CEPKApi && window.CEPKApi.normalizeReservation ? window.CEPKApi.normalizeReservation(reserva) : reserva;
     }
 
     function escHtml(v) {
@@ -632,7 +644,7 @@
 
     function buildRows() {
       const tbody = document.querySelector("#tabela-reservas tbody");
-      const reservas = getReservas(storedEmail);
+      const reservas = getReservas(storedEmail).map(normalizeReserva);
       tbody.innerHTML = reservas.length ? reservas.map((r) =>
         "<tr data-status=\"" + escHtml(r.status) + "\">" +
         "<td>" + escHtml(r.lab) + "</td>" +
@@ -647,7 +659,8 @@
       return Array.from(tbody.querySelectorAll("tr"));
     }
 
-    let rows = buildRows();
+    let rows = [];
+    let filtroAtual = "todos";
 
     function updateStats() {
       const count = { aprovada: 0, pendente: 0, recusada: 0 };
@@ -660,14 +673,11 @@
       document.getElementById("statPendentes").textContent = count.pendente;
       document.getElementById("statRecusadas").textContent = count.recusada;
     }
-    updateStats();
-
-    if (rows.length === 0) emptyMsg.classList.add("show");
-    else emptyMsg.classList.remove("show");
 
     const filterBtns = Array.from(document.querySelectorAll("#filters .filter"));
 
     function applyFilter(status) {
+      filtroAtual = status;
       let visible = 0;
       rows.forEach((r) => {
         const show = status === "todos" || r.dataset.status === status;
@@ -678,6 +688,12 @@
       filterBtns.forEach((b) => b.classList.toggle("active", b.dataset.filter === status));
     }
 
+    function renderTudo() {
+      rows = buildRows();
+      updateStats();
+      applyFilter(filtroAtual);
+    }
+
     filterBtns.forEach((b) => {
       b.addEventListener("click", () => applyFilter(b.dataset.filter));
     });
@@ -686,8 +702,31 @@
     const statusParam = urlParams.get("status");
     if (statusParam) {
       const valid = ["todos", "aprovada", "pendente", "recusada"];
-      if (valid.includes(statusParam)) applyFilter(statusParam);
+      if (valid.includes(statusParam)) filtroAtual = statusParam;
     }
+
+    renderTudo();
+
+    let syncEmAndamento = false;
+    async function syncReservas() {
+      if (syncEmAndamento || !window.CEPKApi || typeof window.CEPKApi.reservations !== "function") return;
+      syncEmAndamento = true;
+      try {
+        const result = await window.CEPKApi.reservations();
+        if (!result.ok || !result.data || !Array.isArray(result.data.reservations)) return;
+        const apiReservas = result.data.reservations.filter((r) => !r.professorEmail || String(r.professorEmail).toLowerCase() === storedEmail);
+        const merged = window.CEPKApi.mergeReservations
+          ? window.CEPKApi.mergeReservations(getReservas(storedEmail), apiReservas)
+          : apiReservas.map(normalizeReserva);
+        saveReservas(storedEmail, merged);
+        renderTudo();
+      } finally {
+        syncEmAndamento = false;
+      }
+    }
+    syncReservas();
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) syncReservas(); });
+    window.addEventListener("focus", syncReservas);
 
     // Delegação: navegação funciona também nas linhas geradas dinamicamente
     document.addEventListener("click", (e) => {
@@ -710,9 +749,17 @@
     });
 
     // Logout
-    document.getElementById("linkLogout").addEventListener("click", (e) => {
+    document.getElementById("linkLogout").addEventListener("click", async (e) => {
       e.preventDefault();
       if (confirm("Deseja realmente sair do sistema?")) {
+        if (window.CEPKApi) {
+          await window.CEPKApi.logout();
+          window.CEPKApi.clearSession();
+        }
+        ["cepk_user_name", "cepk_user_email", "cepk_user_pass", "cepk_user_subject", "cepk_user_role", "cepk_prova_token"].forEach((key) => {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        });
         window.location.href = "login.html?dest=" + encodeURIComponent("visualizacao-reservas.html");
       }
     });

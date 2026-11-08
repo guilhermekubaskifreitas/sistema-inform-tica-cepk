@@ -433,6 +433,7 @@
   </main>
 </div>
 
+<script src="api.js"></script>
 <script>
   (function () {
     "use strict";
@@ -466,13 +467,17 @@
     });
 
     // Logout
-    document.getElementById("linkLogout").addEventListener("click", (e) => {
+    document.getElementById("linkLogout").addEventListener("click", async (e) => {
       e.preventDefault();
       if (confirm("Deseja realmente sair do sistema?")) {
-        localStorage.removeItem("cepk_user_name");
-        localStorage.removeItem("cepk_user_email");
-        sessionStorage.removeItem("cepk_user_name");
-        sessionStorage.removeItem("cepk_user_email");
+        if (window.CEPKApi) {
+          await window.CEPKApi.logout();
+          window.CEPKApi.clearSession();
+        }
+        ["cepk_user_name", "cepk_user_email", "cepk_user_pass", "cepk_user_subject", "cepk_user_role", "cepk_prova_token"].forEach((key) => {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        });
         window.location.href = "login.html?dest=" + encodeURIComponent("laboratorios.html");
       }
     });
