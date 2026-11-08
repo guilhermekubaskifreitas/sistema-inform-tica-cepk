@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: cepk-mock
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: APPROVAL_EMAIL
+        value: guilhermekf55@gmail.com
+      - key: RESERVATION_EMAIL
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM
+        value: onboarding@resend.dev
+      - key: USE_FORMSUBMIT
+        value: "false"

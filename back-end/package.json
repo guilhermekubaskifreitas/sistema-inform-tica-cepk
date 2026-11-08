@@ -1,0 +1,17 @@
+{
+  "name": "cepk-mock-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mock API da Agenda dos Laboratorios CEPK",
+  "main": "scripts/mock-api.js",
+  "scripts": {
+    "start": "node scripts/mock-api.js",
+    "mock": "node scripts/mock-api.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}
