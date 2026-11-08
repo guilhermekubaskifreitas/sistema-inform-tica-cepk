@@ -4,7 +4,7 @@
   var API_KEY = "cepk_api_base";
   var TOKEN_KEY = "cepk_access_token";
   var USER_KEY = "cepk_user";
-  var DEFAULT_BASE = "http://backend-informatica-cepk.onrender.com";
+  var DEFAULT_BASE = "https://backend-informatica-cepk.onrender.com";
 
   function normalizeBase(value) {
     return String(value || "").trim().replace(/\/+$/, "");
