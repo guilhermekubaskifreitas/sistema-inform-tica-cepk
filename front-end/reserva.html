@@ -506,6 +506,8 @@
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 </style>
+<link rel="stylesheet" href="theme.css" />
+<script src="theme.js"></script>
 </head>
 <body>
 
@@ -594,23 +596,27 @@
               </div>
             </div>
 
-            <div class="field">
-              <label for="res-dia">3 · Dia da semana</label>
-              <div class="input-wrap">
-                <select id="res-dia" name="dia" required>
-                  <option value="">Selecione o dia</option>
-                  <option value="Segunda">Segunda</option>
-                  <option value="Terça">Terça</option>
-                  <option value="Quarta">Quarta</option>
-                  <option value="Quinta">Quinta</option>
-                  <option value="Sexta">Sexta</option>
-                </select>
+            <div class="field" style="grid-column:1/-1">
+              <label>3 · Dias da semana <span style="color:var(--ink-500);font-weight:500">— clique em um ou mais</span></label>
+              <div class="chips" id="res-dias" role="group" aria-label="Dias da semana">
+                <button type="button" class="chip" data-value="Segunda">Segunda</button>
+                <button type="button" class="chip" data-value="Terça">Terça</button>
+                <button type="button" class="chip" data-value="Quarta">Quarta</button>
+                <button type="button" class="chip" data-value="Quinta">Quinta</button>
+                <button type="button" class="chip" data-value="Sexta">Sexta</button>
               </div>
             </div>
 
             <div class="field">
               <label>4 · Aulas <span style="color:var(--ink-500);font-weight:500">— clique em uma ou mais</span></label>
               <div class="chips" id="res-aulas" role="group" aria-label="Aulas do dia"></div>
+            </div>
+
+            <div class="field" id="res-disciplina-field" hidden>
+              <label for="res-disciplina">5 · Disciplina da reserva</label>
+              <div class="input-wrap">
+                <select id="res-disciplina" name="disciplina" required></select>
+              </div>
             </div>
           </div>
 
@@ -686,10 +692,38 @@
       return PERIODOS[turno] || [];
     }
 
+    const SUBJECTS = [
+      "Matemática", "Português", "Química", "Biologia", "Geografia", "Física",
+      "História", "Educação Física", "Inglês", "Arte", "Banco de Dados",
+      "Introdução à Computação", "Introdução à Programação", "Lógica Computacional",
+      "Análise e Métodos para Sistema", "Projeto/Outro"
+    ];
+
     const resTurno = document.getElementById("res-turno");
-    const resDia = document.getElementById("res-dia");
+    const resDias = document.getElementById("res-dias");
     const resAulas = document.getElementById("res-aulas");
+    const resDisciplinaField = document.getElementById("res-disciplina-field");
+    const resDisciplina = document.getElementById("res-disciplina");
     const gridBody = document.getElementById("grid-body");
+
+    function getUserSubjects() {
+      const user = window.CEPKApi && window.CEPKApi.user ? window.CEPKApi.user() : null;
+      const fromUser = user && Array.isArray(user.subjects) ? user.subjects : [];
+      const stored = localStorage.getItem("cepk_user_subject") || sessionStorage.getItem("cepk_user_subject") || "";
+      const fromStorage = stored.split(/[,;]/).map(function (item) { return item.trim(); }).filter(Boolean);
+      return fromUser.concat(fromStorage).filter(function (item, index, list) { return list.indexOf(item) === index; });
+    }
+
+    function renderDisciplinas() {
+      const subjects = getUserSubjects();
+      const options = subjects.length ? subjects : SUBJECTS;
+      resDisciplina.innerHTML = options.map(function (subject) {
+        return "<option value=\"" + subject.replace(/"/g, "&quot;") + "\">" + subject + "</option>";
+      }).join("");
+      const multiple = options.length > 1;
+      resDisciplinaField.hidden = !multiple;
+      if (!multiple && options.length) resDisciplina.value = options[0];
+    }
 
     // Chips de aulas: renderiza conforme o turno e permite seleção múltipla
     function renderChipsAulas() {
@@ -719,19 +753,30 @@
       return sel.sort(function (a, b) { return a - b; });
     }
 
-    // Marca na grade as células do dia com aulas selecionadas
+    function getDiasSelecionados() {
+      return Array.from(resDias.querySelectorAll(".chip.sel")).map(function (chip) { return chip.dataset.value; });
+    }
+
+    // Marca na grade as células dos dias com aulas selecionadas
     function marcarGrid() {
       const aulas = getAulasSelecionadas();
-      const dia = DIA_MAP[resDia.value] || resDia.value;
+      const dias = getDiasSelecionados().map(function (dia) { return DIA_MAP[dia] || dia; });
       gridBody.querySelectorAll("td[data-aula]").forEach(function (td) {
-        const on = aulas.indexOf(Number(td.dataset.aula)) !== -1 && dia && td.dataset.dia === dia;
+        const on = aulas.indexOf(Number(td.dataset.aula)) !== -1 && dias.indexOf(td.dataset.dia) !== -1;
         td.textContent = on ? "✓" : "·";
         td.classList.toggle("marcada", on);
       });
     }
 
+    resDias.querySelectorAll(".chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        chip.classList.toggle("sel");
+        marcarGrid();
+      });
+    });
+
+    renderDisciplinas();
     resTurno.addEventListener("change", renderChipsAulas);
-    resDia.addEventListener("change", marcarGrid);
     renderChipsAulas();
 
     function renderGrid() {
@@ -785,10 +830,11 @@
       e.preventDefault();
       const lab = document.getElementById("res-lab").value;
       const turno = resTurno.value;
-      const dia = document.getElementById("res-dia").value;
+      const dias = getDiasSelecionados();
       const aulas = getAulasSelecionadas();
-      if (!lab || !turno || !dia || aulas.length === 0) {
-        alert("Preencha todos os itens do checklist e selecione pelo menos uma aula para criar a reserva.");
+      const disciplina = resDisciplina.value || getUserSubjects()[0] || "";
+      if (!lab || !turno || dias.length === 0 || aulas.length === 0 || !disciplina) {
+        alert("Preencha todos os itens do checklist e selecione pelo menos um dia, uma aula e a disciplina da reserva.");
         return;
       }
 
@@ -804,9 +850,10 @@
         lab: lab,
         professor: storedName,
         professorEmail: storedEmail,
-        disciplina: localStorage.getItem("cepk_user_subject") || "",
+        disciplina: disciplina,
         turno: turno,
-        dia: dia,
+        dias: dias,
+        dia: dias.join(", "),
         aulas: aulas,
         aula: aulas.join(","),
         status: "pendente",
@@ -846,6 +893,7 @@
       return window.CEPKApi.createReservation({
         lab: r.lab,
         dia: r.dia,
+        dias: r.dias,
         turno: r.turno,
         aulas: r.aulas,
         disciplinas: disciplina ? [disciplina] : []
