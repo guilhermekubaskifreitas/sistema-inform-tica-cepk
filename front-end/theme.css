@@ -159,14 +159,15 @@ select option {
 
 #subjects-pop {
   max-height: 360px;
-  overflow-y: auto;
+  overflow-y: scroll;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: var(--blue-500) var(--surface-2);
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: var(--cyan-400) var(--surface-2);
 }
 
 #subjects-pop::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 
 #subjects-pop::-webkit-scrollbar-track {
@@ -175,13 +176,13 @@ select option {
 }
 
 #subjects-pop::-webkit-scrollbar-thumb {
-  background: var(--blue-500);
+  background: var(--cyan-400);
   border: 2px solid var(--surface-2);
   border-radius: 8px;
 }
 
 #subjects-pop::-webkit-scrollbar-thumb:hover {
-  background: var(--blue-600);
+  background: var(--blue-500);
 }
 
 .check-row input {
