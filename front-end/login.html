@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
 <script>
   (function () {
     // Garante que o caminho se adapte entre pastas prototypes/ e frontend/
@@ -882,9 +883,21 @@
       transition-duration: 0.001ms !important;
     }
   }
+  #subjects-pop {
+    max-height: 360px;
+    overflow-y: scroll !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: auto;
+    scrollbar-color: var(--cyan-400) var(--surface-2);
+  }
+  #subjects-pop::-webkit-scrollbar { width: 12px; }
+  #subjects-pop::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 8px; }
+  #subjects-pop::-webkit-scrollbar-thumb { background: var(--cyan-400); border: 2px solid var(--surface-2); border-radius: 8px; }
+  #subjects-pop::-webkit-scrollbar-thumb:hover { background: var(--blue-500); }
 </style>
-<link rel="stylesheet" href="theme.css" />
-<script src="theme.js"></script>
+<link rel="stylesheet" href="theme.css?v=20261109h" />
+<script src="theme.js?v=20261109h"></script>
 </head>
 <body>
 
