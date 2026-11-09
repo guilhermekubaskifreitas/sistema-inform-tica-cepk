@@ -160,6 +160,28 @@ select option {
 #subjects-pop {
   max-height: 360px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-500) var(--surface-2);
+}
+
+#subjects-pop::-webkit-scrollbar {
+  width: 10px;
+}
+
+#subjects-pop::-webkit-scrollbar-track {
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+
+#subjects-pop::-webkit-scrollbar-thumb {
+  background: var(--blue-500);
+  border: 2px solid var(--surface-2);
+  border-radius: 8px;
+}
+
+#subjects-pop::-webkit-scrollbar-thumb:hover {
+  background: var(--blue-600);
 }
 
 .check-row input {
