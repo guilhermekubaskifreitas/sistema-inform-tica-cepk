@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
 <script>
   (function () {
     // Garante que o caminho se adapte entre pastas prototypes/ e frontend/
@@ -9,9 +11,6 @@
     });
   })();
 </script>
-</head>
-</html><head>
-<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="Acesso ao sistema de agendamento dos laboratórios de informática do Colégio Estadual Presidente Kennedy." />
 <title>Entrar · Agenda dos Laboratórios · CEPK</title>
@@ -884,6 +883,8 @@
     }
   }
 </style>
+<link rel="stylesheet" href="theme.css" />
+<script src="theme.js"></script>
 </head>
 <body>
 
@@ -1082,33 +1083,38 @@
             </div>
 
             <div class="field" id="r-subject">
-              <label for="reg-subject">Disciplina principal</label>
+              <label for="reg-subject">Disciplinas que leciona</label>
               <div class="input-wrap">
                 <span class="leading">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
                 </span>
-                <input id="reg-subject" name="subject" type="text" readonly placeholder="Selecione uma disciplina" autocomplete="off" required />
+                <input id="reg-subject" name="subject" type="text" readonly placeholder="Selecione uma ou mais disciplinas" autocomplete="off" required />
                 <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                <div class="fill-pop" id="subjects-pop" role="listbox" aria-label="Disciplinas">
-                  <button type="button" class="row" data-value="Matemática"><span class="meta">Matemática</span></button>
-                  <button type="button" class="row" data-value="Português"><span class="meta">Português</span></button>
-                  <button type="button" class="row" data-value="Química"><span class="meta">Química</span></button>
-                  <button type="button" class="row" data-value="Biologia"><span class="meta">Biologia</span></button>
-                  <button type="button" class="row" data-value="Geografia"><span class="meta">Geografia</span></button>
-                  <button type="button" class="row" data-value="Física"><span class="meta">Física</span></button>
-                  <button type="button" class="row" data-value="História"><span class="meta">História</span></button>
-                  <button type="button" class="row" data-value="Educação Física"><span class="meta">Educação Física</span></button>
-                  <button type="button" class="row" data-value="Inglês"><span class="meta">Inglês</span></button>
-                  <button type="button" class="row" data-value="Arte"><span class="meta">Arte</span></button>
-                  <button type="button" class="row" data-value="Banco de Dados"><span class="meta">Banco de Dados</span></button>
-                  <button type="button" class="row" data-value="Introdução à Computação"><span class="meta">Introdução à Computação</span></button>
-                  <button type="button" class="row" data-value="Introdução à Programação"><span class="meta">Introdução à Programação</span></button>
-                  <button type="button" class="row" data-value="Lógica Computacional"><span class="meta">Lógica Computacional</span></button>
-                  <button type="button" class="row" data-value="Análise e Métodos para Sistema"><span class="meta">Análise e Métodos para Sistema</span></button>
-                  <button type="button" class="row" data-value="Projeto/Outro"><span class="meta">Projeto/Outro</span></button>
+                <div class="fill-pop" id="subjects-pop" role="group" aria-label="Disciplinas">
+                  <div class="pop-head">Selecione uma ou mais disciplinas</div>
+                  <button type="button" class="row" data-value="Matemática" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Matemática</span></button>
+                  <button type="button" class="row" data-value="Português" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Português</span></button>
+                  <button type="button" class="row" data-value="Química" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Química</span></button>
+                  <button type="button" class="row" data-value="Biologia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Biologia</span></button>
+                  <button type="button" class="row" data-value="Geografia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Geografia</span></button>
+                  <button type="button" class="row" data-value="Física" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Física</span></button>
+                  <button type="button" class="row" data-value="História" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">História</span></button>
+                  <button type="button" class="row" data-value="Educação Física" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Educação Física</span></button>
+                  <button type="button" class="row" data-value="Inglês" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Inglês</span></button>
+                  <button type="button" class="row" data-value="Arte" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Arte</span></button>
+                  <button type="button" class="row" data-value="Banco de Dados" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Banco de Dados</span></button>
+                  <button type="button" class="row" data-value="Introdução à Computação" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Introdução à Computação</span></button>
+                  <button type="button" class="row" data-value="Introdução à Programação" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Introdução à Programação</span></button>
+                  <button type="button" class="row" data-value="Lógica Computacional" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Lógica Computacional</span></button>
+                  <button type="button" class="row" data-value="Análise e Métodos para Sistema" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Análise e Métodos para Sistema</span></button>
+                  <button type="button" class="row" data-value="Projeto/Outro" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Projeto/Outro</span></button>
+                  <div class="pop-actions">
+                    <button type="button" id="subjects-clear">Limpar</button>
+                    <button type="button" id="subjects-done" class="primary">Concluir</button>
+                  </div>
                 </div>
               </div>
-              <span class="hint"><span class="hint-text">Informe a disciplina que você leciona.</span></span>
+              <span class="hint"><span class="hint-text">Selecione ao menos uma disciplina.</span></span>
             </div>
 
             <div class="field" id="r-pass">
@@ -1308,16 +1314,41 @@
   /* ---------- Dropdown: disciplinas (cadastro) ---------- */
   const subjectsPop = $("#subjects-pop");
   const subjectInput = $("#reg-subject");
+  const subjectRows = $$("#subjects-pop .row");
+
+  function getSelectedSubjects() {
+    return subjectRows.filter((row) => row.classList.contains("selected")).map((row) => row.dataset.value);
+  }
+
+  function syncSubjects() {
+    subjectInput.value = getSelectedSubjects().join(", ");
+  }
 
   subjectInput.addEventListener("focus", () => openPop(subjectsPop));
   subjectInput.addEventListener("click", () => openPop(subjectsPop));
 
-  $$("#subjects-pop .row").forEach((row) => {
+  subjectRows.forEach((row) => {
     row.addEventListener("click", () => {
-      subjectInput.value = row.dataset.value;
+      const selected = row.classList.toggle("selected");
+      row.setAttribute("aria-pressed", String(selected));
+      syncSubjects();
       subjectInput.closest(".field").classList.remove("invalid");
-      closePops();
     });
+  });
+
+  $("#subjects-done").addEventListener("click", () => {
+    syncSubjects();
+    closePops();
+    subjectInput.focus();
+  });
+
+  $("#subjects-clear").addEventListener("click", () => {
+    subjectRows.forEach((row) => {
+      row.classList.remove("selected");
+      row.setAttribute("aria-pressed", "false");
+    });
+    syncSubjects();
+    subjectInput.focus();
   });
 
   document.addEventListener("click", (e) => {
@@ -1478,12 +1509,12 @@
   formRegister.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name    = $("#reg-name").value.trim();
-    const email   = $("#reg-email").value.trim();
-    const subject = $("#reg-subject").value.trim();
-    const pass    = $("#reg-pass").value;
-    const confirm = $("#reg-confirm").value;
-    const terms   = $("#terms").checked;
+    const name     = $("#reg-name").value.trim();
+    const email    = $("#reg-email").value.trim();
+    const subjects = getSelectedSubjects();
+    const pass     = $("#reg-pass").value;
+    const confirm  = $("#reg-confirm").value;
+    const terms    = $("#terms").checked;
     let ok = true;
 
     clearInvalid("r-name", "r-email", "r-subject", "r-pass", "r-confirm");
@@ -1496,8 +1527,8 @@
       setInvalid("r-email", true, "Informe um e-mail válido.");
       ok = false;
     }
-    if (!subject) {
-      setInvalid("r-subject", true, "Informe a disciplina que você leciona.");
+    if (subjects.length === 0) {
+      setInvalid("r-subject", true, "Selecione ao menos uma disciplina.");
       ok = false;
     }
     if (pass.length < 8) {
@@ -1534,7 +1565,7 @@
     }
     setLoading(btn, true);
 
-    const result = await window.CEPKApi.register({ name: name, email: email, subjects: [subject], password: pass });
+    const result = await window.CEPKApi.register({ name: name, email: email, subjects: subjects, password: pass });
     setLoading(btn, false);
 
     if (!result.ok) {

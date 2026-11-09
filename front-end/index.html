@@ -1998,6 +1998,8 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
 @media (max-width: 640px){#screen-visualizacao-reservas .stats{ grid-template-columns: 1fr; }
 #screen-visualizacao-reservas .header{ flex-direction: column; gap: 12px; align-items: flex-start; }}
 </style>
+<link rel="stylesheet" href="theme.css" />
+<script src="theme.js"></script>
 </head>
 <body>
 
@@ -2138,33 +2140,38 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
                 <span class="hint"><span class="hint-text">Informe um e-mail válido.</span></span>
               </div>
               <div class="field" id="r-subject">
-                <label for="reg-subject">Disciplina principal</label>
+                <label for="reg-subject">Disciplinas que leciona</label>
                 <div class="input-wrap">
                   <span class="leading">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
                   </span>
-                  <input id="reg-subject" name="subject" type="text" readonly placeholder="Selecione uma disciplina" autocomplete="off" required />
+                  <input id="reg-subject" name="subject" type="text" readonly placeholder="Selecione uma ou mais disciplinas" autocomplete="off" required />
                   <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                  <div class="fill-pop" id="subjects-pop" role="listbox" aria-label="Disciplinas">
-                    <button type="button" class="row" data-value="Matemática"><span class="meta">Matemática</span></button>
-                    <button type="button" class="row" data-value="Português"><span class="meta">Português</span></button>
-                    <button type="button" class="row" data-value="Química"><span class="meta">Química</span></button>
-                    <button type="button" class="row" data-value="Biologia"><span class="meta">Biologia</span></button>
-                    <button type="button" class="row" data-value="Geografia"><span class="meta">Geografia</span></button>
-                    <button type="button" class="row" data-value="Física"><span class="meta">Física</span></button>
-                    <button type="button" class="row" data-value="História"><span class="meta">História</span></button>
-                    <button type="button" class="row" data-value="Educação Física"><span class="meta">Educação Física</span></button>
-                    <button type="button" class="row" data-value="Inglês"><span class="meta">Inglês</span></button>
-                    <button type="button" class="row" data-value="Arte"><span class="meta">Arte</span></button>
-                    <button type="button" class="row" data-value="Banco de Dados"><span class="meta">Banco de Dados</span></button>
-                    <button type="button" class="row" data-value="Introdução à Computação"><span class="meta">Introdução à Computação</span></button>
-                    <button type="button" class="row" data-value="Introdução à Programação"><span class="meta">Introdução à Programação</span></button>
-                    <button type="button" class="row" data-value="Lógica Computacional"><span class="meta">Lógica Computacional</span></button>
-                    <button type="button" class="row" data-value="Análise e Métodos para Sistema"><span class="meta">Análise e Métodos para Sistema</span></button>
-                    <button type="button" class="row" data-value="Projeto/Outro"><span class="meta">Projeto/Outro</span></button>
+                  <div class="fill-pop" id="subjects-pop" role="group" aria-label="Disciplinas">
+                    <div class="pop-head">Selecione uma ou mais disciplinas</div>
+                    <button type="button" class="row" data-value="Matemática" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Matemática</span></button>
+                    <button type="button" class="row" data-value="Português" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Português</span></button>
+                    <button type="button" class="row" data-value="Química" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Química</span></button>
+                    <button type="button" class="row" data-value="Biologia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Biologia</span></button>
+                    <button type="button" class="row" data-value="Geografia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Geografia</span></button>
+                    <button type="button" class="row" data-value="Física" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Física</span></button>
+                    <button type="button" class="row" data-value="História" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">História</span></button>
+                    <button type="button" class="row" data-value="Educação Física" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Educação Física</span></button>
+                    <button type="button" class="row" data-value="Inglês" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Inglês</span></button>
+                    <button type="button" class="row" data-value="Arte" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Arte</span></button>
+                    <button type="button" class="row" data-value="Banco de Dados" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Banco de Dados</span></button>
+                    <button type="button" class="row" data-value="Introdução à Computação" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Introdução à Computação</span></button>
+                    <button type="button" class="row" data-value="Introdução à Programação" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Introdução à Programação</span></button>
+                    <button type="button" class="row" data-value="Lógica Computacional" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Lógica Computacional</span></button>
+                    <button type="button" class="row" data-value="Análise e Métodos para Sistema" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Análise e Métodos para Sistema</span></button>
+                    <button type="button" class="row" data-value="Projeto/Outro" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Projeto/Outro</span></button>
+                    <div class="pop-actions">
+                      <button type="button" id="subjects-clear">Limpar</button>
+                      <button type="button" id="subjects-done" class="primary">Concluir</button>
+                    </div>
                   </div>
                 </div>
-                <span class="hint"><span class="hint-text">Informe a disciplina que você leciona.</span></span>
+                <span class="hint"><span class="hint-text">Selecione ao menos uma disciplina.</span></span>
               </div>
               <div class="field" id="r-pass">
                 <label for="reg-pass">Senha</label>
@@ -2352,7 +2359,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
                 <tr>
                   <th>Laboratório</th>
                   <th>Turma / Disciplina</th>
-                  <th>Dia</th>
+                  <th>Dias</th>
                   <th>Aula</th>
                   <th>Turno</th>
                   <th>Status</th>
@@ -2448,42 +2455,24 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
                   </select>
                 </div>
               </div>
-              <div class="field">
-                <label for="res-dia">3 · Dia da semana</label>
-                <div class="input-wrap">
-                  <select id="res-dia" name="dia" required>
-                    <option value="">Selecione o dia</option>
-                    <option value="Segunda">Segunda</option>
-                    <option value="Terça">Terça</option>
-                    <option value="Quarta">Quarta</option>
-                    <option value="Quinta">Quinta</option>
-                    <option value="Sexta">Sexta</option>
-                  </select>
+              <div class="field" style="grid-column:1/-1">
+                <label>3 · Dias da semana <span style="color:var(--ink-500);font-weight:500">— clique em um ou mais</span></label>
+                <div class="chips" id="res-dias" role="group" aria-label="Dias da semana">
+                  <button type="button" class="chip" data-value="Segunda">Segunda</button>
+                  <button type="button" class="chip" data-value="Terça">Terça</button>
+                  <button type="button" class="chip" data-value="Quarta">Quarta</button>
+                  <button type="button" class="chip" data-value="Quinta">Quinta</button>
+                  <button type="button" class="chip" data-value="Sexta">Sexta</button>
                 </div>
               </div>
               <div class="field">
                 <label>4 · Aulas <span style="color:var(--ink-500);font-weight:500">— clique em uma ou mais</span></label>
                 <div class="chips" id="res-aulas" role="group" aria-label="Aulas do dia"></div>
               </div>
-              <div class="field">
-                <label>5 · Disciplinas <span style="color:var(--ink-500);font-weight:500">— clique em uma ou mais</span></label>
-                <div class="chips" id="res-disciplinas" role="group" aria-label="Disciplinas">
-                  <button type="button" class="chip" data-value="Matemática">Matemática</button>
-                  <button type="button" class="chip" data-value="Português">Português</button>
-                  <button type="button" class="chip" data-value="Química">Química</button>
-                  <button type="button" class="chip" data-value="Biologia">Biologia</button>
-                  <button type="button" class="chip" data-value="Geografia">Geografia</button>
-                  <button type="button" class="chip" data-value="Física">Física</button>
-                  <button type="button" class="chip" data-value="História">História</button>
-                  <button type="button" class="chip" data-value="Educação Física">Educação Física</button>
-                  <button type="button" class="chip" data-value="Inglês">Inglês</button>
-                  <button type="button" class="chip" data-value="Arte">Arte</button>
-                  <button type="button" class="chip" data-value="Banco de Dados">Banco de Dados</button>
-                  <button type="button" class="chip" data-value="Introdução à Computação">Introdução à Computação</button>
-                  <button type="button" class="chip" data-value="Introdução à Programação">Introdução à Programação</button>
-                  <button type="button" class="chip" data-value="Lógica Computacional">Lógica Computacional</button>
-                  <button type="button" class="chip" data-value="Análise e Métodos para Sistema">Análise e Métodos para Sistema</button>
-                  <button type="button" class="chip" data-value="Projeto/Outro">Projeto/Outro</button>
+              <div class="field" id="res-disciplina-field" hidden>
+                <label for="res-disciplina">5 · Disciplina da reserva</label>
+                <div class="input-wrap">
+                  <select id="res-disciplina" name="disciplina" required></select>
                 </div>
               </div>
             </div>
@@ -2707,7 +2696,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
               <tr>
                 <th>Laboratório</th>
                 <th>Disciplina</th>
-                <th>Dia</th>
+                <th>Dias</th>
                 <th>Aula</th>
                 <th>Turno</th>
                 <th>Solicitado em</th>
@@ -2732,12 +2721,14 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
   function enviarEmailAutorizacaoReserva(r) {
+    const disciplina = r.disciplina || localStorage.getItem("cepk_user_subject") || "";
     return window.CEPKApi.createReservation({
       lab: r.lab,
       dia: r.dia,
+      dias: r.dias,
       turno: r.turno,
       aulas: r.aulas,
-      disciplina: r.disciplina
+      disciplinas: disciplina ? [disciplina] : []
     }).then(function (result) {
       if (!result.ok) {
         console.warn("Reserva (API):", window.CEPKApi.errorMessage(result, "Falha ao enviar a reserva."));
@@ -3006,11 +2997,16 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
     $$(".toggle-pass").forEach(function (btn) { btn.addEventListener("click", function (e) { e.preventDefault(); togglePass(btn); }); });
     const subjectsPop = document.getElementById("subjects-pop");
     const subjectInput = document.getElementById("reg-subject");
+    const subjectRows = $$("#subjects-pop .row");
     const closePops = function (except) { $$(".fill-pop").forEach(function (p) { if (p !== except) p.classList.remove("open"); }); };
     const openPop = function (pop) { closePops(pop); pop.classList.add("open"); };
+    function getSelectedSubjects() { return subjectRows.filter(function (row) { return row.classList.contains("selected"); }).map(function (row) { return row.dataset.value; }); }
+    function syncSubjects() { subjectInput.value = getSelectedSubjects().join(", "); }
     subjectInput.addEventListener("focus", function () { openPop(subjectsPop); });
     subjectInput.addEventListener("click", function () { openPop(subjectsPop); });
-    $$("#subjects-pop .row").forEach(function (row) { row.addEventListener("click", function () { subjectInput.value = row.dataset.value; subjectInput.closest(".field").classList.remove("invalid"); closePops(); }); });
+    subjectRows.forEach(function (row) { row.addEventListener("click", function () { const selected = row.classList.toggle("selected"); row.setAttribute("aria-pressed", String(selected)); syncSubjects(); subjectInput.closest(".field").classList.remove("invalid"); }); });
+    document.getElementById("subjects-done").addEventListener("click", function () { syncSubjects(); closePops(); subjectInput.focus(); });
+    document.getElementById("subjects-clear").addEventListener("click", function () { subjectRows.forEach(function (row) { row.classList.remove("selected"); row.setAttribute("aria-pressed", "false"); }); syncSubjects(); subjectInput.focus(); });
     document.addEventListener("click", function (e) { if (!e.target.closest("#subjects-pop, #reg-subject")) subjectsPop.classList.remove("open"); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePops(); });
     const formRegister = document.getElementById("form-register");
@@ -3036,14 +3032,14 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
       e.preventDefault();
       const name = document.getElementById("reg-name").value.trim();
       const email = document.getElementById("reg-email").value.trim().toLowerCase();
-      const subject = document.getElementById("reg-subject").value.trim();
+      const subjects = getSelectedSubjects();
       const pass = document.getElementById("reg-pass").value;
       const confirm = document.getElementById("reg-confirm").value;
       const terms = document.getElementById("terms").checked;
       let ok = true;
       setInvalid("r-name", name.length < 3, "Informe seu nome completo.");
       setInvalid("r-email", !matchesDomain(email), "Informe um e-mail válido.");
-      setInvalid("r-subject", !subject, "Informe a disciplina que você leciona.");
+      setInvalid("r-subject", subjects.length === 0, "Selecione ao menos uma disciplina.");
       setInvalid("r-pass", pass.length < 8, "A senha deve ter no mínimo 8 caracteres.");
       setInvalid("r-confirm", confirm !== pass || !confirm, "As senhas não coincidem.");
       if (!terms) { ok = false; const check = document.getElementById("terms").closest(".check-row"); check.style.color = "var(--red-600)"; check.animate([{ transform: "translateX(0)" }, { transform: "translateX(-4px)" }, { transform: "translateX(4px)" }, { transform: "translateX(0)" }], { duration: 260 }); setTimeout(function () { check.style.color = ""; }, 1200); }
@@ -3056,7 +3052,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
         return;
       }
       setLoading(btn, true);
-      const result = await window.CEPKApi.register({ name: name, email: email, subjects: [subject], password: pass });
+      const result = await window.CEPKApi.register({ name: name, email: email, subjects: subjects, password: pass });
       setLoading(btn, false);
       if (!result.ok) {
         showAlert(errorBox, window.CEPKApi.errorMessage(result, "Não foi possível registrar a solicitação. Tente novamente."));
@@ -3268,36 +3264,58 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
 
   function renderGridReserva() {
     const resTurno = document.getElementById("res-turno");
-    const resDia = document.getElementById("res-dia");
+    const resDias = document.getElementById("res-dias");
     const resAulas = document.getElementById("res-aulas");
-    const resDisciplinas = document.getElementById("res-disciplinas");
+    const resDisciplinaField = document.getElementById("res-disciplina-field");
+    const resDisciplina = document.getElementById("res-disciplina");
     const gridBody = document.getElementById("grid-body");
+    const SUBJECTS = [
+      "Matemática", "Português", "Química", "Biologia", "Geografia", "Física",
+      "História", "Educação Física", "Inglês", "Arte", "Banco de Dados",
+      "Introdução à Computação", "Introdução à Programação", "Lógica Computacional",
+      "Análise e Métodos para Sistema", "Projeto/Outro"
+    ];
     const PERIODOS = {
       Manhã: [ { n: 1, t: "07:15 – 08:05" }, { n: 2, t: "08:05 – 08:55" }, { n: 3, t: "08:55 – 09:45" }, { n: 4, t: "10:05 – 10:55" }, { n: 5, t: "10:55 – 11:45" }, { n: 6, t: "11:45 – 12:35" } ],
       Tarde: [ { n: 7, t: "13:00 – 13:50" }, { n: 8, t: "13:50 – 14:40" }, { n: 9, t: "14:40 – 15:25" }, { n: 10, t: "15:45 – 16:35" }, { n: 11, t: "16:35 – 17:25" }, { n: 12, t: "17:25 – 18:10" } ]
     };
     function getPeriodos(turno) { if (turno === "Ambos") return PERIODOS["Manhã"].concat(PERIODOS["Tarde"]); return PERIODOS[turno] || []; }
+    function getUserSubjects() {
+      const user = window.CEPKApi && window.CEPKApi.user ? window.CEPKApi.user() : null;
+      const fromUser = user && Array.isArray(user.subjects) ? user.subjects : [];
+      const stored = localStorage.getItem("cepk_user_subject") || sessionStorage.getItem("cepk_user_subject") || "";
+      const fromStorage = stored.split(/[,;]/).map(function (item) { return item.trim(); }).filter(Boolean);
+      return fromUser.concat(fromStorage).filter(function (item, index, list) { return list.indexOf(item) === index; });
+    }
+    function renderDisciplinas() {
+      const subjects = getUserSubjects();
+      const options = subjects.length ? subjects : SUBJECTS;
+      resDisciplina.innerHTML = options.map(function (subject) {
+        return "<option value=\"" + subject.replace(/"/g, "&quot;") + "\">" + subject + "</option>";
+      }).join("");
+      const multiple = options.length > 1;
+      resDisciplinaField.hidden = !multiple;
+      if (!multiple && options.length) resDisciplina.value = options[0];
+    }
     function renderChipsAulas() { const periodos = getPeriodos(resTurno.value); resAulas.innerHTML = ""; periodos.forEach(function (p) { const chip = document.createElement("button"); chip.type = "button"; chip.className = "chip"; chip.textContent = p.n + "ª aula — " + p.t; chip.dataset.aula = String(p.n); chip.addEventListener("click", function () { chip.classList.toggle("sel"); marcarGrid(); }); resAulas.appendChild(chip); }); marcarGrid(); }
     function getAulasSelecionadas() { const sel = []; resAulas.querySelectorAll(".chip.sel").forEach(function (chip) { sel.push(parseInt(chip.dataset.aula, 10)); }); return sel.sort(function (a, b) { return a - b; }); }
-    function getDisciplinasSelecionadas() { return Array.from(resDisciplinas.querySelectorAll(".chip.sel")).map(function (chip) { return chip.dataset.value; }); }
-    function marcarGrid() { const aulas = getAulasSelecionadas(); const diaMap = { "Segunda": "Seg", "Terça": "Ter", "Quarta": "Qua", "Quinta": "Qui", "Sexta": "Sex" }; const dia = diaMap[resDia.value] || resDia.value; gridBody.querySelectorAll("td[data-aula]").forEach(function (td) { const on = aulas.indexOf(Number(td.dataset.aula)) !== -1 && dia && td.dataset.dia === dia; td.textContent = on ? "✓" : "·"; td.classList.toggle("marcada", on); }); }
+    function getDiasSelecionados() { return Array.from(resDias.querySelectorAll(".chip.sel")).map(function (chip) { return chip.dataset.value; }); }
+    function marcarGrid() { const aulas = getAulasSelecionadas(); const diaMap = { "Segunda": "Seg", "Terça": "Ter", "Quarta": "Qua", "Quinta": "Qui", "Sexta": "Sex" }; const dias = getDiasSelecionados().map(function (dia) { return diaMap[dia] || dia; }); gridBody.querySelectorAll("td[data-aula]").forEach(function (td) { const on = aulas.indexOf(Number(td.dataset.aula)) !== -1 && dias.indexOf(td.dataset.dia) !== -1; td.textContent = on ? "✓" : "·"; td.classList.toggle("marcada", on); }); }
     function renderGrid() { const turno = resTurno.value || "Ambos"; const periodos = getPeriodos(turno); gridBody.innerHTML = ""; periodos.forEach(function (p) { const tr = document.createElement("tr"); const tdAula = document.createElement("td"); tdAula.textContent = p.n + "ª aula"; const tdHora = document.createElement("td"); const horaBadge = document.createElement("span"); horaBadge.className = "badge hora"; horaBadge.textContent = p.t; tdHora.appendChild(horaBadge); const tdTurno = document.createElement("td"); const turnoBadgeEl = document.createElement("span"); turnoBadgeEl.className = "badge " + (p.n <= 6 ? "manha" : "tarde"); turnoBadgeEl.textContent = p.n <= 6 ? "Manhã" : "Tarde"; tdTurno.appendChild(turnoBadgeEl); tr.appendChild(tdAula); tr.appendChild(tdHora); tr.appendChild(tdTurno); ["Seg", "Ter", "Qua", "Qui", "Sex"].forEach(function (d) { const td = document.createElement("td"); td.textContent = "·"; td.dataset.dia = d; td.dataset.aula = String(p.n); tr.appendChild(td); }); gridBody.appendChild(tr); }); marcarGrid(); }
-    resDisciplinas.querySelectorAll(".chip").forEach(function (chip) { chip.addEventListener("click", function () { chip.classList.toggle("sel"); }); });
+    resDias.querySelectorAll(".chip").forEach(function (chip) { chip.addEventListener("click", function () { chip.classList.toggle("sel"); marcarGrid(); }); });
     resTurno.addEventListener("change", renderChipsAulas);
-    resDia.addEventListener("change", marcarGrid);
     resTurno.addEventListener("change", renderGrid);
+    renderDisciplinas();
     renderGrid();
-    const savedSubjects = (localStorage.getItem("cepk_user_subject") || "").split(",").map(function (s) { return s.trim(); });
-    if (savedSubjects.length) { resDisciplinas.querySelectorAll(".chip").forEach(function (chip) { if (savedSubjects.indexOf(chip.dataset.value) !== -1) chip.classList.add("sel"); }); }
     function abrirConfirmacao(r) {
       const lista = document.getElementById("confirm-detalhes");
       const aulasTxt = (r.aulas || []).map(function (n) { return n + "ª"; }).join(", ");
       lista.innerHTML = [
         ["Laboratório", r.lab],
         ["Turno", r.turno],
-        ["Dia", r.dia],
+        ["Dias", r.dia],
         ["Aulas", aulasTxt],
-        ["Disciplinas", r.disciplina]
+        ["Disciplina", r.disciplina]
       ].map(function (item) { return "<li><span>" + item[0] + "</span><strong>" + escHtml(item[1]) + "</strong></li>"; }).join("");
       document.getElementById("confirm-reserva").classList.add("open");
     }
@@ -3310,16 +3328,16 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
       e.preventDefault();
       const lab = document.getElementById("res-lab").value;
       const turno = resTurno.value;
-      const dia = document.getElementById("res-dia").value;
-      const disciplinas = getDisciplinasSelecionadas();
+      const dias = getDiasSelecionados();
+      const disciplina = resDisciplina.value || getUserSubjects()[0] || "";
       const aulas = getAulasSelecionadas();
-      if (!lab || !turno || !dia || disciplinas.length === 0 || aulas.length === 0) { alert("Preencha todos os itens do checklist, selecione ao menos uma disciplina e uma aula para criar a reserva."); return; }
+      if (!lab || !turno || dias.length === 0 || !disciplina || aulas.length === 0) { alert("Preencha todos os itens do checklist, selecione ao menos um dia, uma aula e a disciplina da reserva."); return; }
       const hoje = new Date();
       const criadaEm = ("0" + hoje.getDate()).slice(-2) + "/" + ("0" + (hoje.getMonth() + 1)).slice(-2) + "/" + hoje.getFullYear();
       let todas = {};
       try { todas = JSON.parse(localStorage.getItem("cepk_reservas") || "{}"); } catch (err2) { todas = {}; }
       if (!Array.isArray(todas[storedEmail])) todas[storedEmail] = [];
-      const nova = { id: String(Date.now()), lab: lab, professor: storedName, professorEmail: storedEmail, disciplina: disciplinas.join(", "), disciplinas: disciplinas, turno: turno, dia: dia, aulas: aulas, aula: aulas.join(","), status: "pendente", criadaEm: criadaEm };
+      const nova = { id: String(Date.now()), lab: lab, professor: storedName, professorEmail: storedEmail, disciplina: disciplina, disciplinas: [disciplina], turno: turno, dias: dias, dia: dias.join(", "), aulas: aulas, aula: aulas.join(","), status: "pendente", criadaEm: criadaEm };
       todas[storedEmail].unshift(nova);
       localStorage.setItem("cepk_reservas", JSON.stringify(todas));
       enviarEmailAutorizacaoReserva(nova);

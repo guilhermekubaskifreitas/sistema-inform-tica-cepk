@@ -4,10 +4,15 @@
   var API_KEY = "cepk_api_base";
   var TOKEN_KEY = "cepk_access_token";
   var USER_KEY = "cepk_user";
-  var DEFAULT_BASE = "https://backend-informatica-cepk.onrender.com";
+  var LOCAL_HOST = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
+  var DEFAULT_BASE = LOCAL_HOST ? "http://localhost:3000" : "https://backend-informatica-cepk.onrender.com";
 
   function normalizeBase(value) {
-    return String(value || "").trim().replace(/\/+$/, "");
+    var base = String(value || "").trim().replace(/\/+$/, "");
+    if (/^http:\/\/backend-informatica-cepk\.onrender\.com$/i.test(base)) {
+      base = base.replace(/^http:/i, "https:");
+    }
+    return base;
   }
 
   function apiBase() {
@@ -63,6 +68,7 @@
       writeValue("cepk_user_name", data.user.name || "", remember);
       writeValue("cepk_user_email", data.user.email || "", remember);
       writeValue("cepk_user_role", data.user.role || "", remember);
+      writeValue("cepk_user_subject", Array.isArray(data.user.subjects) ? data.user.subjects.join(", ") : "", remember);
     }
   }
 
@@ -158,12 +164,17 @@
     var disciplinas = Array.isArray(source.disciplinas)
       ? source.disciplinas.map(String).filter(Boolean)
       : String(source.disciplina || "").split(/[,;\n]/).map(function (item) { return item.trim(); }).filter(Boolean);
+    var dias = Array.isArray(source.dias)
+      ? source.dias.map(String).filter(Boolean)
+      : String(source.dia || "").split(/[,;\n]/).map(function (item) { return item.trim(); }).filter(Boolean);
     var aulas = Array.isArray(source.aulas)
       ? source.aulas.map(String).filter(Boolean)
       : String(source.aula || "").split(",").map(function (item) { return item.trim(); }).filter(Boolean);
     return Object.assign({}, source, {
       disciplinas: disciplinas,
       disciplina: source.disciplina || disciplinas.join(", "),
+      dias: dias,
+      dia: source.dia || dias.join(", "),
       aulas: aulas,
       aula: source.aula || aulas.join(","),
       status: String(source.status || "pendente").toLowerCase(),
@@ -175,7 +186,7 @@
     var item = normalizeReservation(reservation);
     return [
       item.lab || "",
-      item.dia || "",
+      item.dias.join(","),
       item.turno || "",
       item.aulas.join(",")
     ].join("|");

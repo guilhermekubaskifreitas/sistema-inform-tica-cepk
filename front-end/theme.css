@@ -1,0 +1,325 @@
+:root {
+  --navy-950: #051525;
+  --navy-900: #08243d;
+  --navy-800: #0d3655;
+  --blue-600: #17466b;
+  --blue-500: #1f5a85;
+  --blue-100: #d8e5f0;
+  --cyan-400: #4d9fc5;
+  --green-500: #1d8a56;
+  --green-100: #dcefe5;
+  --amber-500: #b3771a;
+  --amber-100: #f6ecd9;
+  --red-600: #bf3b34;
+  --red-100: #f7dfdc;
+  --ink-900: #0b1b2b;
+  --ink-700: #2b4056;
+  --ink-500: #5a6f86;
+  --ink-400: #8294a8;
+  --line: #d6dee7;
+  --surface: #f7f8fa;
+  --surface-2: #edf1f5;
+  --surface-3: #e2e8ef;
+  --bg: #e5eaf0;
+  --shadow-lg: 0 24px 60px -24px rgba(4, 17, 32, 0.28);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --navy-950: #030b13;
+  --navy-900: #071a2a;
+  --navy-800: #0d293f;
+  --blue-600: #3c6f9c;
+  --blue-500: #4b86b5;
+  --blue-100: #17354d;
+  --cyan-400: #63b6d8;
+  --green-500: #3fbd80;
+  --green-100: #133626;
+  --amber-500: #d9a441;
+  --amber-100: #382a13;
+  --red-600: #e06a62;
+  --red-100: #3a1b1d;
+  --ink-900: #e6edf4;
+  --ink-700: #b6c4d4;
+  --ink-500: #8da0b4;
+  --ink-400: #70849a;
+  --line: #243244;
+  --surface: #111c29;
+  --surface-2: #172534;
+  --surface-3: #1e2f42;
+  --bg: #09111a;
+  --shadow-lg: 0 24px 60px -24px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink-900);
+}
+
+.form-panel {
+  background:
+    radial-gradient(600px 400px at 100% 0%, rgba(216, 229, 240, 0.75), transparent 60%),
+    var(--bg) !important;
+}
+
+html[data-theme="dark"] .form-panel {
+  background:
+    radial-gradient(600px 400px at 100% 0%, rgba(31, 90, 133, 0.28), transparent 60%),
+    var(--bg) !important;
+}
+
+.input-wrap input,
+.input-wrap select {
+  background: var(--surface-2) !important;
+  color: var(--ink-900);
+}
+
+.input-wrap input:focus,
+.input-wrap select:focus {
+  background: var(--surface) !important;
+}
+
+.input-wrap select option,
+select option {
+  background: var(--surface);
+  color: var(--ink-900);
+}
+
+.fill-pop {
+  background: var(--surface) !important;
+}
+
+.fill-pop .row:hover {
+  background: var(--surface-2) !important;
+}
+
+.fill-pop .row.selected {
+  background: var(--blue-100) !important;
+}
+
+.fill-pop .row .check {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+  color: transparent;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.fill-pop .row.selected .check {
+  background: var(--blue-600);
+  border-color: var(--blue-600);
+  color: #fff;
+}
+
+.fill-pop .row.selected .meta {
+  color: var(--blue-600);
+}
+
+.fill-pop .pop-actions {
+  display: flex;
+  gap: 8px;
+  padding: 8px 6px 4px;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+}
+
+.fill-pop .pop-actions button {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink-700);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fill-pop .pop-actions button:hover {
+  background: var(--surface-2);
+}
+
+.fill-pop .pop-actions .primary {
+  background: var(--blue-600);
+  border-color: var(--blue-600);
+  color: #fff;
+}
+
+#subjects-pop {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.check-row input {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+}
+
+.toggle-pass:hover {
+  background: var(--surface-2) !important;
+}
+
+.modal {
+  background: var(--surface) !important;
+}
+
+.btn-ghost,
+.btn:not(.btn-primary):not(.btn-danger),
+.filters .filter:not(.active),
+.menu-toggle {
+  background: var(--surface) !important;
+}
+
+.btn-ghost:hover,
+.btn:not(.btn-primary):not(.btn-danger):hover,
+.filters .filter:not(.active):hover,
+.menu-toggle:hover {
+  background: var(--surface-2) !important;
+  border-color: var(--line) !important;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, var(--blue-500), var(--blue-600)) !important;
+}
+
+.user {
+  background: var(--surface-2) !important;
+}
+
+.user:hover {
+  background: var(--surface-3) !important;
+}
+
+th {
+  background: var(--surface-2) !important;
+}
+
+tbody tr:hover td {
+  background: var(--surface-2) !important;
+}
+
+.chip:not(.sel) {
+  background: var(--surface-2);
+}
+
+.badge.aula,
+.badge.estado {
+  background: var(--surface-2) !important;
+}
+
+.badge.noite {
+  background: var(--surface-3) !important;
+}
+
+.theme-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 120;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-700);
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.theme-toggle:hover {
+  background: var(--surface-2);
+  color: var(--blue-600);
+  transform: translateY(-1px);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--blue-100);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 21px;
+  height: 21px;
+}
+
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+html[data-theme="dark"] .alert-error {
+  color: #fca5a5;
+}
+
+html[data-theme="dark"] .alert-success {
+  color: #86efac;
+}
+
+html[data-theme="dark"] .alert-info {
+  color: #93c5fd;
+}
+
+html[data-theme="dark"] .alert-warn,
+html[data-theme="dark"] .status-pill {
+  color: #fcd34d;
+}
+
+html[data-theme="dark"] .badge.aprovada {
+  color: #86efac;
+}
+
+html[data-theme="dark"] .badge.pendente,
+html[data-theme="dark"] .badge.tarde {
+  color: #fcd34d;
+}
+
+html[data-theme="dark"] .badge.recusada {
+  color: #fca5a5;
+}
+
+html[data-theme="dark"] .badge.dia,
+html[data-theme="dark"] .badge.manha,
+html[data-theme="dark"] .badge.hora {
+  color: #bfdbfe;
+}
+
+html[data-theme="dark"] .badge.noite {
+  color: var(--ink-700);
+}
+
+html[data-theme="dark"] .field.invalid .input-wrap input,
+html[data-theme="dark"] .field.invalid .input-wrap select {
+  background: #2a1719 !important;
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    right: 14px;
+    bottom: 14px;
+    width: 42px;
+    height: 42px;
+  }
+}
