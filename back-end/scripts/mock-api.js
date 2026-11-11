@@ -595,11 +595,12 @@ async function handle(req, res) {
     const subjects = Array.isArray(body.subjects)
       ? body.subjects.map((item) => String(item).trim()).filter(Boolean)
       : String(body.subject || "").split(/[,;\n]/).map((item) => item.trim()).filter(Boolean);
+    const adminRequested = Boolean(body.adminRequest);
 
     if (name.length < 3) fields.name = ["Informe seu nome completo."];
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/i.test(email)) fields.email = ["E-mail inválido."];
     if (password.length < 8) fields.password = ["A senha deve ter ao menos 8 caracteres."];
-    if (subjects.length === 0) fields.subjects = ["Informe ao menos uma disciplina."];
+    if (!adminRequested && subjects.length === 0) fields.subjects = ["Informe ao menos uma disciplina."];
     if (Object.keys(fields).length) return validationError(res, fields);
 
     const existing = users.get(email);
@@ -612,7 +613,7 @@ async function handle(req, res) {
       name,
       email,
       password,
-      role: "professor",
+      role: adminRequested ? "admin" : "professor",
       status: "pendente",
       subjects
     });
@@ -626,7 +627,12 @@ async function handle(req, res) {
     if (!emailResult.sent) console.warn("E-mail não enviado:", emailResult.error);
 
     return sendJson(res, 201, {
-      message: "Solicitação registrada. Aguarde a aprovação da secretaria.",
+      message: adminRequested
+        ? "Solicitação de acesso administrativo registrada. Aguarde a validação da secretaria."
+        : "Solicitação registrada. Aguarde a aprovação da secretaria.",
+      admin: false,
+      requestedAdmin: adminRequested,
+      requiresApproval: true,
       user: publicUser(user),
       emailSent: emailResult.sent,
       emailError: emailResult.sent ? undefined : emailResult.error,
@@ -726,6 +732,49 @@ async function handle(req, res) {
     const user = currentUser(req);
     if (!user) return sendJson(res, 401, { error: "Sessão inválida." });
     return sendJson(res, 200, { user: publicUser(user) });
+  }
+
+  const reservationAction = path.match(/^\/reservations\/([^/]+)\/(approve|reject)$/);
+  if (req.method === "POST" && reservationAction) {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado") {
+      return sendJson(res, 401, { error: "Sessão inválida." });
+    }
+    if (user.role !== "secretaria" && user.role !== "admin") {
+      return sendJson(res, 403, { error: "Apenas a secretaria pode aprovar reservas." });
+    }
+
+    let body = {};
+    try {
+      const raw = await readBody(req);
+      body = raw ? JSON.parse(raw) : {};
+    } catch (error) {
+      return sendJson(res, 400, { error: "JSON inválido." });
+    }
+
+    const reservation = reservations.find((item) => item.id === reservationAction[1]);
+    if (!reservation) {
+      return sendJson(res, 404, { error: "Solicitação não encontrada." });
+    }
+
+    const action = reservationAction[2];
+    if (action === "approve") {
+      const lab = String(body.lab || reservation.lab || "").trim();
+      if (!lab) return sendJson(res, 400, { error: "Informe o laboratório." });
+      reservation.lab = lab;
+      reservation.status = "aprovada";
+    } else {
+      reservation.status = "recusada";
+      if (body.reason) reservation.reason = String(body.reason);
+    }
+
+    reservation.decidedAt = new Date().toISOString();
+    reservation.decidedBy = user.email;
+
+    return sendJson(res, 200, {
+      message: action === "approve" ? "Reserva aprovada." : "Reserva recusada.",
+      reservation
+    });
   }
 
   if (req.method === "GET" && path === "/reservations/approval") {
