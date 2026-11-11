@@ -1,1 +1,1 @@
-# sistema-inform-tica-cepk
+# Sistema de agendamentos de laboratórios CEPK
