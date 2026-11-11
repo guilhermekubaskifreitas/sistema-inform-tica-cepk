@@ -438,6 +438,79 @@
     .header { flex-direction: column; gap: 12px; align-items: flex-start; }
   }
 
+  section.view { display: none !important; }
+  section.view.active { display: block !important; }
+
+  .admin-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 14px;
+  }
+
+  .admin-toolbar label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-700);
+  }
+
+  .admin-toolbar select,
+  .admin-lab {
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--ink-900);
+    font: inherit;
+    font-size: 13px;
+    padding: 0 10px;
+  }
+
+  .admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .btn-approve { background: #16803c; border-color: #16803c; color: #fff; }
+  .btn-approve:hover { background: #116933; border-color: #116933; }
+  .btn-reject { background: #fff; border-color: #fca5a5; color: #b42318; }
+  .btn-reject:hover { background: #fef3f2; border-color: #f87171; }
+
+  .admin-grid-wrap { overflow-x: auto; margin-top: 4px; }
+  .admin-grid { min-width: 880px; }
+  .admin-grid th, .admin-grid td { padding: 10px 12px; vertical-align: top; }
+  .admin-grid td.slot-cell { min-width: 130px; }
+  .admin-grid tr.shift-row td {
+    background: #eef4ff;
+    color: var(--blue-600);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .admin-grid .slot {
+    display: block;
+    margin-bottom: 5px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    border-left: 3px solid #94a3b8;
+    font-size: 11.5px;
+    line-height: 1.35;
+  }
+  .admin-grid .slot.pendente { background: #fffbeb; border-left-color: #f59e0b; }
+  .admin-grid .slot.aprovada { background: #ecfdf3; border-left-color: #16a34a; }
+  .admin-grid .slot strong { display: block; color: var(--ink-900); font-size: 11.5px; }
+  .admin-grid .slot span { display: block; color: var(--ink-500); font-size: 10.5px; }
+  .admin-grid .vazio { color: #cbd5e1; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
@@ -465,7 +538,10 @@
     </div>
 
     <ul class="nav">
-      <li><a href="#" class="nav-item active" data-view="view-dashboard"><span class="icon">
+      <li><a href="#" class="nav-item nav-secretary" data-view="view-admin-dashboard" style="display:none"><span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+      </span>Painel administrativo</a></li>
+      <li><a href="#" class="nav-item nav-professor active" data-view="view-dashboard"><span class="icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
       </span>Dashboard</a></li>
       <li><a href="visualizacao-reservas.html" class="nav-item"><span class="icon">
@@ -474,6 +550,9 @@
       <li><a href="laboratorios.html" class="nav-item"><span class="icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
       </span>Laboratórios</a></li>
+      <li><a href="#" class="nav-item nav-secretary" data-view="view-admin-reservas" style="display:none"><span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="14"></line><line x1="8" y1="2" x2="8" y2="14"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M8 15l2 2 4-4"></path></svg>
+      </span>Gestão de horários</a></li>
       <li><a href="#" class="nav-item nav-secretary" data-view="view-cadastros" style="display:none"><span class="icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="8"></line><line x1="18" y1="14" x2="23" y2="14"></line></svg>
       </span>Aprovações</a></li>
@@ -592,6 +671,88 @@
         </div>
       </section>
 
+      <!-- Dashboard administrativo -->
+      <section class="view" id="view-admin-dashboard" style="display:none">
+        <h2>Painel administrativo</h2>
+        <p class="sub">Visão geral das solicitações e da ocupação dos laboratórios do CEPK.</p>
+
+        <div class="stats">
+          <div class="stat-card">
+            <div class="top">
+              <div class="label">Pendentes</div>
+              <div class="num" id="admin-stat-pending">0</div>
+            </div>
+            <div class="delta">Aguardando encaminhamento</div>
+            <div class="bar"><div class="bar-fill" id="admin-stat-pending-bar" style="width:0%"></div></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top">
+              <div class="label">Aprovadas</div>
+              <div class="num" id="admin-stat-approved">0</div>
+            </div>
+            <div class="delta up">Reservas ativas</div>
+            <div class="bar"><div class="bar-fill" id="admin-stat-approved-bar" style="width:0%"></div></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top">
+              <div class="label">Laboratórios</div>
+              <div class="num">3</div>
+            </div>
+            <div class="delta up">Disponíveis para agendamento</div>
+            <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top">
+              <div class="label">Total de reservas</div>
+              <div class="num" id="admin-stat-total">0</div>
+            </div>
+            <div class="delta">Pendentes + aprovadas</div>
+            <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Gestão de horários</h3>
+            <p>Aprove solicitações, escolha o laboratório e acompanhe a grade semanal.</p>
+            <button class="btn btn-primary" style="margin-top:14px" data-goto="view-admin-reservas">Abrir gestão de horários</button>
+          </div>
+
+          <div class="card">
+            <h3>Solicitações pendentes</h3>
+            <p id="admin-dash-pending-text">Carregando solicitações...</p>
+            <button class="btn" style="margin-top:14px" data-goto="view-admin-reservas">Analisar agora</button>
+          </div>
+
+          <div class="card">
+            <h3>Orientação</h3>
+            <p>O professor envia o pedido; você define o laboratório disponível e confirma o encaminhamento.</p>
+            <button class="btn" style="margin-top:14px" id="admin-dash-refresh">Atualizar dados</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Professor</th>
+                <th>Disciplina</th>
+                <th>Dias e aulas</th>
+                <th>Turno</th>
+                <th>Laboratório</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="admin-dash-pendentes-body">
+              <tr><td colspan="6" style="color:var(--ink-500)">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- Aprovações (secretary) -->
       <section class="view" id="view-cadastros" style="display:none">
         <h2>Aprovação de cadastros</h2>
@@ -599,6 +760,68 @@
         <div class="card">
           <p style="color:var(--ink-500);font-size:13px">Não há solicitações pendentes no momento.</p>
         </div>
+      </section>
+
+      <!-- Gestão de horários (admin/secretaria) -->
+      <section class="view" id="view-admin-reservas" style="display:none">
+        <h2>Gestão de horários</h2>
+        <p class="sub">Aprove as solicitações dos professores, escolha o laboratório disponível e acompanhe a grade semanal.</p>
+
+        <div class="admin-toolbar">
+          <span style="font-size:12.5px;color:var(--ink-500)" id="admin-pendentes-status">Carregando solicitações...</span>
+          <button type="button" class="btn" id="admin-refresh">Atualizar</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Professor</th>
+                <th>Disciplina</th>
+                <th>Dias e aulas</th>
+                <th>Turno</th>
+                <th>Laboratório</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="admin-pendentes-body">
+              <tr><td colspan="6" style="color:var(--ink-500)">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:28px 0 12px">
+          <div>
+            <h3 style="margin:0 0 4px;font-size:16px;color:var(--ink-900)">Grade semanal por laboratório</h3>
+            <p style="margin:0;font-size:13px;color:var(--ink-500)">Visualize cada reserva preenchida nos dias da semana, como na planilha.</p>
+          </div>
+          <label class="admin-toolbar" style="margin:0">
+            Laboratório
+            <select id="admin-grid-lab">
+              <option value="Lab 1">Laboratório 1</option>
+              <option value="Lab 2">Laboratório 2</option>
+              <option value="Lab 3">Laboratório 3</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="table-wrap admin-grid-wrap">
+          <table class="admin-grid" id="admin-grade">
+            <thead>
+              <tr>
+                <th>Aula</th>
+                <th>Horário</th>
+                <th>Segunda</th>
+                <th>Terça</th>
+                <th>Quarta</th>
+                <th>Quinta</th>
+                <th>Sexta</th>
+              </tr>
+            </thead>
+            <tbody id="admin-grade-body"></tbody>
+          </table>
+        </div>
+        <p id="admin-grade-status" style="margin-top:10px;font-size:12.5px;color:var(--ink-500)"></p>
       </section>
     </div>
   </main>
@@ -626,13 +849,14 @@
       storedName = storedName.split(" ").filter(Boolean).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") || "Usuário";
     }
 
+    const storedRole = String(localStorage.getItem("cepk_user_role") || sessionStorage.getItem("cepk_user_role") || "").toLowerCase();
+    const isSecretary = storedRole === "secretaria" || storedRole === "admin" || String(storedEmail).toLowerCase().startsWith("secretaria");
+
     const user = {
       name: storedName,
       email: storedEmail,
-      role: "docente",
+      role: storedRole || (isSecretary ? "secretaria" : "professor"),
     };
-
-    const isSecretary = String(user.email).toLowerCase().startsWith("secretaria");
 
     // Reservas do usuário logado (persistidas em localStorage)
     function getReservas(email) {
@@ -671,6 +895,201 @@
       } finally {
         syncEmAndamento = false;
       }
+    }
+
+    const ADMIN_LABS = ["Lab 1", "Lab 2", "Lab 3"];
+    const ADMIN_DAYS = [
+      { short: "Seg", full: "Segunda" },
+      { short: "Ter", full: "Terça" },
+      { short: "Qua", full: "Quarta" },
+      { short: "Qui", full: "Quinta" },
+      { short: "Sex", full: "Sexta" }
+    ];
+    const AULA_HORARIOS = {
+      1: "07:15 – 08:05", 2: "08:05 – 08:55", 3: "08:55 – 09:45",
+      4: "10:05 – 10:55", 5: "10:55 – 11:45", 6: "11:45 – 12:35",
+      7: "13:00 – 13:50", 8: "13:50 – 14:40", 9: "14:40 – 15:25",
+      10: "15:45 – 16:35", 11: "16:35 – 17:25", 12: "17:25 – 18:10"
+    };
+    let adminReservas = [];
+    let adminCarregando = false;
+    let adminBound = false;
+
+    function adminLabOptions(selected) {
+      return ADMIN_LABS.map(function (lab) {
+        return '<option value="' + escHtml(lab) + '"' + (lab === selected ? " selected" : "") + ">" +
+          escHtml(lab.replace("Lab ", "Laboratório ")) + "</option>";
+      }).join("");
+    }
+
+    function renderAdminPendentes() {
+      const body = document.getElementById("admin-pendentes-body");
+      const status = document.getElementById("admin-pendentes-status");
+      if (!body) return;
+
+      const pendentes = adminReservas.filter(function (r) {
+        return String(r.status).toLowerCase() === "pendente";
+      });
+
+      if (status) {
+        status.textContent = pendentes.length
+          ? pendentes.length + " solicitação(ões) aguardando encaminhamento."
+          : "Nenhuma solicitação pendente no momento.";
+      }
+
+      if (!pendentes.length) {
+        body.innerHTML = '<tr><td colspan="6" style="color:var(--ink-500)">Nenhuma solicitação pendente. A grade abaixo mostra as reservas já preenchidas.</td></tr>';
+        return;
+      }
+
+      body.innerHTML = pendentes.map(function (r) {
+        const aulasTxt = fmtAulas(r);
+        return '<tr data-reserva-id="' + escHtml(r.id || "") + '">' +
+          '<td><strong>' + escHtml(r.professor || "Professor") + "</strong><br><span style=\"font-size:11.5px;color:var(--ink-500)\">" + escHtml(r.professorEmail || "") + "</span></td>" +
+          "<td>" + escHtml(r.disciplina || "—") + "</td>" +
+          '<td><span class="badge dia">' + escHtml(r.dia || "—") + '</span><br><span class="badge aula" style="margin-top:5px">' + escHtml(aulasTxt) + " aula" + (aulasTxt.includes(",") ? "s" : "") + "</span></td>" +
+          "<td>" + turnoBadge(r.turno) + "</td>" +
+          '<td><select class="admin-lab">' + adminLabOptions(r.lab) + "</select></td>" +
+          '<td><div class="admin-actions"><button type="button" class="btn btn-approve" data-admin-action="approve">Encaminhar e aprovar</button><button type="button" class="btn btn-reject" data-admin-action="reject">Recusar</button></div></td>' +
+          "</tr>";
+      }).join("");
+    }
+
+    function renderAdminGrade() {
+      const body = document.getElementById("admin-grade-body");
+      const labSelect = document.getElementById("admin-grid-lab");
+      const status = document.getElementById("admin-grade-status");
+      if (!body || !labSelect) return;
+
+      const lab = labSelect.value || ADMIN_LABS[0];
+      const relevant = adminReservas.filter(function (r) {
+        const st = String(r.status).toLowerCase();
+        return r.lab === lab && st !== "recusada" && st !== "cancelada";
+      });
+
+      let rows = "";
+      let lastShift = "";
+      for (let n = 1; n <= 12; n++) {
+        const shift = n <= 6 ? "Manhã" : "Tarde";
+        if (shift !== lastShift) {
+          rows += '<tr class="shift-row"><td colspan="7">' + shift + "</td></tr>";
+          lastShift = shift;
+        }
+        rows += "<tr><td><strong>" + n + "ª aula</strong></td><td><span class=\"badge aula\">" + (AULA_HORARIOS[n] || "—") + "</span></td>";
+        ADMIN_DAYS.forEach(function (day) {
+          const items = relevant.filter(function (r) {
+            const dias = Array.isArray(r.dias) ? r.dias : [];
+            const aulas = Array.isArray(r.aulas) ? r.aulas.map(Number) : [];
+            return dias.indexOf(day.full) !== -1 && aulas.indexOf(n) !== -1;
+          });
+          const content = items.map(function (r) {
+            const st = String(r.status).toLowerCase();
+            return '<span class="slot ' + escHtml(st) + '"><strong>' + escHtml(r.professor || "Professor") + "</strong><span>" + escHtml(r.disciplina || "—") + "</span></span>";
+          }).join("");
+          rows += '<td class="slot-cell">' + (content || '<span class="vazio">·</span>') + "</td>";
+        });
+        rows += "</tr>";
+      }
+      body.innerHTML = rows;
+      if (status) {
+        status.textContent = relevant.length
+          ? relevant.length + " reserva(s) preenchida(s) na grade do " + lab + "."
+          : "Nenhuma reserva preenchida para o " + lab + ".";
+      }
+    }
+
+    function renderAdminDashboard() {
+      const pendentes = adminReservas.filter(function (r) { return String(r.status).toLowerCase() === "pendente"; });
+      const aprovadas = adminReservas.filter(function (r) { return String(r.status).toLowerCase() === "aprovada"; });
+      const total = pendentes.length + aprovadas.length;
+      const setText = function (id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = String(value);
+      };
+      setText("admin-stat-pending", pendentes.length);
+      setText("admin-stat-approved", aprovadas.length);
+      setText("admin-stat-total", total);
+      const pendingBar = document.getElementById("admin-stat-pending-bar");
+      if (pendingBar) pendingBar.style.width = (total ? Math.round((pendentes.length / total) * 100) : 0) + "%";
+      const approvedBar = document.getElementById("admin-stat-approved-bar");
+      if (approvedBar) approvedBar.style.width = (total ? Math.round((aprovadas.length / total) * 100) : 0) + "%";
+      const pendingText = document.getElementById("admin-dash-pending-text");
+      if (pendingText) {
+        pendingText.textContent = pendentes.length
+          ? pendentes.length + " solicitação(ões) aguardando análise e encaminhamento."
+          : "Nenhuma solicitação pendente no momento.";
+      }
+
+      const body = document.getElementById("admin-dash-pendentes-body");
+      if (!body) return;
+      if (!pendentes.length) {
+        body.innerHTML = '<tr><td colspan="6" style="color:var(--ink-500)">Nenhuma solicitação pendente. Acesse a gestão para ver a grade completa.</td></tr>';
+        return;
+      }
+      body.innerHTML = pendentes.slice(0, 6).map(function (r) {
+        return "<tr><td><strong>" + escHtml(r.professor || "Professor") + "</strong></td>" +
+          "<td>" + escHtml(r.disciplina || "—") + "</td>" +
+          '<td><span class="badge dia">' + escHtml(r.dia || "—") + "</span> <span class=\"badge aula\">" + escHtml(fmtAulas(r)) + "</span></td>" +
+          "<td>" + turnoBadge(r.turno) + "</td>" +
+          "<td>" + escHtml(r.lab || "—") + "</td>" +
+          "<td>" + statusBadge(r.status) + "</td></tr>";
+      }).join("");
+    }
+
+    async function carregarAdminReservas() {
+      if (!isSecretary || adminCarregando || !window.CEPKApi) return;
+      adminCarregando = true;
+      const status = document.getElementById("admin-pendentes-status");
+      if (status) status.textContent = "Carregando solicitações...";
+      try {
+        const result = await window.CEPKApi.reservations();
+        if (!result.ok || !result.data || !Array.isArray(result.data.reservations)) {
+          if (status) status.textContent = window.CEPKApi.errorMessage(result, "Não foi possível carregar as solicitações.");
+          return;
+        }
+        adminReservas = result.data.reservations.map(normalizeReserva);
+        renderAdminPendentes();
+        renderAdminGrade();
+        renderAdminDashboard();
+      } finally {
+        adminCarregando = false;
+      }
+    }
+
+    function initAdminReservas() {
+      if (adminBound || !document.getElementById("view-admin-reservas")) return;
+      adminBound = true;
+      const refresh = document.getElementById("admin-refresh");
+      if (refresh) refresh.addEventListener("click", carregarAdminReservas);
+      const dashRefresh = document.getElementById("admin-dash-refresh");
+      if (dashRefresh) dashRefresh.addEventListener("click", carregarAdminReservas);
+      const labSelect = document.getElementById("admin-grid-lab");
+      if (labSelect) labSelect.addEventListener("change", renderAdminGrade);
+      const body = document.getElementById("admin-pendentes-body");
+      if (!body) return;
+      body.addEventListener("click", async function (e) {
+        const button = e.target.closest("[data-admin-action]");
+        if (!button) return;
+        const row = button.closest("tr");
+        const id = row ? row.dataset.reservaId : "";
+        if (!id) return;
+        const action = button.dataset.adminAction;
+        const reason = action === "reject" ? prompt("Motivo da recusa (opcional):") : "";
+        if (action === "reject" && reason === null) return;
+        const buttons = row.querySelectorAll("[data-admin-action]");
+        buttons.forEach(function (btn) { btn.disabled = true; });
+        button.textContent = action === "approve" ? "Encaminhando..." : "Recusando...";
+        const result = action === "approve"
+          ? await window.CEPKApi.approveReservation(id, { lab: row.querySelector(".admin-lab").value })
+          : await window.CEPKApi.rejectReservation(id, { reason: reason });
+        if (!result.ok) {
+          alert(window.CEPKApi.errorMessage(result, "Não foi possível concluir a ação."));
+          buttons.forEach(function (btn) { btn.disabled = false; });
+          button.textContent = action === "approve" ? "Encaminhar e aprovar" : "Recusar";
+          return;
+        }
+        await carregarAdminReservas();
+      });
     }
 
     function escHtml(v) {
@@ -745,32 +1164,42 @@
     document.getElementById("statRole").textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
 
     if (isSecretary) {
-      document.querySelector(".nav-secretary").style.display = "flex";
-      document.getElementById("pageSub").textContent = "Painel da secretaria — aprovação de cadastros e gestão dos laboratórios.";
+      document.querySelectorAll(".nav-secretary").forEach((el) => { el.style.display = "flex"; });
+      document.querySelectorAll(".nav-professor").forEach((el) => { el.style.display = "none"; });
+      document.getElementById("pageSub").textContent = "Painel administrativo — solicitações de reserva, gestão de horários e laboratórios.";
     }
+    initAdminReservas();
 
     // Navegação entre views
     const views = document.querySelectorAll(".view");
     const navItems = document.querySelectorAll(".nav-item");
 
     function showView(id) {
-      views.forEach((v) => v.classList.toggle("active", v.id === id));
-      navItems.forEach((a) => a.classList.toggle("active", a.dataset.view === id));
+      const staffViews = ["view-admin-dashboard", "view-admin-reservas", "view-cadastros"];
+      let targetView = id;
+      if (!isSecretary && staffViews.indexOf(id) !== -1) targetView = "view-dashboard";
+      else if (isSecretary && id === "view-dashboard") targetView = "view-admin-dashboard";
+      views.forEach((v) => v.classList.toggle("active", v.id === targetView));
+      navItems.forEach((a) => a.classList.toggle("active", a.dataset.view === targetView));
       const titleMap = {
         "view-dashboard": ["Painel", "Bem-vindo de volta, " + user.name + "."],
+        "view-admin-dashboard": ["Painel administrativo", "Visão geral das solicitações e da ocupação dos laboratórios."],
         "view-cadastros": ["Aprovação de cadastros", "Analise as solicitações de acesso de novos usuários."],
+        "view-admin-reservas": ["Gestão de horários", "Aprove solicitações e acompanhe a grade semanal dos laboratórios."]
       };
-      if (titleMap[id]) {
-        document.getElementById("pageTitle").textContent = titleMap[id][0];
-        document.getElementById("pageSub").textContent = titleMap[id][1];
+      if (titleMap[targetView]) {
+        document.getElementById("pageTitle").textContent = titleMap[targetView][0];
+        document.getElementById("pageSub").textContent = titleMap[targetView][1];
       }
       // Sincroniza a aba com a URL — protegido: alguns navegadores bloqueiam em file://
       try {
-        history.replaceState(null, "", "#" + id.replace("view-", ""));
+        history.replaceState(null, "", "#" + targetView.replace("view-", ""));
       } catch (err) { /* ignorar */ }
 
       // Sempre que a aba trocar, atualiza os dados (reservas ficam em dia)
       renderTabelas();
+      if (targetView === "view-admin-dashboard") renderAdminDashboard();
+      if (targetView === "view-admin-reservas" || targetView === "view-admin-dashboard") carregarAdminReservas();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -843,8 +1272,8 @@
 
     // Abre a aba indicada na URL (ex.: painel.html#labs), senão o dashboard
     const hash = window.location.hash.replace(/^#/, "");
-    const abas = { dashboard: "view-dashboard", cadastros: "view-cadastros" };
-    showView(abas[hash] || "view-dashboard");
+    const abas = { dashboard: "view-dashboard", cadastros: "view-cadastros", "admin-dashboard": "view-admin-dashboard", "admin-reservas": "view-admin-reservas" };
+    showView(abas[hash] || (isSecretary ? "view-admin-dashboard" : "view-dashboard"));
     syncReservasApi();
     document.addEventListener("visibilitychange", () => { if (!document.hidden) syncReservasApi(); });
     window.addEventListener("focus", syncReservasApi);

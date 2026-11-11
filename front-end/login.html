@@ -582,6 +582,71 @@
   .check-row input:checked::after { transform: rotate(-45deg) scale(1); }
   .check-row input:focus-visible { outline: 2px solid var(--blue-500); outline-offset: 2px; }
 
+  .role-options {
+    display: grid;
+    gap: 10px;
+  }
+
+  .role-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  }
+
+  .role-option:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+  }
+
+  .role-option.selected {
+    border-color: var(--blue-600);
+    background: #eff6ff;
+    box-shadow: 0 8px 20px -16px rgba(29, 78, 216, 0.55);
+  }
+
+  .role-option input {
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0;
+    accent-color: var(--blue-600);
+    flex: 0 0 auto;
+  }
+
+  .role-option strong {
+    display: block;
+    font-size: 13.5px;
+    color: var(--ink-900);
+  }
+
+  .role-option small {
+    display: block;
+    margin-top: 3px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--ink-500);
+  }
+
+  html[data-theme="dark"] .role-option {
+    background: var(--surface-2);
+    border-color: var(--line);
+  }
+
+  html[data-theme="dark"] .role-option:hover {
+    background: var(--surface-3);
+    border-color: var(--ink-400);
+  }
+
+  html[data-theme="dark"] .role-option.selected {
+    background: var(--blue-100);
+    border-color: var(--blue-500);
+  }
+
   /* ---------- Botões ---------- */
   .btn {
     width: 100%;
@@ -1095,6 +1160,26 @@
               <span class="hint"><span class="hint-text">Informe um e-mail válido.</span></span>
             </div>
 
+            <div class="field" id="r-role">
+              <label>Tipo de cadastro</label>
+              <div class="role-options" role="radiogroup" aria-label="Tipo de cadastro">
+                <label class="role-option selected">
+                  <input type="radio" name="reg-role" value="professor" checked />
+                  <span>
+                    <strong>Professor</strong>
+                    <small>Para solicitar reservas de aulas nos laboratórios.</small>
+                  </span>
+                </label>
+                <label class="role-option">
+                  <input type="radio" name="reg-role" value="admin" />
+                  <span>
+                    <strong>Administrador</strong>
+                    <small>Declaro que sou responsável pelo agendamento dos laboratórios do CEPK.</small>
+                  </span>
+                </label>
+              </div>
+            </div>
+
             <div class="field" id="r-subject">
               <label for="reg-subject">Disciplinas que leciona</label>
               <div class="input-wrap">
@@ -1183,9 +1268,9 @@
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
             <h2 id="ok-title">Solicitação enviada</h2>
-            <p>Recebemos seu cadastro. A secretaria do colégio vai analisar e liberar seu acesso.</p>
-            <div class="status-pill"><i></i> Aguardando aprovação</div>
-            <p style="font-size:12.5px;margin-bottom:22px">Você receberá um e-mail em <strong id="ok-email" style="color:var(--ink-700)">seu e-mail institucional</strong> quando o acesso for liberado.</p>
+            <p id="ok-message">Recebemos seu cadastro. A secretaria do colégio vai analisar e liberar seu acesso.</p>
+            <div class="status-pill"><i></i> <span id="ok-status-text">Aguardando aprovação</span></div>
+            <p style="font-size:12.5px;margin-bottom:22px" id="ok-detail">Você receberá um e-mail em <strong id="ok-email" style="color:var(--ink-700)">seu e-mail institucional</strong> quando o acesso for liberado.</p>
             <p id="approval-links" style="display:none;font-size:12.5px;margin-bottom:18px;line-height:1.8">
               Link de aprovação para teste:
               <a id="approval-approve" href="#" target="_blank" rel="noopener">aprovar</a>
@@ -1479,9 +1564,11 @@
     localStorage.removeItem("cepk_user_pass");
     sessionStorage.removeItem("cepk_user_pass");
 
+    const isStaff = String(user.role || "").toLowerCase() === "admin" || String(user.role || "").toLowerCase() === "secretaria";
     const destParam = new URLSearchParams(location.search).get("dest");
     const destOk = destParam && /^(painel|reserva|visualizacao-reservas|laboratorios)\.html/.test(destParam);
     const to = new URL(destOk ? destParam : "painel.html", location.href);
+    if (isStaff && !destOk) to.hash = "admin-dashboard";
     to.searchParams.set("name", displayName);
     to.searchParams.set("email", email);
     window.location.href = to.href;
@@ -1498,6 +1585,28 @@
   /* ---------- Cadastro ---------- */
   const formRegister = $("#form-register");
   const strength = $("#strength");
+  const roleRadios = $$('input[name="reg-role"]');
+  const adminSubjectField = $("#r-subject");
+
+  function selectedRegistrationType() {
+    const checked = document.querySelector('input[name="reg-role"]:checked');
+    return checked ? checked.value : "professor";
+  }
+
+  function syncRegistrationTypeFields() {
+    const isAdmin = selectedRegistrationType() === "admin";
+    if (adminSubjectField) adminSubjectField.style.display = isAdmin ? "none" : "";
+    roleRadios.forEach(function (radio) {
+      const option = radio.closest(".role-option");
+      if (option) option.classList.toggle("selected", radio.checked);
+    });
+    if (isAdmin) clearInvalid("r-subject");
+  }
+
+  roleRadios.forEach(function (radio) {
+    radio.addEventListener("change", syncRegistrationTypeFields);
+  });
+  syncRegistrationTypeFields();
 
   $("#reg-pass").addEventListener("input", (e) => {
     const val = e.target.value;
@@ -1532,6 +1641,7 @@
     const pass     = $("#reg-pass").value;
     const confirm  = $("#reg-confirm").value;
     const terms    = $("#terms").checked;
+    const adminRequest = selectedRegistrationType() === "admin";
     let ok = true;
 
     clearInvalid("r-name", "r-email", "r-subject", "r-pass", "r-confirm");
@@ -1544,7 +1654,7 @@
       setInvalid("r-email", true, "Informe um e-mail válido.");
       ok = false;
     }
-    if (subjects.length === 0) {
+    if (!adminRequest && subjects.length === 0) {
       setInvalid("r-subject", true, "Selecione ao menos uma disciplina.");
       ok = false;
     }
@@ -1582,7 +1692,7 @@
     }
     setLoading(btn, true);
 
-    const result = await window.CEPKApi.register({ name: name, email: email, subjects: subjects, password: pass });
+    const result = await window.CEPKApi.register({ name: name, email: email, subjects: subjects, password: pass, adminRequest: adminRequest });
     setLoading(btn, false);
 
     if (!result.ok) {
@@ -1593,15 +1703,39 @@
 
     const data = result.data || {};
     const createdUser = data.user || {};
+    const requestedAdmin = Boolean(data.requestedAdmin) || String(createdUser.role || "").toLowerCase() === "admin";
+    const isActiveAdmin = Boolean(data.admin) && data.requiresApproval !== true;
+    const isPendingAdmin = !isActiveAdmin && requestedAdmin;
     const warn = $("#ok-warn");
     if (warn) { warn.style.display = "none"; warn.textContent = ""; }
 
     $("#ok-email").textContent = createdUser.email || email;
 
+    const okTitle = $("#ok-title");
+    const okMessage = $("#ok-message");
+    const okStatus = $("#ok-status-text");
+    const okDetail = $("#ok-detail");
+    if (okTitle) okTitle.textContent = isActiveAdmin ? "Acesso administrativo liberado" : isPendingAdmin ? "Solicitação administrativa enviada" : "Solicitação enviada";
+    if (okMessage) {
+      okMessage.textContent = isActiveAdmin
+        ? "Seu cadastro de administrador foi criado e já está liberado. Entre com seu e-mail e senha para gerenciar as reservas."
+        : isPendingAdmin
+          ? "Recebemos seu pedido de acesso como responsável pelo agendamento. A secretaria vai validar sua solicitação."
+          : "Recebemos seu cadastro. A secretaria do colégio vai analisar e liberar seu acesso.";
+    }
+    if (okStatus) okStatus.textContent = isActiveAdmin ? "Conta de administrador ativa" : isPendingAdmin ? "Aguardando validação administrativa" : "Aguardando aprovação";
+    if (okDetail) {
+      okDetail.innerHTML = isActiveAdmin
+        ? "Conta administrativa registrada para <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong>. O painel de gestão de horários já está disponível."
+        : isPendingAdmin
+          ? "Pedido de administrador registrado para <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong>. Após a validação, você terá acesso à gestão de horários."
+          : "Você receberá um e-mail em <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong> quando o acesso for liberado.";
+    }
+
     const links = $("#approval-links");
     const isLocalApi = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(window.CEPKApi.apiBase());
     if (links) {
-      const showLinks = Boolean(data.token) && isLocalApi;
+      const showLinks = Boolean(data.token) && isLocalApi && !isActiveAdmin;
       if (showLinks) {
         $("#approval-approve").href = window.CEPKApi.approvalUrl(data.token, "approve");
         $("#approval-reject").href = window.CEPKApi.approvalUrl(data.token, "reject");
@@ -1610,7 +1744,7 @@
       links.style.display = showLinks ? "block" : "none";
     }
 
-    if (warn && data.emailSent === false) {
+    if (warn && !isActiveAdmin && data.emailSent === false) {
       warn.textContent = "O e-mail de autorização não pôde ser enviado. Avise a secretaria para liberar seu acesso.";
       warn.style.display = "block";
     }
