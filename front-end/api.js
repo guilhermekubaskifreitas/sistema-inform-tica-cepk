@@ -5,12 +5,12 @@
   var TOKEN_KEY = "cepk_access_token";
   var USER_KEY = "cepk_user";
   var LOCAL_HOST = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
-  var DEFAULT_BASE = LOCAL_HOST ? "http://localhost:3000" : "https://cepk-api.onrender.com";
-  var FALLBACK_BASE = "https://backend-informatica-cepk.onrender.com";
-  var FALLBACK_KEY = "cepk_api_fallback_until";
+  var DEFAULT_BASE = LOCAL_HOST ? "http://localhost:3000" : "https://backend-informatica-cepk.onrender.com";
+  var FALLBACK_BASE = "https://cepk-api.onrender.com";
+  var FALLBACK_KEY = "cepk_api_fallback_v2";
   var FALLBACK_TTL = 10 * 60 * 1000;
   var LEGACY_BASES = [
-    /^https?:\/\/backend-informatica-cepk\.onrender\.com$/i,
+    /^https?:\/\/cepk-api\.onrender\.com$/i,
     /^https?:\/\/cepk-mock\.onrender\.com$/i
   ];
 
@@ -60,7 +60,7 @@
 
   function shouldFallback(base, result) {
     if (LOCAL_HOST || base !== DEFAULT_BASE) return false;
-    return result.status === 404 || result.status === 502 || result.status === 503 || result.status === 504;
+    return result.status === 0 || result.status === 404 || result.status === 502 || result.status === 503 || result.status === 504;
   }
 
   function readValue(key) {
@@ -150,7 +150,7 @@
 
     if (shouldFallback(base, result)) {
       var fallbackResult = await send(FALLBACK_BASE, path, opts);
-      if (fallbackResult.status !== 0) {
+      if (fallbackResult.status !== 0 && fallbackResult.status !== 404 && fallbackResult.status !== 502 && fallbackResult.status !== 503 && fallbackResult.status !== 504) {
         markFallback();
         console.warn("API principal indisponível; usando contingência temporária.");
         return fallbackResult;
