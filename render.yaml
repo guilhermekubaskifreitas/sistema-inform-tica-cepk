@@ -1,6 +1,6 @@
 # Render Blueprint — Sistema de Agendamento dos Laboratórios CEPK
 # Frontend: Static Site | API: Web Service
-# Banco de dados: Neon (externo) — apenas a variável DATABASE_URL é solicitada.
+# Banco de dados: Neon (externo) — variável DATABASE_URL configurada no dashboard, nunca no repo
 
 services:
   # ---------------------------------------------------------------------------
@@ -14,9 +14,9 @@ services:
     buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /health
-    autoDeploy: true
+    autoDeployTrigger: commit
     envVars:
-      # Única variável obrigatória: cole aqui a connection string do Neon.
+      # Cole a connection string do Neon no dashboard (Environment), nunca aqui
       - key: DATABASE_URL
         sync: false
       - key: NODE_VERSION
@@ -35,12 +35,10 @@ services:
   # ---------------------------------------------------------------------------
   # Frontend (Static Site)
   # ---------------------------------------------------------------------------
-  - type: static
+  - type: web
     name: cepk-front
     runtime: static
-    rootDir: front-end
-    # Site estático puro (HTML + CSS + JS), sem etapa de build.
-    buildCommand: ""
-    publishPath: .
-    pullRequestPreviewsEnabled: true
-    autoDeploy: true
+    staticPublishPath: ./front-end
+    autoDeployTrigger: commit
+    previews:
+      generation: automatic
