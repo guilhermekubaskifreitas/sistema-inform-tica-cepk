@@ -36,7 +36,7 @@ services:
   # Frontend (Static Site)
   # ---------------------------------------------------------------------------
   - type: web
-    name: cepk-front
+    name: frontend-sistema-cepk
     runtime: static
     staticPublishPath: ./front-end
     autoDeployTrigger: commit
