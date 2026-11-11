@@ -206,6 +206,22 @@
     });
   }
 
+  function schedule() {
+    return request("/schedule");
+  }
+
+  function saveScheduleEntry(payload) {
+    return request("/schedule", { method: "PUT", body: payload || {} });
+  }
+
+  function deleteScheduleEntry(payload) {
+    var params = new URLSearchParams();
+    params.set("lab", String((payload && payload.lab) || ""));
+    params.set("weekday", String((payload && payload.weekday) || ""));
+    params.set("period", String((payload && payload.period) || ""));
+    return request("/schedule?" + params.toString(), { method: "DELETE" });
+  }
+
   function formatReservationDate(value) {
     if (!value) return "";
     var date = new Date(value);
@@ -299,6 +315,9 @@
     reservations: reservations,
     approveReservation: approveReservation,
     rejectReservation: rejectReservation,
+    schedule: schedule,
+    saveScheduleEntry: saveScheduleEntry,
+    deleteScheduleEntry: deleteScheduleEntry,
     normalizeReservation: normalizeReservation,
     mergeReservations: mergeReservations,
     approvalUrl: approvalUrl,

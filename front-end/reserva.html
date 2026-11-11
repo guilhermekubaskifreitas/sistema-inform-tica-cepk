@@ -450,6 +450,42 @@
     box-shadow: 0 6px 14px -8px rgba(37, 99, 235, 0.8);
   }
 
+  .aula-group {
+    flex: 1 0 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .aula-group + .aula-group {
+    border-top: 1px dashed var(--line);
+    padding-top: 10px;
+    margin-top: 2px;
+  }
+
+  .aula-group-title {
+    flex: 0 0 100%;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-500);
+  }
+
+  td[data-aula][data-dia] { cursor: pointer; }
+
+  tr.shift-row td {
+    background: #eef4ff;
+    color: var(--blue-600);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+  }
+
   /* ---------- Grade: células marcadas ---------- */
   td.marcada {
     background: var(--blue-100);
@@ -573,14 +609,9 @@
         <form id="form-reserva" novalidate>
           <div class="fields">
             <div class="field">
-              <label for="res-lab">1 · Laboratório</label>
-              <div class="input-wrap">
-                <select id="res-lab" name="lab" required>
-                  <option value="">Selecione o laboratório</option>
-                  <option value="Lab 1">Laboratório 1</option>
-                  <option value="Lab 2">Laboratório 2</option>
-                  <option value="Lab 3">Laboratório 3</option>
-                </select>
+              <label>1 · Laboratório</label>
+              <div class="input-wrap" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font-size:13px;color:var(--ink-500)">
+                Definido pela secretaria no momento da aprovação.
               </div>
             </div>
 
@@ -727,20 +758,40 @@
 
     // Chips de aulas: renderiza conforme o turno e permite seleção múltipla
     function renderChipsAulas() {
-      const periodos = getPeriodos(resTurno.value);
+      const turno = resTurno.value;
       resAulas.innerHTML = "";
-      periodos.forEach(function (p) {
-        const chip = document.createElement("button");
-        chip.type = "button";
-        chip.className = "chip";
-        chip.textContent = p.n + "ª aula — " + p.t;
-        chip.dataset.aula = String(p.n);
-        chip.addEventListener("click", function () {
-          chip.classList.toggle("sel");
-          marcarGrid();
+
+      function addGroup(label, periodos) {
+        if (!periodos.length) return;
+        const group = document.createElement("div");
+        group.className = "aula-group";
+        if (label) {
+          const title = document.createElement("span");
+          title.className = "aula-group-title";
+          title.textContent = label;
+          group.appendChild(title);
+        }
+        periodos.forEach(function (p) {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "chip";
+          chip.textContent = p.n + "ª aula — " + p.t;
+          chip.dataset.aula = String(p.n);
+          chip.addEventListener("click", function () {
+            chip.classList.toggle("sel");
+            marcarGrid();
+          });
+          group.appendChild(chip);
         });
-        resAulas.appendChild(chip);
-      });
+        resAulas.appendChild(group);
+      }
+
+      if (turno === "Ambos") {
+        addGroup("Manhã", PERIODOS["Manhã"]);
+        addGroup("Tarde", PERIODOS["Tarde"]);
+      } else {
+        addGroup("", getPeriodos(turno));
+      }
       marcarGrid();
     }
 
@@ -768,6 +819,21 @@
       });
     }
 
+    function toggleCelula(dayShort, aulaN) {
+      const diaFull = Object.keys(DIA_MAP).find(function (key) { return DIA_MAP[key] === dayShort; });
+      const aulaChip = resAulas.querySelector('.chip[data-aula="' + aulaN + '"]');
+      const diaChip = diaFull ? resDias.querySelector('.chip[data-value="' + diaFull + '"]') : null;
+      if (!aulaChip || !diaChip) return;
+      const selected = aulaChip.classList.contains("sel") && diaChip.classList.contains("sel");
+      if (selected) {
+        aulaChip.classList.remove("sel");
+      } else {
+        aulaChip.classList.add("sel");
+        diaChip.classList.add("sel");
+      }
+      marcarGrid();
+    }
+
     resDias.querySelectorAll(".chip").forEach(function (chip) {
       chip.addEventListener("click", function () {
         chip.classList.toggle("sel");
@@ -783,7 +849,20 @@
       const turno = resTurno.value || "Ambos";
       const periodos = getPeriodos(turno);
       gridBody.innerHTML = "";
+      let lastShift = "";
       periodos.forEach(function (p) {
+        const shift = p.n <= 6 ? "Manhã" : "Tarde";
+        if (turno === "Ambos" && shift !== lastShift) {
+          const shiftRow = document.createElement("tr");
+          shiftRow.className = "shift-row";
+          const shiftCell = document.createElement("td");
+          shiftCell.colSpan = 8;
+          shiftCell.textContent = shift;
+          shiftRow.appendChild(shiftCell);
+          gridBody.appendChild(shiftRow);
+          lastShift = shift;
+        }
+
         const tr = document.createElement("tr");
 
         const tdAula = document.createElement("td");
@@ -810,6 +889,8 @@
           td.textContent = "·";
           td.dataset.dia = d;
           td.dataset.aula = String(p.n);
+          td.title = "Clique para marcar " + d + ", " + p.n + "ª aula";
+          td.addEventListener("click", function () { toggleCelula(d, p.n); });
           tr.appendChild(td);
         });
 
@@ -828,13 +909,12 @@
 
     document.getElementById("form-reserva").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const lab = document.getElementById("res-lab").value;
       const turno = resTurno.value;
       const dias = getDiasSelecionados();
       const aulas = getAulasSelecionadas();
       const disciplina = resDisciplina.value || getUserSubjects()[0] || "";
-      if (!lab || !turno || dias.length === 0 || aulas.length === 0 || !disciplina) {
-        alert("Preencha todos os itens do checklist e selecione pelo menos um dia, uma aula e a disciplina da reserva.");
+      if (!turno || dias.length === 0 || aulas.length === 0 || !disciplina) {
+        alert("Preencha os itens do checklist e selecione pelo menos um dia, uma aula e a disciplina da reserva.");
         return;
       }
 
@@ -847,7 +927,7 @@
       if (!Array.isArray(todas[storedEmail])) todas[storedEmail] = [];
       const nova = {
         id: String(Date.now()),
-        lab: lab,
+        lab: "A definir",
         professor: storedName,
         professorEmail: storedEmail,
         disciplina: disciplina,
@@ -878,6 +958,14 @@
         return;
       }
 
+      if (result.data && result.data.reservation) {
+        const server = window.CEPKApi.normalizeReservation(result.data.reservation);
+        const index = todas[storedEmail].findIndex((item) => item.id === nova.id);
+        if (index >= 0) todas[storedEmail][index] = server;
+        else todas[storedEmail].unshift(server);
+        localStorage.setItem("cepk_reservas", JSON.stringify(todas));
+      }
+
       if (result.data && result.data.emailSent === false) {
         showToast("Reserva registrada, mas o e-mail não foi enviado: " + (result.data.emailError || "verifique o SMTP."));
         setTimeout(() => { window.location.href = "visualizacao-reservas.html"; }, 4000);
@@ -891,7 +979,6 @@
     function enviarEmailAutorizacao(r) {
       const disciplina = r.disciplina || localStorage.getItem("cepk_user_subject") || "";
       return window.CEPKApi.createReservation({
-        lab: r.lab,
         dia: r.dia,
         dias: r.dias,
         turno: r.turno,
