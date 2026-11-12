@@ -1,27 +1,42 @@
-# Render Blueprint — Sistema de Agendamento dos Laboratórios CEPK
-# Frontend: Static Site | API: Web Service
-# Banco de dados: Neon (externo) — variável DATABASE_URL configurada no dashboard, nunca no repo
+databases:
+  - name: cepk-db
+    databaseName: cepk
+    user: cepk
+    plan: free
+    postgresMajorVersion: "16"
 
 services:
-  # ---------------------------------------------------------------------------
-  # API (Node.js Web Service)
-  # ---------------------------------------------------------------------------
   - type: web
-    name: backend-informatica-cepk
+    name: cepk-api
     runtime: node
     plan: free
     rootDir: back-end
-    buildCommand: npm ci --omit=dev
-    startCommand: npm start
+    buildCommand: npm install --include=dev && npm run prisma:generate && npm run build
+    startCommand: npm run prisma:deploy && npm run prisma:seed && npm start
     healthCheckPath: /health
-    autoDeployTrigger: commit
+    autoDeploy: true
     envVars:
-      # Cole a connection string do Neon no dashboard (Environment), nunca aqui
+      - key: NODE_ENV
+        value: production
       - key: DATABASE_URL
-        sync: false
-      - key: NODE_VERSION
-        value: "20"
+        fromDatabase:
+          name: cepk-db
+          property: connectionString
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: ACCESS_TOKEN_TTL
+        value: 15m
+      - key: REFRESH_TOKEN_TTL_DAYS
+        value: "7"
       - key: APP_URL
+        value: https://frontend-informatica-cepk.onrender.com
+      - key: CORS_ORIGIN
+        value: https://frontend-informatica-cepk.onrender.com
+      - key: ALLOWED_EMAIL_DOMAINS
+        value: escola.pr.gov.br
+      - key: APPROVAL_EMAIL
         sync: false
       - key: RESERVATION_EMAIL
         sync: false
@@ -29,16 +44,21 @@ services:
         sync: false
       - key: RESEND_FROM
         value: onboarding@resend.dev
-      - key: USE_FORMSUBMIT
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
         value: "false"
-
-  # ---------------------------------------------------------------------------
-  # Frontend (Static Site)
-  # ---------------------------------------------------------------------------
-  - type: web
-    name: frontend-sistema-cepk
-    runtime: static
-    staticPublishPath: ./front-end
-    autoDeployTrigger: commit
-    previews:
-      generation: automatic
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      - key: ADMIN_NAME
+        value: Secretaria CEPK
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

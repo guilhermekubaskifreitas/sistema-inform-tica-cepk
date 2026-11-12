@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.mock
+.env.mock.local
+.env.render
+.env.producao
+.mock-data.json
+*.log
+prisma/migrations/**/migration_lock.toml.bak
+.DS_Store

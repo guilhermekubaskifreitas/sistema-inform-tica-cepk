@@ -1,0 +1,317 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  professor
+  secretaria
+  admin
+}
+
+enum UserStatus {
+  pendente
+  aprovado
+  recusado
+}
+
+enum ReservationStatus {
+  pendente
+  aprovada
+  recusada
+  cancelada
+}
+
+enum Shift {
+  manha
+  tarde
+}
+
+model User {
+  id             String     @id @default(uuid())
+  name           String     @db.VarChar(120)
+  email          String     @unique @db.VarChar(160)
+  passwordHash   String     @db.VarChar(255)
+  role           Role       @default(professor)
+  status         UserStatus @default(pendente)
+  emailVerifiedAt DateTime?
+  approvedById   String?
+  approvedBy     User?      @relation("UserApprovals", fields: [approvedById], references: [id], onDelete: SetNull)
+  approvedUsers  User[]     @relation("UserApprovals")
+  approvedAt     DateTime?
+  lastLoginAt    DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  teacherSubjects      TeacherSubject[]
+  reservations         Reservation[]         @relation("TeacherReservations")
+  createdReservations  Reservation[]         @relation("CreatedReservations")
+  approvedReservations Reservation[]         @relation("ApprovedReservations")
+  approvalTokens       UserApprovalToken[]
+  refreshTokens        RefreshToken[]
+  reservationExceptions ReservationException[]
+  blockedSlots         BlockedSlot[]
+  auditLogs            AuditLog[]
+
+  @@index([status])
+  @@map("users")
+}
+
+model UserApprovalToken {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @db.VarChar(64)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("user_approval_tokens")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @db.VarChar(64)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Lab {
+  id              String        @id @default(uuid())
+  name            String        @unique @db.VarChar(80)
+  location        String?       @db.VarChar(120)
+  studentCapacity Int?
+  pcCount         Int?
+  active          Boolean       @default(true)
+  notes           String?       @db.Text
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  reservations    Reservation[]
+  blockedSlots    BlockedSlot[]
+  scheduleEntries ScheduleEntry[]
+
+  @@map("labs")
+}
+
+model Period {
+  id         String  @id @default(uuid())
+  label      String  @db.VarChar(40)
+  shift      Shift
+  startTime  String  @db.VarChar(5)
+  endTime    String  @db.VarChar(5)
+  orderIndex Int
+  active     Boolean @default(true)
+
+  reservationPeriods  ReservationPeriod[]
+  blockedSlotPeriods  BlockedSlotPeriod[]
+  scheduleEntries     ScheduleEntry[]
+
+  @@unique([shift, orderIndex])
+  @@map("periods")
+}
+
+model Subject {
+  id     String  @id @default(uuid())
+  name   String  @unique @db.VarChar(80)
+  active Boolean @default(true)
+
+  teacherSubjects      TeacherSubject[]
+  reservationSubjects  ReservationSubject[]
+
+  @@map("subjects")
+}
+
+model Class {
+  id           String  @id @default(uuid())
+  name         String  @db.VarChar(80)
+  grade        String? @db.VarChar(40)
+  shift        Shift?
+  studentCount Int?
+  active       Boolean @default(true)
+
+  teacherSubjects TeacherSubject[]
+  reservations    Reservation[]
+
+  @@unique([name, shift])
+  @@map("classes")
+}
+
+model TeacherSubject {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  classId   String?
+  class     Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, subjectId, classId])
+  @@map("teacher_subjects")
+}
+
+model Reservation {
+  id           String            @id @default(uuid())
+  seriesId     String?           @db.VarChar(36)
+  labId        String?
+  lab          Lab?              @relation(fields: [labId], references: [id], onDelete: Restrict)
+  teacherId    String
+  teacher      User              @relation("TeacherReservations", fields: [teacherId], references: [id], onDelete: Restrict)
+  classId      String?
+  class        Class?            @relation(fields: [classId], references: [id], onDelete: SetNull)
+  weekday      Int
+  validFrom    DateTime          @db.Date
+  validUntil   DateTime          @db.Date
+  status       ReservationStatus @default(pendente)
+  notes        String?           @db.Text
+  createdById  String
+  createdBy    User              @relation("CreatedReservations", fields: [createdById], references: [id], onDelete: Restrict)
+  approvedById String?
+  approvedBy   User?             @relation("ApprovedReservations", fields: [approvedById], references: [id], onDelete: SetNull)
+  approvedAt   DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  periods    ReservationPeriod[]
+  subjects   ReservationSubject[]
+  exceptions ReservationException[]
+
+  @@index([seriesId])
+  @@index([labId, weekday, validFrom, validUntil])
+  @@index([teacherId, weekday, validFrom, validUntil])
+  @@index([classId, weekday, validFrom, validUntil])
+  @@map("reservations")
+}
+
+model ReservationApprovalToken {
+  id        String    @id @default(uuid())
+  seriesId  String    @db.VarChar(36)
+  tokenHash String    @unique @db.VarChar(64)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([seriesId])
+  @@map("reservation_approval_tokens")
+}
+
+model ReservationPeriod {
+  reservationId String
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  periodId      String
+  period        Period      @relation(fields: [periodId], references: [id], onDelete: Restrict)
+
+  @@id([reservationId, periodId])
+  @@index([periodId])
+  @@map("reservation_periods")
+}
+
+model ReservationSubject {
+  reservationId String
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  subjectId     String
+  subject       Subject     @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+
+  @@id([reservationId, subjectId])
+  @@index([subjectId])
+  @@map("reservation_subjects")
+}
+
+model ReservationException {
+  id            String      @id @default(uuid())
+  reservationId String
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  date          DateTime    @db.Date
+  type          String      @db.VarChar(30)
+  reason        String?     @db.Text
+  createdById   String
+  createdBy     User        @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt     DateTime    @default(now())
+
+  @@unique([reservationId, date])
+  @@map("reservation_exceptions")
+}
+
+model BlockedSlot {
+  id          String   @id @default(uuid())
+  labId       String
+  lab         Lab      @relation(fields: [labId], references: [id], onDelete: Cascade)
+  weekday     Int
+  validFrom   DateTime @db.Date
+  validUntil  DateTime @db.Date
+  reason      String   @db.Text
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt   DateTime @default(now())
+
+  periods BlockedSlotPeriod[]
+
+  @@index([labId, weekday, validFrom, validUntil])
+  @@map("blocked_slots")
+}
+
+model BlockedSlotPeriod {
+  blockedSlotId String
+  blockedSlot   BlockedSlot @relation(fields: [blockedSlotId], references: [id], onDelete: Cascade)
+  periodId      String
+  period        Period      @relation(fields: [periodId], references: [id], onDelete: Restrict)
+
+  @@id([blockedSlotId, periodId])
+  @@index([periodId])
+  @@map("blocked_slot_periods")
+}
+
+model ScheduleEntry {
+  id        String   @id @default(uuid())
+  labId     String
+  lab       Lab      @relation(fields: [labId], references: [id], onDelete: Cascade)
+  weekday   Int
+  periodId  String
+  period    Period   @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  professor String   @db.VarChar(120)
+  subject   String   @db.VarChar(160)
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([labId, weekday, periodId])
+  @@index([weekday, periodId])
+  @@map("schedule_entries")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String   @db.VarChar(80)
+  entity     String   @db.VarChar(80)
+  entityId   String?  @db.VarChar(80)
+  beforeJson Json?
+  afterJson  Json?
+  ip         String?  @db.VarChar(45)
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([entity, entityId])
+  @@map("audit_logs")
+}
+
+model Setting {
+  key       String   @id @db.VarChar(80)
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
