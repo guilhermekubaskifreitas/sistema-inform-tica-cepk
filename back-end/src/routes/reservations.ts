@@ -847,8 +847,10 @@ router.post(
               throw new AppError(404, "Turma nao encontrada.");
             }
           } else if (data.turma) {
+            // Reaproveita a turma existente (qualquer turno) para nao duplicar a lista oficial.
             const existing = await tx.class.findFirst({
-              where: { name: data.turma, shift: null },
+              where: { name: data.turma },
+              orderBy: { shift: "asc" },
             });
             turma = existing ?? await tx.class.create({ data: { name: data.turma } });
           } else {

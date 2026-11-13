@@ -262,8 +262,10 @@ router.post(
       // Perfil do professor: turmas que leciona + laboratorio principal
       const classRows = [];
       for (const className of classes) {
+        // Reaproveita a turma existente (qualquer turno) para nao duplicar a lista oficial.
         const existing = await tx.class.findFirst({
-          where: { name: className, shift: null },
+          where: { name: className },
+          orderBy: { shift: "asc" },
         });
         const row = existing ?? await tx.class.create({ data: { name: className } });
         classRows.push(row);
