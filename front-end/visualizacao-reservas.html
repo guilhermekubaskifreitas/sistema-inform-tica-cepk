@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
@@ -144,7 +144,7 @@
   }
 
   .nav-foot a {
-    color: #94a3b8;
+    color: var(--ink-400);
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -183,12 +183,12 @@
     gap: 10px;
     padding: 8px 14px;
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--line);
     cursor: pointer;
   }
 
-  .user:hover { background: #f1f5f9; }
+  .user:hover { background: var(--surface-2); }
 
   .user-avatar {
     width: 34px;
@@ -306,7 +306,7 @@
     transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
 
-  .filters .filter:hover { background: #f8fafc; border-color: #cbd5e1; }
+  .filters .filter:hover { background: var(--surface-2); border-color: var(--ink-400); }
 
   .filters .filter.active {
     background: var(--blue-500);
@@ -333,7 +333,7 @@
     padding: 14px 20px;
     font-weight: 600;
     color: var(--ink-700);
-    background: #f8fafc;
+    background: var(--surface-2);
     border-bottom: 1px solid var(--line);
     white-space: nowrap;
   }
@@ -346,7 +346,7 @@
   }
 
   tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f8fafc; }
+  tr:hover td { background: var(--surface-2); }
 
   .empty {
     display: none;
@@ -369,22 +369,22 @@
     font-weight: 600;
   }
 
-  .badge.aprovada { background: var(--green-100); color: #166534; }
-  .badge.pendente { background: var(--amber-100); color: #92400e; }
-  .badge.recusada { background: var(--red-100); color: #991b1b; }
+  .badge.aprovada { background: var(--green-100); color: var(--status-aprovada-fg); }
+  .badge.pendente { background: var(--amber-100); color: var(--status-pendente-fg); }
+  .badge.recusada { background: var(--red-100); color: var(--status-recusada-fg); }
 
   .badge.dia {
     background: var(--blue-100);
-    color: #1e40af;
+    color: var(--blue-600);
     font-variant-numeric: tabular-nums;
   }
 
-  .badge.manha { background: var(--blue-100); color: #1e40af; }
-  .badge.tarde { background: var(--amber-100); color: #92400e; }
-  .badge.noite { background: #e2e8f0; color: #334155; }
+  .badge.manha { background: var(--blue-100); color: var(--blue-600); }
+  .badge.tarde { background: var(--amber-100); color: var(--status-pendente-fg); }
+  .badge.noite { background: var(--surface-3); color: var(--ink-700); }
 
   .badge.aula {
-    background: #f1f5f9;
+    background: var(--surface-2);
     color: var(--ink-700);
     border: 1px solid var(--line);
   }
@@ -406,7 +406,7 @@
     transition: background 0.15s, border-color 0.15s;
   }
 
-  .btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+  .btn:hover { background: var(--surface-2); border-color: var(--ink-400); }
 
   .btn-primary {
     background: linear-gradient(180deg, var(--blue-500), var(--blue-600));
@@ -455,8 +455,8 @@
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 </style>
-<link rel="stylesheet" href="theme.css" />
-<script src="theme.js"></script>
+<link rel="stylesheet" href="theme.css?v=20261111d" />
+<script src="theme.js?v=20261111d"></script>
 </head>
 <body>
 
@@ -592,7 +592,7 @@
   </main>
 </div>
 
-<script src="api.js"></script>
+<script src="api.js?v=20261111d"></script>
 <script>
   (function () {
     "use strict";
@@ -632,9 +632,19 @@
     }
 
     function statusBadge(status) {
-      const s = String(status).toLowerCase();
-      const label = s === "aprovada" ? "Aprovada" : s === "recusada" ? "Recusada" : "Pendente";
-      return '<span class="badge ' + s + '">' + label + '</span>';
+      const s = String(status || "pendente").toLowerCase();
+      const known = ["aprovada", "aprovado", "recusada", "recusado", "cancelada", "cancelado", "pendente"];
+      const norm = known.indexOf(s) !== -1 ? s : "pendente";
+      const cls = norm === "aprovado" ? "aprovada" : norm === "recusado" ? "recusada" : norm === "cancelado" ? "cancelada" : norm;
+      const labels = { aprovada: "Aprovada", recusada: "Recusada", cancelada: "Cancelada", pendente: "Pendente" };
+      return '<span class="badge ' + cls + '">' + labels[cls] + '</span>';
+    }
+
+    function turnoBadge(turno) {
+      const raw = String(turno || "").trim();
+      const key = raw.toLowerCase();
+      const cls = key.indexOf("tarde") !== -1 ? "tarde" : key.indexOf("noite") !== -1 || key.indexOf("ambos") !== -1 ? "noite" : "manha";
+      return '<span class="badge ' + cls + '">' + escHtml(raw || "—") + '</span>';
     }
 
     function fmtAulas(r) {
@@ -653,10 +663,11 @@
         "<td>" + escHtml(r.disciplina || "—") + "</td>" +
         '<td><span class="badge dia">' + escHtml(r.dia) + "</span></td>" +
         '<td><span class="badge aula">' + escHtml(fmtAulas(r)) + " aula" + (fmtAulas(r).includes(",") ? "s" : "") + "</span></td>" +
-        '<td><span class="badge ' + (r.turno === "Tarde" ? "tarde" : "manha") + '">' + escHtml(r.turno) + "</span></td>" +
+        '<td>' + turnoBadge(r.turno) + "</td>" +
         "<td>" + escHtml(r.criadaEm) + "</td>" +
         statusBadge(r.status) +
-        '<td><button class="btn" data-goto="reserva.html">Detalhes</button></td></tr>'
+        '<td><div style="display:flex;gap:8px"><button class="btn" data-goto="reserva.html">Detalhes</button>' +
+        '<button class="btn btn-danger" data-delete-reservation="' + escHtml(r.id || "") + '">Excluir</button></div></td></tr>'
       ).join("") : "";
       return Array.from(tbody.querySelectorAll("tr"));
     }
@@ -696,6 +707,39 @@
       applyFilter(filtroAtual);
     }
 
+    function removeReservaLocal(id) {
+      const restantes = getReservas(storedEmail).filter((reserva) => {
+        const item = normalizeReserva(reserva);
+        return String(item.id || "") !== String(id);
+      });
+      saveReservas(storedEmail, restantes);
+    }
+
+    async function excluirReserva(button) {
+      const id = button.getAttribute("data-delete-reservation");
+      if (!id) return;
+      if (!confirm("Excluir esta reserva? Essa acao nao pode ser desfeita.")) return;
+
+      const label = button.textContent;
+      button.disabled = true;
+      button.textContent = "Excluindo...";
+
+      let result = null;
+      if (window.CEPKApi && typeof window.CEPKApi.deleteReservation === "function") {
+        result = await window.CEPKApi.deleteReservation(id);
+      }
+
+      if (result && !result.ok && result.status !== 404 && result.status !== 0) {
+        alert(window.CEPKApi.errorMessage(result, "Nao foi possivel excluir a reserva."));
+        button.disabled = false;
+        button.textContent = label;
+        return;
+      }
+
+      removeReservaLocal(id);
+      renderTudo();
+    }
+
     filterBtns.forEach((b) => {
       b.addEventListener("click", () => applyFilter(b.dataset.filter));
     });
@@ -730,8 +774,15 @@
     document.addEventListener("visibilitychange", () => { if (!document.hidden) syncReservas(); });
     window.addEventListener("focus", syncReservas);
 
-    // Delegação: navegação funciona também nas linhas geradas dinamicamente
+    // Delegação: navegação e exclusão funcionam também nas linhas geradas dinamicamente
     document.addEventListener("click", (e) => {
+      const deleteBtn = e.target.closest("[data-delete-reservation]");
+      if (deleteBtn) {
+        e.preventDefault();
+        excluirReserva(deleteBtn);
+        return;
+      }
+
       const el = e.target.closest("[data-goto]");
       if (el) window.location.href = el.dataset.goto;
     });

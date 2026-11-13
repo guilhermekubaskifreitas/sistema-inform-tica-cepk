@@ -1,0 +1,64 @@
+﻿# ============================================================================
+#  Blueprint ALTERNATIVO â€” apenas a API real (Node + Prisma + Neon)
+#
+#  Por que este arquivo existe:
+#  - o serviÃ§o do MOCK (backend-informatica-cepk) foi criado manualmente
+#    no painel do Render e NÃƒO Ã© gerenciado por blueprint. DeclarÃ¡-lo aqui
+#    causava conflito de nome e o apply do blueprint falhava.
+#  - por isso este blueprint cria APENAS o serviÃ§o "cepk-api".
+#
+#  Como aplicar:
+#  Render -> Blueprints -> (selecione este blueprint) -> Settings
+#  -> "Blueprint Path" = render.api.yaml -> Update Blueprint
+#
+#  Depois de aplicar com sucesso, aponte o blueprint antigo (render.yaml)
+#  para render.api.yaml OU desative-o (o serviÃ§o do mock segue no ar).
+# ============================================================================
+services:
+  - type: web
+    name: cepk-api
+    runtime: node
+    plan: free
+    rootDir: back-end
+    buildCommand: npm install --include=dev && npm run prisma:generate && npm run build
+    startCommand: npm run prisma:deploy && npm run prisma:seed && npm run start:api
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # String de conexÃ£o DIRETA do Neon (sem -pooler), com sslmode=require.
+      # Pegue em neon.tech -> seu projeto -> Connect -> aba "Direct".
+      # Ex.: postgresql://USER:SENHA@ep-xxx.sa-east-1.aws.neon.tech/cepk?sslmode=require
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: ACCESS_TOKEN_TTL
+        value: 15m
+      - key: REFRESH_TOKEN_TTL_DAYS
+        value: "7"
+      - key: APP_URL
+        value: https://frontend-informatica-cepk.onrender.com
+      - key: API_PUBLIC_URL
+        value: https://cepk-api.onrender.com
+      - key: CORS_ORIGIN
+        value: https://frontend-informatica-cepk.onrender.com
+      - key: ALLOWED_EMAIL_DOMAINS
+        value: escola.pr.gov.br,gmail.com
+      - key: APPROVAL_EMAIL
+        value: guilhermekf55@gmail.com
+      - key: RESERVATION_EMAIL
+        value: guilhermekf55@gmail.com
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM
+        value: onboarding@resend.dev
+      - key: ADMIN_NAME
+        value: Secretaria CEPK
+      - key: ADMIN_EMAIL
+        value: guilhermekf55@gmail.com
+      - key: ADMIN_PASSWORD
+        sync: false

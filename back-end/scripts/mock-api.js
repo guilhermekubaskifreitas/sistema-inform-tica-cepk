@@ -1,5 +1,7 @@
 const http = require("http");
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 try { require("dotenv").config({ path: ".env.mock" }); } catch (error) {}
 try { require("dotenv").config(); } catch (error) {}
 
@@ -18,6 +20,9 @@ const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER;
 const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
 const RESEND_FROM = process.env.RESEND_FROM || "onboarding@resend.dev";
 const USE_FORMSUBMIT = process.env.USE_FORMSUBMIT === "true";
+const ADMIN_NAME = process.env.ADMIN_NAME || "Secretaria Teste";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "secretaria@escola.pr.gov.br";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "senha123";
 
 function emailRecipients(value) {
   return String(value || "")
@@ -32,24 +37,267 @@ const reservationApprovalTokens = new Map();
 const accessTokens = new Map();
 const refreshTokens = new Map();
 const reservations = [];
+const scheduleEntries = [];
+
+const MOCK_PERIODS = [
+  { id: "per-1", label: "1ª aula", shift: "manha", startTime: "07:15", endTime: "08:05", orderIndex: 1, active: true },
+  { id: "per-2", label: "2ª aula", shift: "manha", startTime: "08:05", endTime: "08:55", orderIndex: 2, active: true },
+  { id: "per-3", label: "3ª aula", shift: "manha", startTime: "08:55", endTime: "09:45", orderIndex: 3, active: true },
+  { id: "per-4", label: "4ª aula", shift: "manha", startTime: "10:05", endTime: "10:55", orderIndex: 4, active: true },
+  { id: "per-5", label: "5ª aula", shift: "manha", startTime: "10:55", endTime: "11:45", orderIndex: 5, active: true },
+  { id: "per-6", label: "6ª aula", shift: "manha", startTime: "11:45", endTime: "12:35", orderIndex: 6, active: true },
+  { id: "per-7", label: "7ª aula", shift: "tarde", startTime: "13:00", endTime: "13:50", orderIndex: 7, active: true },
+  { id: "per-8", label: "8ª aula", shift: "tarde", startTime: "13:50", endTime: "14:40", orderIndex: 8, active: true },
+  { id: "per-9", label: "9ª aula", shift: "tarde", startTime: "14:40", endTime: "15:25", orderIndex: 9, active: true },
+  { id: "per-10", label: "10ª aula", shift: "tarde", startTime: "15:45", endTime: "16:35", orderIndex: 10, active: true },
+  { id: "per-11", label: "11ª aula", shift: "tarde", startTime: "16:35", endTime: "17:25", orderIndex: 11, active: true },
+  { id: "per-12", label: "12ª aula", shift: "tarde", startTime: "17:25", endTime: "18:10", orderIndex: 12, active: true }
+];
+
+const MOCK_CLASSES = [
+  { id: "cls-6A", name: "6A", shift: "tarde" },
+  { id: "cls-6B", name: "6B", shift: "tarde" },
+  { id: "cls-6C", name: "6C", shift: "tarde" },
+  { id: "cls-7A", name: "7A", shift: "tarde" },
+  { id: "cls-7B", name: "7B", shift: "tarde" },
+  { id: "cls-7C", name: "7C", shift: "tarde" },
+  { id: "cls-8A", name: "8A", shift: "tarde" },
+  { id: "cls-8B", name: "8B", shift: "tarde" },
+  { id: "cls-8C", name: "8C", shift: "tarde" },
+  { id: "cls-9A", name: "9A", shift: "tarde" },
+  { id: "cls-9B", name: "9B", shift: "tarde" },
+  { id: "cls-9C", name: "9C", shift: "tarde" },
+  { id: "cls-1ADM", name: "1ADM", shift: "tarde" },
+  { id: "cls-1DSB", name: "1DSB", shift: "tarde" },
+  { id: "cls-1A", name: "1A", shift: "manha" },
+  { id: "cls-1B", name: "1B", shift: "manha" },
+  { id: "cls-1C", name: "1C", shift: "manha" },
+  { id: "cls-2A", name: "2A", shift: "manha" },
+  { id: "cls-2B", name: "2B", shift: "manha" },
+  { id: "cls-2C", name: "2C", shift: "manha" },
+  { id: "cls-3A", name: "3A", shift: "manha" },
+  { id: "cls-3B", name: "3B", shift: "manha" },
+  { id: "cls-3C", name: "3C", shift: "manha" },
+  { id: "cls-2DSB", name: "2DSB", shift: "manha" },
+  { id: "cls-2ADM", name: "2ADM", shift: "manha" },
+  { id: "cls-3DSB", name: "3DSB", shift: "manha" },
+  { id: "cls-3DSC", name: "3DSC", shift: "manha" },
+  { id: "cls-3ADM", name: "3ADM", shift: "manha" }
+];
+
+const MOCK_SUBJECTS = [
+  "Matemática",
+  "Português",
+  "História",
+  "Geografia",
+  "Ciências",
+  "Biologia",
+  "Física",
+  "Química",
+  "Filosofia",
+  "Sociologia",
+  "Arte",
+  "Educação Física",
+  "Inglês",
+  "Espanhol",
+  "Informática",
+  "Programação",
+  "Robótica",
+  "Redes",
+  "Banco de Dados",
+  "Empreendedorismo"
+].map((name, index) => ({ id: `sub-${index + 1}`, name, active: true }));
+
+const DEFAULT_LABS = [
+  { id: "lab-1", name: "Lab 1", location: "Bloco A", studentCapacity: 30, pcCount: 30, notes: "" },
+  { id: "lab-2", name: "Lab 2", location: "Bloco A", studentCapacity: 25, pcCount: 25, notes: "" },
+  { id: "lab-3", name: "Lab 3", location: "Bloco B", studentCapacity: 30, pcCount: 30, notes: "" }
+];
+
+const labs = DEFAULT_LABS.map((lab) => {
+  const now = new Date().toISOString();
+  return { ...lab, active: true, createdAt: now, updatedAt: now };
+});
+
+const MOCK_DATA_FILE = (() => {
+  const configured = process.env.MOCK_DATA_FILE;
+  if (configured === "false" || configured === "off") return "";
+  if (configured) return path.resolve(configured);
+  return path.join(__dirname, "..", ".mock-data.json");
+})();
+
+function loadMockData() {
+  if (!MOCK_DATA_FILE) return;
+  let raw;
+  try {
+    raw = fs.readFileSync(MOCK_DATA_FILE, "utf8");
+  } catch (error) {
+    return;
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed.users)) {
+      users.clear();
+      parsed.users.forEach((user) => {
+        if (user && user.email) users.set(String(user.email).toLowerCase(), user);
+      });
+    }
+    if (Array.isArray(parsed.reservations)) {
+      reservations.length = 0;
+      reservations.push(...parsed.reservations);
+    }
+    if (Array.isArray(parsed.scheduleEntries)) {
+      scheduleEntries.length = 0;
+      scheduleEntries.push(...parsed.scheduleEntries);
+    }
+    if (Array.isArray(parsed.labs) && parsed.labs.length) {
+      labs.length = 0;
+      labs.push(...parsed.labs);
+    }
+  } catch (error) {
+    console.warn("Mock: arquivo de dados inválido, ignorando.", error.message);
+  }
+}
+
+function saveMockData() {
+  if (!MOCK_DATA_FILE) return;
+  const payload = {
+    users: Array.from(users.values()),
+    reservations,
+    scheduleEntries,
+    labs,
+    savedAt: new Date().toISOString()
+  };
+  try {
+    fs.writeFileSync(MOCK_DATA_FILE, JSON.stringify(payload, null, 2));
+  } catch (error) {
+    console.warn("Mock: não foi possível gravar os dados.", error.message);
+  }
+}
+
+const MOCK_WEEKDAYS = {
+  segunda: 1,
+  terça: 2,
+  terca: 2,
+  quarta: 3,
+  quinta: 4,
+  sexta: 5,
+  seg: 1,
+  ter: 2,
+  qua: 3,
+  qui: 4,
+  sex: 5
+};
+
+function reservationWeekdays(reservation) {
+  const list = Array.isArray(reservation.dias)
+    ? reservation.dias
+    : String(reservation.dia || "").split(/[,;\n]/);
+  return Array.from(
+    new Set(
+      list
+        .map((item) => MOCK_WEEKDAYS[String(item).trim().toLowerCase()])
+        .filter(Boolean)
+    )
+  );
+}
+
+function reservationPeriods(reservation) {
+  const list = Array.isArray(reservation.aulas)
+    ? reservation.aulas
+    : String(reservation.aula || "").split(/[,;\n]/);
+  return Array.from(
+    new Set(
+      list
+        .map((item) => {
+          const match = String(item).match(/\d+/);
+          return match ? Number(match[0]) : null;
+        })
+        .filter((item) => Number.isInteger(item) && item >= 1 && item <= 12)
+    )
+  );
+}
+
+function syncMockSchedule(reservation) {
+  if (!reservation.lab || reservation.lab === "A definir") return;
+
+  const subject =
+    (Array.isArray(reservation.disciplinas) && reservation.disciplinas.join(", ")) ||
+    reservation.disciplina ||
+    "A definir";
+
+  for (const weekday of reservationWeekdays(reservation)) {
+    for (const period of reservationPeriods(reservation)) {
+      const existing = scheduleEntries.find(
+        (entry) =>
+          entry.lab === reservation.lab &&
+          Number(entry.weekday) === weekday &&
+          Number(entry.period) === period
+      );
+
+      if (existing) {
+        existing.professor = reservation.professor;
+        existing.subject = subject;
+        existing.updatedAt = new Date().toISOString();
+      } else {
+        scheduleEntries.push({
+          id: id("sch"),
+          lab: reservation.lab,
+          weekday,
+          period,
+          professor: reservation.professor,
+          subject,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+      }
+    }
+  }
+}
+
+function removeMockSchedule(reservation) {
+  if (!reservation.lab || reservation.lab === "A definir") return;
+
+  const subject =
+    (Array.isArray(reservation.disciplinas) && reservation.disciplinas.join(", ")) ||
+    reservation.disciplina ||
+    "A definir";
+
+  for (const weekday of reservationWeekdays(reservation)) {
+    for (const period of reservationPeriods(reservation)) {
+      const index = scheduleEntries.findIndex(
+        (entry) =>
+          entry.lab === reservation.lab &&
+          Number(entry.weekday) === weekday &&
+          Number(entry.period) === period &&
+          entry.professor === reservation.professor &&
+          entry.subject === subject
+      );
+
+      if (index >= 0) scheduleEntries.splice(index, 1);
+    }
+  }
+}
 
 function id(prefix) {
   return prefix + "_" + crypto.randomUUID().slice(0, 8);
 }
 
-function addUser(input) {
-  const email = String(input.email || "").trim().toLowerCase();
-  users.set(email, {
-    id: input.id || id("usr"),
-    name: input.name,
-    email,
-    password: input.password,
-    role: input.role || "professor",
-    status: input.status || "pendente",
-    subjects: input.subjects || []
-  });
-  return users.get(email);
-}
+  function addUser(input) {
+    const email = String(input.email || "").trim().toLowerCase();
+    users.set(email, {
+      id: input.id || id("usr"),
+      name: input.name,
+      email,
+      password: input.password,
+      role: input.role || "professor",
+      status: input.status || "pendente",
+      subjects: input.subjects || [],
+      classes: input.classes || [],
+      labId: input.labId || null
+    });
+    return users.get(email);
+  }
 
 addUser({
   id: "usr_professor",
@@ -63,23 +311,52 @@ addUser({
 
 addUser({
   id: "usr_secretaria",
-  name: "Secretaria Teste",
-  email: "secretaria@escola.pr.gov.br",
-  password: "senha123",
+  name: ADMIN_NAME,
+  email: ADMIN_EMAIL,
+  password: ADMIN_PASSWORD,
   role: "secretaria",
   status: "aprovado",
   subjects: ["Secretaria"]
 });
 
-function publicUser(user) {
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    status: user.status,
-    subjects: user.subjects
+  function publicUser(user) {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+      subjects: user.subjects || [],
+      classes: user.classes || [],
+      labId: user.labId || null,
+      labName: user.labId ? ((labs.find((lab) => lab.id === user.labId) || {}).name || null) : null
+    };
+  }
+
+function normalizeLabInput(body, current) {
+  const base = current || {};
+  const pickString = (value, fallback) => (value === undefined ? fallback : String(value || "").trim());
+  const pickInt = (value, fallback) => {
+    if (value === undefined || value === null || value === "") return fallback;
+    const number = Number(value);
+    return Number.isFinite(number) ? Math.max(0, Math.trunc(number)) : fallback;
   };
+  return {
+    name: pickString(body.name, base.name || ""),
+    location: pickString(body.location, base.location || ""),
+    studentCapacity: pickInt(body.studentCapacity, typeof base.studentCapacity === "number" ? base.studentCapacity : 0),
+    pcCount: pickInt(body.pcCount, typeof base.pcCount === "number" ? base.pcCount : 0),
+    notes: pickString(body.notes, base.notes || ""),
+    active: body.active === undefined ? base.active !== false : Boolean(body.active)
+  };
+}
+
+function labInUse(name) {
+  const normalized = String(name || "").toLowerCase();
+  return (
+    reservations.some((reservation) => String(reservation.lab || "").toLowerCase() === normalized) ||
+    scheduleEntries.some((entry) => String(entry.lab || "").toLowerCase() === normalized)
+  );
 }
 
 function approvalLinks(token) {
@@ -349,7 +626,7 @@ function setCors(req, res) {
   const origin = req.headers.origin;
   res.setHeader("Access-Control-Allow-Origin", origin || "*");
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Vary", "Origin");
 }
@@ -560,24 +837,236 @@ async function handle(req, res) {
   const path = url.pathname;
 
   if (req.method === "GET" && path === "/health") {
-    return sendJson(res, 200, { status: "ok", mock: true, timestamp: new Date().toISOString() });
+    return sendJson(res, 200, {
+      status: "ok",
+      mock: true,
+      version: "2026-11-12-labs-admin",
+      features: ["labs-crud", "admin-users", "admin-reservations", "schedule-put", "persistence"],
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  if (req.method === "GET" && path === "/classes") {
+    return sendJson(res, 200, { classes: MOCK_CLASSES });
+  }
+
+  if (req.method === "POST" && path === "/classes") {
+    const current = currentUser(req);
+    if (!current || (current.role !== "secretaria" && current.role !== "admin")) {
+      return sendJson(res, current ? 403 : 401, { error: "Apenas a administracao pode cadastrar turmas." });
+    }
+    const name = String((req.body && req.body.name) || "").trim();
+    if (!name) return sendJson(res, 400, { error: "Informe o nome da turma." });
+    const existing = MOCK_CLASSES.find((c) => c.name.toLowerCase() === name.toLowerCase());
+    if (existing) return sendJson(res, 200, { class: existing, created: false });
+    const created = { id: id("cls"), name, shift: (req.body && req.body.shift) || "manha" };
+    MOCK_CLASSES.push(created);
+    return sendJson(res, 201, { class: created, created: true });
+  }
+
+  if (req.method === "GET" && path === "/professors") {
+    const current = currentUser(req);
+    if (!current || (current.role !== "secretaria" && current.role !== "admin")) {
+      return sendJson(res, current ? 403 : 401, { error: "Acesso restrito a administracao." });
+    }
+    const professors = Array.from(users.values())
+      .filter((user) => user.role === "professor")
+      .map((user) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        status: user.status,
+        labId: user.labId || null,
+        labName: (labs.find((lab) => lab.id === user.labId) || {}).name || null,
+        classes: user.classes || []
+      }));
+    return sendJson(res, 200, { professors });
   }
 
   if (req.method === "GET" && path === "/catalog") {
     return sendJson(res, 200, {
-      labs: [
-        { id: "lab-1", name: "Laboratório 1", capacity: 40 },
-        { id: "lab-2", name: "Laboratório 2", capacity: 35 },
-        { id: "lab-3", name: "Laboratório 3", capacity: 30 }
-      ],
-      periods: [
-        { id: "p1", name: "1ª aula", start: "07:00", end: "07:50" },
-        { id: "p2", name: "2ª aula", start: "07:50", end: "08:40" },
-        { id: "p3", name: "3ª aula", start: "08:40", end: "09:30" }
-      ],
-      subjects: ["Matemática", "Português", "Química", "Biologia", "Geografia", "Física", "História", "Educação Física", "Inglês", "Arte", "Banco de Dados", "Introdução à Computação", "Introdução à Programação", "Lógica Computacional", "Análise e Métodos para Sistema", "Projeto/Outro"].map((name, index) => ({ id: "sub-" + index, name })),
-      classes: [{ id: "turma-1", name: "1º Ano A", grade: "1º Ano" }]
+      labs: labs.filter((lab) => lab.active !== false),
+      periods: MOCK_PERIODS,
+      subjects: MOCK_SUBJECTS,
+      classes: MOCK_CLASSES
     });
+  }
+
+  if (req.method === "GET" && path === "/labs") {
+    const user = currentUser(req);
+    const includeInactive = String(url.searchParams.get("includeInactive") || "") === "true";
+    const isStaff = Boolean(user && (user.role === "secretaria" || user.role === "admin"));
+    const visible = includeInactive && isStaff ? labs : labs.filter((lab) => lab.active !== false);
+    return sendJson(res, 200, { labs: visible });
+  }
+
+  if (req.method === "GET" && path === "/periods") {
+    return sendJson(res, 200, { periods: MOCK_PERIODS });
+  }
+
+  if (req.method === "GET" && path === "/subjects") {
+    return sendJson(res, 200, { subjects: MOCK_SUBJECTS });
+  }
+
+  if (req.method === "GET" && path === "/classes") {
+    return sendJson(res, 200, { classes: MOCK_CLASSES });
+  }
+
+  if (req.method === "POST" && path === "/labs") {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado" || (user.role !== "secretaria" && user.role !== "admin")) {
+      return sendJson(res, user ? 403 : 401, {
+        error: user ? "Apenas a administração pode cadastrar laboratórios." : "Sessão inválida."
+      });
+    }
+
+    let body;
+    try {
+      body = JSON.parse(await readBody(req));
+    } catch (error) {
+      return sendJson(res, 400, { error: "JSON inválido." });
+    }
+
+    const normalized = normalizeLabInput(body, null);
+    const fields = {};
+    if (normalized.name.length < 2 || normalized.name.length > 80) {
+      fields.name = ["Informe um nome entre 2 e 80 caracteres."];
+    } else if (labs.some((lab) => lab.name.toLowerCase() === normalized.name.toLowerCase())) {
+      fields.name = ["Já existe um laboratório com este nome."];
+    }
+    if (Object.keys(fields).length) return validationError(res, fields);
+
+    const now = new Date().toISOString();
+    const lab = { id: id("lab"), ...normalized, createdAt: now, updatedAt: now };
+    labs.push(lab);
+    return sendJson(res, 201, { lab });
+  }
+
+  const labMatch = path.match(/^\/labs\/([^/]+)$/);
+  if (req.method === "PUT" && labMatch) {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado" || (user.role !== "secretaria" && user.role !== "admin")) {
+      return sendJson(res, user ? 403 : 401, {
+        error: user ? "Apenas a administração pode editar laboratórios." : "Sessão inválida."
+      });
+    }
+
+    const current = labs.find((lab) => lab.id === labMatch[1]);
+    if (!current) return sendJson(res, 404, { error: "Laboratório não encontrado." });
+
+    let body;
+    try {
+      body = JSON.parse(await readBody(req));
+    } catch (error) {
+      return sendJson(res, 400, { error: "JSON inválido." });
+    }
+
+    const normalized = normalizeLabInput(body, current);
+    const fields = {};
+    if (normalized.name.length < 2 || normalized.name.length > 80) {
+      fields.name = ["Informe um nome entre 2 e 80 caracteres."];
+    } else if (
+      labs.some(
+        (lab) => lab.id !== current.id && lab.name.toLowerCase() === normalized.name.toLowerCase()
+      )
+    ) {
+      fields.name = ["Já existe um laboratório com este nome."];
+    }
+    if (Object.keys(fields).length) return validationError(res, fields);
+
+    Object.assign(current, normalized, { updatedAt: new Date().toISOString() });
+    return sendJson(res, 200, { lab: current });
+  }
+
+  if (req.method === "DELETE" && labMatch) {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado" || (user.role !== "secretaria" && user.role !== "admin")) {
+      return sendJson(res, user ? 403 : 401, {
+        error: user ? "Apenas a administração pode excluir laboratórios." : "Sessão inválida."
+      });
+    }
+
+    const index = labs.findIndex((lab) => lab.id === labMatch[1]);
+    if (index < 0) return sendJson(res, 404, { error: "Laboratório não encontrado." });
+
+    if (labInUse(labs[index].name)) {
+      return sendJson(res, 409, {
+        error: "Este laboratório possui reservas ou horários vinculados. Desative-o em vez de excluir."
+      });
+    }
+
+    labs.splice(index, 1);
+    return sendJson(res, 200, { ok: true });
+  }
+
+  if (req.method === "GET" && path === "/admin/users") {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado" || (user.role !== "secretaria" && user.role !== "admin")) {
+      return sendJson(res, user ? 403 : 401, {
+        error: user ? "Acesso restrito à administração." : "Sessão inválida."
+      });
+    }
+
+    const status = String(url.searchParams.get("status") || "").trim().toLowerCase();
+    const query = String(url.searchParams.get("q") || "").trim().toLowerCase();
+    let list = Array.from(users.values());
+    if (status) list = list.filter((item) => String(item.status || "").toLowerCase() === status);
+    if (query) {
+      list = list.filter(
+        (item) =>
+          String(item.name || "").toLowerCase().includes(query) ||
+          String(item.email || "").toLowerCase().includes(query)
+      );
+    }
+    list.sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "pt-BR"));
+    return sendJson(res, 200, { users: list.map(publicUser) });
+  }
+
+  const adminUserAction = path.match(/^\/admin\/users\/([^/]+)\/(approve|reject)$/);
+  if (req.method === "POST" && adminUserAction) {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado" || (user.role !== "secretaria" && user.role !== "admin")) {
+      return sendJson(res, user ? 403 : 401, {
+        error: user ? "Acesso restrito à administração." : "Sessão inválida."
+      });
+    }
+
+    const target = Array.from(users.values()).find((item) => item.id === adminUserAction[1]);
+    if (!target) return sendJson(res, 404, { error: "Usuário não encontrado." });
+    if (target.role === "admin" && user.role !== "admin") {
+      return sendJson(res, 403, { error: "Apenas um administrador pode alterar outro administrador." });
+    }
+
+    const action = adminUserAction[2];
+    target.status = action === "approve" ? "aprovado" : "recusado";
+
+    for (const [token, email] of approvalTokens.entries()) {
+      if (email === target.email) approvalTokens.delete(token);
+    }
+
+    return sendJson(res, 200, {
+      message: action === "approve" ? "Cadastro aprovado." : "Cadastro recusado.",
+      user: publicUser(target)
+    });
+  }
+
+  const adminUserDelete = path.match(/^\/admin\/users\/([^/]+)$/);
+  if (req.method === "DELETE" && adminUserDelete) {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado" || user.role !== "admin") {
+      return sendJson(res, user ? 403 : 401, {
+        error: user ? "Apenas administradores podem excluir usuários." : "Sessão inválida."
+      });
+    }
+
+    const target = Array.from(users.values()).find((item) => item.id === adminUserDelete[1]);
+    if (!target) return sendJson(res, 404, { error: "Usuário não encontrado." });
+    if (target.id === user.id) {
+      return sendJson(res, 409, { error: "Você não pode excluir o próprio usuário." });
+    }
+
+    users.delete(target.email);
+    return sendJson(res, 200, { ok: true });
   }
 
   if (req.method === "POST" && path === "/auth/register") {
@@ -596,11 +1085,16 @@ async function handle(req, res) {
       ? body.subjects.map((item) => String(item).trim()).filter(Boolean)
       : String(body.subject || "").split(/[,;\n]/).map((item) => item.trim()).filter(Boolean);
     const adminRequested = Boolean(body.adminRequest);
+    const classes = Array.isArray(body.classes)
+      ? body.classes.map((item) => String(item).trim()).filter(Boolean)
+      : String(body.turma || "").split(/[,;\n]/).map((item) => item.trim()).filter(Boolean);
+    const labId = body.labId ? String(body.labId) : null;
 
     if (name.length < 3) fields.name = ["Informe seu nome completo."];
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/i.test(email)) fields.email = ["E-mail inválido."];
     if (password.length < 8) fields.password = ["A senha deve ter ao menos 8 caracteres."];
-    if (!adminRequested && subjects.length === 0) fields.subjects = ["Informe ao menos uma disciplina."];
+      if (!adminRequested && subjects.length === 0) fields.subjects = ["Informe ao menos uma disciplina."];
+      if (!adminRequested && classes.length === 0) fields.classes = ["Informe ao menos uma turma."];
     if (Object.keys(fields).length) return validationError(res, fields);
 
     const existing = users.get(email);
@@ -608,15 +1102,17 @@ async function handle(req, res) {
       return sendJson(res, 409, { error: "Este e-mail já possui cadastro aprovado. Faça login." });
     }
 
-    const user = addUser({
-      id: existing ? existing.id : id("usr"),
-      name,
-      email,
-      password,
-      role: adminRequested ? "admin" : "professor",
-      status: "pendente",
-      subjects
-    });
+      const user = addUser({
+        id: existing ? existing.id : id("usr"),
+        name,
+        email,
+        password,
+        role: adminRequested ? "admin" : "professor",
+        status: "pendente",
+        subjects,
+        classes,
+        labId
+      });
 
     const token = crypto.randomUUID();
     approvalTokens.set(token, email);
@@ -734,6 +1230,88 @@ async function handle(req, res) {
     return sendJson(res, 200, { user: publicUser(user) });
   }
 
+  if (req.method === "GET" && path === "/schedule") {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado") {
+      return sendJson(res, 401, { error: "Sessão inválida." });
+    }
+    return sendJson(res, 200, { entries: scheduleEntries });
+  }
+
+  if ((req.method === "PUT" || req.method === "DELETE") && path === "/schedule") {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado") {
+      return sendJson(res, 401, { error: "Sessão inválida." });
+    }
+    if (user.role !== "secretaria" && user.role !== "admin") {
+      return sendJson(res, 403, { error: "Apenas a secretaria pode editar a grade." });
+    }
+
+    let body = {};
+    try {
+      const raw = await readBody(req);
+      body = raw ? JSON.parse(raw) : {};
+    } catch (error) {
+      return sendJson(res, 400, { error: "JSON inválido." });
+    }
+
+    let lab;
+    let weekday;
+    let period;
+
+    if (req.method === "DELETE") {
+      const params = new URLSearchParams(url.search);
+      lab = String(params.get("lab") || "").trim();
+      weekday = Number(params.get("weekday"));
+      period = Number(params.get("period"));
+      const index = scheduleEntries.findIndex(
+        (entry) =>
+          entry.lab === lab &&
+          Number(entry.weekday) === weekday &&
+          Number(entry.period) === period
+      );
+      if (index >= 0) scheduleEntries.splice(index, 1);
+      return sendJson(res, 200, { ok: true });
+    }
+
+    lab = String(body.lab || "").trim();
+    weekday = Number(body.weekday);
+    period = Number(body.period);
+    const professor = String(body.professor || "").trim();
+    const subject = String(body.subject || "").trim();
+
+    if (!lab || !Number.isInteger(weekday) || weekday < 1 || weekday > 5 || !Number.isInteger(period) || period < 1 || period > 12 || !professor || !subject) {
+      return sendJson(res, 400, { error: "Informe laboratório, dia, aula, professor e matéria." });
+    }
+
+    let entry = scheduleEntries.find(
+      (item) =>
+        item.lab === lab &&
+        Number(item.weekday) === weekday &&
+        Number(item.period) === period
+    );
+
+    if (entry) {
+      entry.professor = professor;
+      entry.subject = subject;
+      entry.updatedAt = new Date().toISOString();
+    } else {
+      entry = {
+        id: id("sch"),
+        lab,
+        weekday,
+        period,
+        professor,
+        subject,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      scheduleEntries.push(entry);
+    }
+
+    return sendJson(res, 200, { entry });
+  }
+
   const reservationAction = path.match(/^\/reservations\/([^/]+)\/(approve|reject)$/);
   if (req.method === "POST" && reservationAction) {
     const user = currentUser(req);
@@ -760,9 +1338,10 @@ async function handle(req, res) {
     const action = reservationAction[2];
     if (action === "approve") {
       const lab = String(body.lab || reservation.lab || "").trim();
-      if (!lab) return sendJson(res, 400, { error: "Informe o laboratório." });
+      if (!lab || lab === "A definir") return sendJson(res, 400, { error: "Informe o laboratório." });
       reservation.lab = lab;
       reservation.status = "aprovada";
+      syncMockSchedule(reservation);
     } else {
       reservation.status = "recusada";
       if (body.reason) reservation.reason = String(body.reason);
@@ -821,7 +1400,23 @@ async function handle(req, res) {
       return sendHtml(res, 400, reservationApprovalPage(null, "", "Ação de aprovação inválida.", true));
     }
 
+    if (action === "approve" && (!reservation.lab || reservation.lab === "A definir")) {
+      return sendHtml(
+        res,
+        400,
+        reservationApprovalPage(
+          reservation,
+          token,
+          "A secretaria precisa definir o laboratório no painel administrativo antes de aprovar esta reserva.",
+          true
+        )
+      );
+    }
+
     reservation.status = action === "approve" ? "aprovada" : "recusada";
+    if (action === "approve") {
+      syncMockSchedule(reservation);
+    }
     reservation.decidedAt = new Date().toISOString();
     reservationApprovalTokens.delete(token);
 
@@ -833,10 +1428,60 @@ async function handle(req, res) {
     if (!user || user.status !== "aprovado") {
       return sendJson(res, 401, { error: "Sessão inválida." });
     }
-    const visible = user.role === "secretaria" || user.role === "admin"
+    const status = String(url.searchParams.get("status") || "").trim().toLowerCase();
+    const isStaff = user.role === "secretaria" || user.role === "admin";
+    let visible = isStaff
       ? reservations
       : reservations.filter((reservation) => reservation.professorEmail === user.email);
+    if (status) {
+      visible = visible.filter((reservation) => String(reservation.status || "").toLowerCase() === status);
+    }
     return sendJson(res, 200, { reservations: visible });
+  }
+
+  if (req.method === "GET" && path === "/admin/reservations") {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado" || (user.role !== "secretaria" && user.role !== "admin")) {
+      return sendJson(res, user ? 403 : 401, { error: user ? "Acesso restrito à administração." : "Sessão inválida." });
+    }
+    const status = String(url.searchParams.get("status") || "").trim().toLowerCase();
+    const visible = status
+      ? reservations.filter((reservation) => String(reservation.status || "").toLowerCase() === status)
+      : reservations;
+    return sendJson(res, 200, { reservations: visible });
+  }
+
+  const reservationDelete = path.match(/^\/reservations\/([^/]+)$/);
+  if (req.method === "DELETE" && reservationDelete) {
+    const user = currentUser(req);
+    if (!user || user.status !== "aprovado") {
+      return sendJson(res, 401, { error: "Sessao invalida." });
+    }
+
+    const index = reservations.findIndex(
+      (item) => item.id === reservationDelete[1]
+    );
+
+    if (index < 0) {
+      return sendJson(res, 404, { error: "Reserva nao encontrada." });
+    }
+
+    const reservation = reservations[index];
+    const canManage = user.role === "secretaria" || user.role === "admin";
+
+    if (!canManage && reservation.professorEmail !== user.email) {
+      return sendJson(res, 403, {
+        error: "Voce so pode excluir suas proprias reservas."
+      });
+    }
+
+    removeMockSchedule(reservation);
+    reservations.splice(index, 1);
+
+    return sendJson(res, 200, {
+      message: "Reserva excluida.",
+      id: reservation.id
+    });
   }
 
   if (req.method === "POST" && path === "/reservations") {
@@ -852,7 +1497,7 @@ async function handle(req, res) {
       return sendJson(res, 400, { error: "JSON inválido." });
     }
 
-    const lab = String(body.lab || "").trim();
+    const lab = String(body.lab || "A definir").trim() || "A definir";
     const dia = String(body.dia || "").trim();
     const turno = String(body.turno || "").trim();
     const aulas = Array.isArray(body.aulas)
@@ -861,26 +1506,53 @@ async function handle(req, res) {
     const disciplinas = Array.isArray(body.disciplinas)
       ? body.disciplinas.map((item) => String(item).trim()).filter(Boolean)
       : String(body.disciplina || "").split(/[,;\n]/).map((item) => item.trim()).filter(Boolean);
+    const dias = Array.isArray(body.dias) && body.dias.length
+      ? body.dias.map((item) => String(item).trim()).filter(Boolean)
+      : String(body.dia || "").split(/[,;\n]/).map((item) => item.trim()).filter(Boolean);
 
     const fields = {};
-    if (!lab) fields.lab = ["Informe o laboratório."];
     if (!dia) fields.dia = ["Informe o dia."];
     if (!turno) fields.turno = ["Informe o turno."];
     if (aulas.length === 0) fields.aulas = ["Informe ao menos uma aula."];
+
+    const turmaNome = String(body.turma || "").trim();
+    let turma = null;
+    if (body.classId) {
+      turma = MOCK_CLASSES.find((c) => c.id === String(body.classId)) || null;
+      if (!turma) return sendJson(res, 404, { error: "Turma n��o encontrada." });
+    } else if (turmaNome) {
+      turma = MOCK_CLASSES.find((c) => c.name.toLowerCase() === turmaNome.toLowerCase()) || null;
+      if (!turma) {
+        turma = { id: id("cls"), name: turmaNome, shift: "manha" };
+        MOCK_CLASSES.push(turma);
+      }
+    } else {
+      return sendJson(res, 400, { error: "Informe a turma que vai ao laboratorio." });
+    }
+
     if (Object.keys(fields).length) return validationError(res, fields);
 
-    const reservation = {
-      id: id("res"),
-      lab,
-      dia,
-      turno,
-      aulas,
-      disciplinas,
-      professor: user.name,
-      professorEmail: user.email,
-      status: "pendente",
-      createdAt: new Date().toISOString()
-    };
+    const now = new Date();
+    const endOfYear = new Date(Date.UTC(now.getUTCFullYear(), 11, 31));
+
+      const reservation = {
+        id: id("res"),
+        lab,
+        turma: turma.name,
+        classe: turma.name,
+        classId: turma.id,
+        dias,
+        dia,
+        turno,
+        aulas,
+        disciplinas,
+        professor: user.name,
+        professorEmail: user.email,
+        status: "pendente",
+        validFrom: body.validFrom || now.toISOString().slice(0, 10),
+        validUntil: body.validUntil || endOfYear.toISOString().slice(0, 10),
+        createdAt: now.toISOString()
+      };
 
     reservations.unshift(reservation);
     const token = crypto.randomUUID();
@@ -903,17 +1575,23 @@ async function handle(req, res) {
   return sendJson(res, 404, { error: "Rota não encontrada." });
 }
 
+loadMockData();
+
 const server = http.createServer((req, res) => {
-  handle(req, res).catch((error) => {
-    console.error(error);
-    if (!res.headersSent) sendJson(res, 500, { error: "Erro interno no mock." });
-  });
+  handle(req, res)
+    .then(() => {
+      if (req.method !== "GET" && req.method !== "OPTIONS") saveMockData();
+    })
+    .catch((error) => {
+      console.error(error);
+      if (!res.headersSent) sendJson(res, 500, { error: "Erro interno no mock." });
+    });
 });
 
 server.listen(PORT, () => {
   console.log("Mock API CEPK em http://localhost:" + PORT);
   console.log("Professor: professor@escola.pr.gov.br / senha123");
-  console.log("Secretaria: secretaria@escola.pr.gov.br / senha123");
+  console.log("Admin: " + ADMIN_EMAIL + " / " + ADMIN_PASSWORD);
   console.log("Aprovações serão enviadas para: " + APPROVAL_EMAIL);
   console.log("Reservas serão enviadas para: " + emailRecipients(RESERVATION_EMAIL).join(", "));
   const provider = emailProvider();

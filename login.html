@@ -2,16 +2,6 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
-<script>
-  (function () {
-    // Garante que o caminho se adapte entre pastas prototypes/ e frontend/
-    document.addEventListener("DOMContentLoaded", function () {
-      const base = location.href.replace(/prototype\/?/, "").replace(/[^a-zA-Z0-9]/g, "");
-      window.SITE_BASE = base || "";
-    });
-  })();
-</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="Acesso ao sistema de agendamento dos laboratórios de informática do Colégio Estadual Presidente Kennedy." />
 <title>Entrar · Agenda dos Laboratórios · CEPK</title>
@@ -368,125 +358,26 @@
     transition: color 0.15s;
   }
 
-  .input-wrap input,
-  .input-wrap select {
+  .input-wrap input {
     width: 100%;
     height: 48px;
     padding: 0 44px 0 42px;
     border: 1px solid var(--line);
     border-radius: 12px;
-    background: var(--surface-2);
+    background: #f8fafc;
     font: inherit;
     font-size: 14.5px;
     color: var(--ink-900);
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-    appearance: none;
   }
-
-  .input-wrap select { cursor: pointer; }
-
-  .input-wrap select:invalid { color: #a8b4c4; }
-
-  .input-wrap select option {
-    color: var(--ink-900);
-    background: var(--surface);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    font-size: 14.5px;
-  }
-
-  .input-wrap .chevron {
-    position: absolute;
-    right: 14px;
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
-    color: var(--ink-400);
-    transition: color 0.15s;
-  }
-
-  .input-wrap:focus-within .chevron { color: var(--blue-600); }
-
-  .input-wrap input[readonly] { cursor: pointer; }
-
-  /* ---------- Popover (lista de opções / gerenciador de senhas) ---------- */
-  .fill-pop {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    right: 0;
-    z-index: 40;
-    display: none;
-    padding: 6px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    box-shadow: 0 12px 32px -8px rgba(8, 25, 51, 0.28);
-    text-align: left;
-    overflow: hidden;
-  }
-
-  .fill-pop.open { display: block; animation: rise 0.18s ease both; }
-
-  .fill-pop .pop-head {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 6px 10px 6px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--ink-400);
-    letter-spacing: 0.02em;
-  }
-
-  .fill-pop .row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    border: 0;
-    background: none;
-    padding: 9px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font: inherit;
-    text-align: left;
-  }
-
-  .fill-pop .row:hover { background: var(--surface-2); }
-
-  .fill-pop .g-key {
-    width: 26px;
-    height: 26px;
-    flex: 0 0 auto;
-    border-radius: 7px;
-    display: grid;
-    place-items: center;
-    background: linear-gradient(135deg, #4285f4, #1a73e8);
-    color: #fff;
-  }
-
-  .fill-pop .meta { font-size: 13.5px; font-weight: 600; color: var(--ink-900); line-height: 1.3; }
-  .fill-pop .sub { font-size: 11.5px; color: var(--ink-400); line-height: 1.3; }
-
-  .fill-pop .pop-foot {
-    border-top: 1px solid var(--line);
-    margin-top: 4px;
-    padding: 7px 10px 3px;
-    font-size: 11.5px;
-    color: var(--ink-500);
-  }
-
-  .fill-pop .pop-foot strong { font-weight: 600; color: var(--ink-700); }
 
   .input-wrap input::placeholder { color: #a8b4c4; }
 
-  .input-wrap input:hover,
-  .input-wrap select:hover { border-color: var(--ink-400); }
+  .input-wrap input:hover { border-color: #cbd5e1; }
 
-  .input-wrap input:focus,
-  .input-wrap select:focus {
+  .input-wrap input:focus {
     outline: none;
-    background: var(--surface);
+    background: #fff;
     border-color: var(--blue-500);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
   }
@@ -521,13 +412,11 @@
   }
 
   .field.invalid .hint { display: flex; }
-  .field.invalid .input-wrap input,
-.field.invalid .input-wrap select {
-    border-color: var(--danger-link);
+  .field.invalid .input-wrap input {
+    border-color: #fca5a5;
     background: #fffafa;
   }
-  .field.invalid .input-wrap input:focus,
-.field.invalid .input-wrap select:focus {
+  .field.invalid .input-wrap input:focus {
     box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
   }
 
@@ -555,7 +444,7 @@
     margin: 0;
     border: 1.5px solid #cbd5e1;
     border-radius: 5px;
-    background: var(--surface);
+    background: #fff;
     cursor: pointer;
     display: grid;
     place-items: center;
@@ -581,71 +470,6 @@
 
   .check-row input:checked::after { transform: rotate(-45deg) scale(1); }
   .check-row input:focus-visible { outline: 2px solid var(--blue-500); outline-offset: 2px; }
-
-  .role-options {
-    display: grid;
-    gap: 10px;
-  }
-
-  .role-option {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px;
-    border: 1.5px solid var(--line);
-    border-radius: 12px;
-    background: var(--surface);
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
-  }
-
-  .role-option:hover {
-    border-color: var(--ink-400);
-    background: var(--surface-2);
-  }
-
-  .role-option.selected {
-    border-color: var(--blue-600);
-    background: #eff6ff;
-    box-shadow: 0 8px 20px -16px rgba(29, 78, 216, 0.55);
-  }
-
-  .role-option input {
-    width: 18px;
-    height: 18px;
-    margin: 2px 0 0;
-    accent-color: var(--blue-600);
-    flex: 0 0 auto;
-  }
-
-  .role-option strong {
-    display: block;
-    font-size: 13.5px;
-    color: var(--ink-900);
-  }
-
-  .role-option small {
-    display: block;
-    margin-top: 3px;
-    font-size: 12px;
-    line-height: 1.45;
-    color: var(--ink-500);
-  }
-
-  html[data-theme="dark"] .role-option {
-    background: var(--surface-2);
-    border-color: var(--line);
-  }
-
-  html[data-theme="dark"] .role-option:hover {
-    background: var(--surface-3);
-    border-color: var(--ink-400);
-  }
-
-  html[data-theme="dark"] .role-option.selected {
-    background: var(--blue-100);
-    border-color: var(--blue-500);
-  }
 
   /* ---------- Botões ---------- */
   .btn {
@@ -682,14 +506,14 @@
   }
 
   .btn-ghost {
-    background: var(--surface);
+    background: #fff;
     border: 1px solid var(--line);
     color: var(--ink-700);
     height: 46px;
     font-weight: 600;
   }
 
-  .btn-ghost:hover { background: var(--surface-2); border-color: var(--ink-400); }
+  .btn-ghost:hover { background: #f8fafc; border-color: #cbd5e1; }
 
   .btn .spinner {
     width: 18px;
@@ -768,10 +592,10 @@
   .alert.show { display: flex; animation: rise 0.25s ease both; }
   .alert svg { flex: 0 0 auto; margin-top: 1px; }
 
-  .alert-error { background: var(--red-100); color: var(--status-recusada-fg); }
-  .alert-success { background: var(--green-100); color: var(--status-aprovada-fg); }
-  .alert-info { background: var(--blue-100); color: var(--blue-600); }
-  .alert-warn { background: var(--amber-100); color: var(--status-pendente-fg); }
+  .alert-error { background: var(--red-100); color: #991b1b; }
+  .alert-success { background: var(--green-100); color: #166534; }
+  .alert-info { background: var(--blue-100); color: #1e40af; }
+  .alert-warn { background: var(--amber-100); color: #92400e; }
 
   /* ---------- Barra de força ---------- */
   .strength {
@@ -786,7 +610,7 @@
   .strength .bars span {
     height: 4px;
     border-radius: 2px;
-    background: var(--surface-3);
+    background: #e2e8f0;
     flex: 1;
     transition: background 0.2s;
   }
@@ -859,7 +683,7 @@
     padding: 7px 13px;
     border-radius: 999px;
     background: var(--amber-100);
-    color: var(--status-pendente-fg);
+    color: #92400e;
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -892,7 +716,7 @@
   .modal {
     width: 100%;
     max-width: 410px;
-    background: var(--surface);
+    background: #fff;
     border-radius: 18px;
     padding: 28px;
     box-shadow: var(--shadow-lg);
@@ -948,21 +772,7 @@
       transition-duration: 0.001ms !important;
     }
   }
-  #subjects-pop {
-    max-height: 360px;
-    overflow-y: scroll !important;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: auto;
-    scrollbar-color: var(--cyan-400) var(--surface-2);
-  }
-  #subjects-pop::-webkit-scrollbar { width: 12px; }
-  #subjects-pop::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 8px; }
-  #subjects-pop::-webkit-scrollbar-thumb { background: var(--cyan-400); border: 2px solid var(--surface-2); border-radius: 8px; }
-  #subjects-pop::-webkit-scrollbar-thumb:hover { background: var(--blue-500); }
 </style>
-<link rel="stylesheet" href="theme.css?v=20261111d" />
-<script src="theme.js?v=20261111d"></script>
 </head>
 <body>
 
@@ -1034,7 +844,7 @@
         <!-- ---------- VIEW: LOGIN ---------- -->
         <section class="view active" id="view-login" aria-labelledby="login-title">
           <h2 id="login-title">Acessar o sistema</h2>
-          <p class="sub">Modo de teste: use <strong>qualquer e-mail válido</strong>.</p>
+          <p class="sub">Use seu e-mail institucional <strong>@escola.pr.gov.br</strong>.</p>
 
           <div class="alert alert-error" id="login-error" role="alert" aria-live="assertive">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
@@ -1043,7 +853,7 @@
 
           <div class="alert alert-info show" id="login-info" role="status">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-            <span>Protótipo: use <strong>seu.nome@escola.pr.gov.br</strong> como e-mail e qualquer senha com 8+ caracteres. E-mail começando com "secretaria" simula o perfil da secretaria.</span>
+            <span>Protótipo: use qualquer e-mail <strong>@escola.pr.gov.br</strong> e uma senha com 8+ caracteres. Comece com “secretaria” para simular o perfil da secretaria.</span>
           </div>
 
           <form id="form-login" novalidate>
@@ -1053,27 +863,11 @@
                 <span class="leading">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m3 6 9 7 9-7"/></svg>
                 </span>
-                 <input id="login-email" name="email" type="email" placeholder="seu.nome@escola.pr.gov.br" autocomplete="username" spellcheck="false" required />
-                <div class="fill-pop" id="pm-pop" role="dialog" aria-label="Senhas salvas">
-                  <div class="pop-head">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2.5"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    Gerenciador de Senhas do Google
-                  </div>
-                  <button type="button" class="row" id="pm-row" style="display:none">
-                    <span class="g-key">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="3.5"/><path d="m10.5 13.5 8-8"/><path d="m15.5 6 2 2"/><path d="m13 4.5 2 2"/></svg>
-                    </span>
-                    <span>
-                      <span class="meta" id="pm-name"></span>
-                      <span class="sub" id="pm-email" style="display:block"></span>
-                    </span>
-                  </button>
-                  <div class="pop-foot">Senhas salvas neste dispositivo · <strong>Gerenciar senhas…</strong></div>
-                </div>
+                <input id="login-email" name="email" type="email" placeholder="nome.sobrenome@escola.pr.gov.br" autocomplete="username" spellcheck="false" required />
               </div>
               <span class="hint">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-                <span class="hint-text">Informe um e-mail válido.</span>
+                <span class="hint-text">Informe um e-mail @escola.pr.gov.br válido.</span>
               </span>
             </div>
 
@@ -1133,10 +927,6 @@
           <h2 id="reg-title">Solicitar cadastro</h2>
           <p class="sub">Seu acesso será liberado após aprovação da secretaria.</p>
 
-          <div class="alert alert-error" id="register-error" role="alert" aria-live="assertive">
-            <span id="register-error-text"></span>
-          </div>
-
           <form id="form-register" novalidate>
             <div class="field" id="r-name">
               <label for="reg-name">Nome completo</label>
@@ -1155,68 +945,27 @@
                 <span class="leading">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m3 6 9 7 9-7"/></svg>
                 </span>
-                <input id="reg-email" name="email" type="email" placeholder="seu.email@escola" autocomplete="email" spellcheck="false" required />
+                <input id="reg-email" name="email" type="email" placeholder="nome.sobrenome@escola.pr.gov.br" autocomplete="email" spellcheck="false" required />
               </div>
-              <span class="hint"><span class="hint-text">Informe um e-mail válido.</span></span>
-            </div>
-
-            <div class="field" id="r-role">
-              <label>Tipo de cadastro</label>
-              <div class="role-options" role="radiogroup" aria-label="Tipo de cadastro">
-                <label class="role-option selected">
-                  <input type="radio" name="reg-role" value="professor" checked />
-                  <span>
-                    <strong>Professor</strong>
-                    <small>Para solicitar reservas de aulas nos laboratórios.</small>
-                  </span>
-                </label>
-                <label class="role-option">
-                  <input type="radio" name="reg-role" value="admin" />
-                  <span>
-                    <strong>Administrador</strong>
-                    <small>Declaro que sou responsável pelo agendamento dos laboratórios do CEPK.</small>
-                  </span>
-                </label>
-              </div>
+              <span class="hint"><span class="hint-text">Use seu e-mail @escola.pr.gov.br.</span></span>
             </div>
 
             <div class="field" id="r-subject">
-              <label for="reg-subject">Disciplinas que leciona</label>
+              <label for="reg-subject">Disciplina principal</label>
               <div class="input-wrap">
                 <span class="leading">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
                 </span>
-                <input id="reg-subject" name="subject" type="text" readonly placeholder="Selecione uma ou mais disciplinas" autocomplete="off" required />
-                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                <div class="fill-pop" id="subjects-pop" role="group" aria-label="Disciplinas">
-                  <div class="pop-head">20 disciplinas — role para ver todas</div>
-                  <button type="button" class="row" data-value="Matemática" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Matemática</span></button>
-                  <button type="button" class="row" data-value="Português" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Português</span></button>
-                  <button type="button" class="row" data-value="Química" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Química</span></button>
-                  <button type="button" class="row" data-value="Biologia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Biologia</span></button>
-                  <button type="button" class="row" data-value="Ciências" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Ciências</span></button>
-                  <button type="button" class="row" data-value="Geografia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Geografia</span></button>
-                  <button type="button" class="row" data-value="Física" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Física</span></button>
-                  <button type="button" class="row" data-value="Filosofia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Filosofia</span></button>
-                  <button type="button" class="row" data-value="História" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">História</span></button>
-                  <button type="button" class="row" data-value="Sociologia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Sociologia</span></button>
-                  <button type="button" class="row" data-value="Educação Física" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Educação Física</span></button>
-                  <button type="button" class="row" data-value="Inglês" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Inglês</span></button>
-                  <button type="button" class="row" data-value="Arte" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Arte</span></button>
-                  <button type="button" class="row" data-value="Educação Digital" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Educação Digital</span></button>
-                  <button type="button" class="row" data-value="Banco de Dados" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Banco de Dados</span></button>
-                  <button type="button" class="row" data-value="Introdução à Computação" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Introdução à Computação</span></button>
-                  <button type="button" class="row" data-value="Introdução à Programação" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Introdução à Programação</span></button>
-                  <button type="button" class="row" data-value="Lógica Computacional" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Lógica Computacional</span></button>
-                  <button type="button" class="row" data-value="Análise e Métodos para Sistema" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Análise e Métodos para Sistema</span></button>
-                  <button type="button" class="row" data-value="Projeto/Outro" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Projeto/Outro</span></button>
-                  <div class="pop-actions">
-                    <button type="button" id="subjects-clear">Limpar</button>
-                    <button type="button" id="subjects-done" class="primary">Concluir</button>
-                  </div>
-                </div>
+                <input id="reg-subject" name="subject" type="text" list="subjects-list" placeholder="Ex.: Matemática" autocomplete="off" required />
+                <datalist id="subjects-list">
+                  <option>Arte</option><option>Biologia</option><option>Ciências</option>
+                  <option>Educação Física</option><option>Filosofia</option><option>Física</option>
+                  <option>Geografia</option><option>História</option><option>Inglês</option>
+                  <option>Matemática</option><option>Português</option><option>Química</option>
+                  <option>Sociologia</option><option>Projeto/Outro</option>
+                </datalist>
               </div>
-              <span class="hint"><span class="hint-text">Selecione ao menos uma disciplina.</span></span>
+              <span class="hint"><span class="hint-text">Informe a disciplina que você leciona.</span></span>
             </div>
 
             <div class="field" id="r-pass">
@@ -1268,16 +1017,9 @@
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
             <h2 id="ok-title">Solicitação enviada</h2>
-            <p id="ok-message">Recebemos seu cadastro. A secretaria do colégio vai analisar e liberar seu acesso.</p>
-            <div class="status-pill"><i></i> <span id="ok-status-text">Aguardando aprovação</span></div>
-            <p style="font-size:12.5px;margin-bottom:22px" id="ok-detail">Você receberá um e-mail em <strong id="ok-email" style="color:var(--ink-700)">seu e-mail institucional</strong> quando o acesso for liberado.</p>
-            <p id="approval-links" style="display:none;font-size:12.5px;margin-bottom:18px;line-height:1.8">
-              Link de aprovação para teste:
-              <a id="approval-approve" href="#" target="_blank" rel="noopener">aprovar</a>
-              <span aria-hidden="true"> · </span>
-              <a id="approval-reject" href="#" target="_blank" rel="noopener">recusar</a>
-            </p>
-            <p id="ok-warn" style="display:none;font-size:12px;color:var(--red-600);margin-bottom:18px"></p>
+            <p>Recebemos seu cadastro. A secretaria do colégio vai analisar e liberar seu acesso.</p>
+            <div class="status-pill"><i></i> Aguardando aprovação</div>
+            <p style="font-size:12.5px;margin-bottom:22px">Você receberá um e-mail em <strong id="ok-email" style="color:var(--ink-700)">seu e-mail institucional</strong> quando o acesso for liberado.</p>
             <button type="button" class="btn btn-ghost" data-goto="view-login">Voltar para o login</button>
           </div>
         </section>
@@ -1302,9 +1044,9 @@
           <span class="leading">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m3 6 9 7 9-7"/></svg>
           </span>
-          <input id="forgot-email" type="email" placeholder="seu.email@escola" autocomplete="email" spellcheck="false" required />
+          <input id="forgot-email" type="email" placeholder="nome.sobrenome@escola.pr.gov.br" autocomplete="email" spellcheck="false" required />
         </div>
-        <span class="hint"><span class="hint-text">Informe um e-mail válido.</span></span>
+        <span class="hint"><span class="hint-text">Use seu e-mail @escola.pr.gov.br.</span></span>
       </div>
 
       <div class="alert alert-success" id="forgot-ok" role="status">
@@ -1323,7 +1065,6 @@
   </div>
 </div>
 
-<script src="api.js?v=20261111d"></script>
 <script>
 (function () {
   "use strict";
@@ -1331,7 +1072,7 @@
   const $  = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+  const EMAIL_RE = /^[a-z0-9._%+-]+@escola\.pr\.gov\.br$/i;
 
   /* ---------- Navegação entre views ---------- */
   function showView(id) {
@@ -1372,94 +1113,6 @@
       btn.querySelector(".eye-off").style.display = show ? "" : "none";
       input.focus();
     });
-  });
-
-  /* ---------- Dropdown: Gerenciador de Senhas (login) ---------- */
-  const pmPop = $("#pm-pop");
-  const pmRow = $("#pm-row");
-  const loginEmailInput = $("#login-email");
-
-  function openPop(pop) {
-    closePops(pop);
-    pop.classList.add("open");
-  }
-
-  function closePops(except) {
-    $$(".fill-pop").forEach((p) => {
-      if (p !== except) p.classList.remove("open");
-    });
-  }
-
-  pmRow.addEventListener("click", () => {
-    loginEmailInput.value = pmRow.dataset.email || "";
-    closePops();
-    $("#login-pass").focus();
-    ["login-email", "login-pass"].forEach((id) => {
-      const f = $("#" + id).closest(".field");
-      if (f) f.classList.remove("invalid");
-    });
-  });
-
-  loginEmailInput.addEventListener("focus", () => {
-    const savedName = localStorage.getItem("cepk_user_name") || sessionStorage.getItem("cepk_user_name");
-    const savedEmail = localStorage.getItem("cepk_user_email") || sessionStorage.getItem("cepk_user_email");
-
-    if (!savedEmail) return;
-
-    pmRow.dataset.email = savedEmail;
-    $("#pm-name").textContent = savedName || "Seu nome";
-    $("#pm-email").textContent = savedEmail;
-    pmRow.style.display = "flex";
-    openPop(pmPop);
-  });
-
-  /* ---------- Dropdown: disciplinas (cadastro) ---------- */
-  const subjectsPop = $("#subjects-pop");
-  const subjectInput = $("#reg-subject");
-  const subjectRows = $$("#subjects-pop .row");
-
-  function getSelectedSubjects() {
-    return subjectRows.filter((row) => row.classList.contains("selected")).map((row) => row.dataset.value);
-  }
-
-  function syncSubjects() {
-    subjectInput.value = getSelectedSubjects().join(", ");
-  }
-
-  subjectInput.addEventListener("focus", () => openPop(subjectsPop));
-  subjectInput.addEventListener("click", () => openPop(subjectsPop));
-
-  subjectRows.forEach((row) => {
-    row.addEventListener("click", () => {
-      const selected = row.classList.toggle("selected");
-      row.setAttribute("aria-pressed", String(selected));
-      syncSubjects();
-      subjectInput.closest(".field").classList.remove("invalid");
-    });
-  });
-
-  $("#subjects-done").addEventListener("click", () => {
-    syncSubjects();
-    closePops();
-    subjectInput.focus();
-  });
-
-  $("#subjects-clear").addEventListener("click", () => {
-    subjectRows.forEach((row) => {
-      row.classList.remove("selected");
-      row.setAttribute("aria-pressed", "false");
-    });
-    syncSubjects();
-    subjectInput.focus();
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest("#pm-pop, #login-email")) pmPop.classList.remove("open");
-    if (!e.target.closest("#subjects-pop, #reg-subject")) subjectsPop.classList.remove("open");
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closePops();
   });
 
   /* ---------- Helpers de validação ---------- */
@@ -1503,11 +1156,11 @@
   const loginError = $("#login-error");
   const loginInfo = $("#login-info");
 
-  formLogin.addEventListener("submit", async (e) => {
+  formLogin.addEventListener("submit", (e) => {
     e.preventDefault();
     hideAlert(loginError);
 
-    const email = $("#login-email").value.trim().toLowerCase();
+    const email = $("#login-email").value.trim();
     const pass  = $("#login-pass").value;
     let ok = true;
 
@@ -1517,7 +1170,7 @@
       setInvalid("f-email", true, "Informe seu e-mail institucional.");
       ok = false;
     } else if (!matchesDomain(email)) {
-      setInvalid("f-email", true, "Informe um e-mail válido.");
+      setInvalid("f-email", true, "O e-mail deve terminar em @escola.pr.gov.br.");
       ok = false;
     }
 
@@ -1536,42 +1189,29 @@
     }
 
     const btn = $("#btn-login");
-    if (!window.CEPKApi) {
-      showAlert(loginError, "Não foi possível carregar a integração com o servidor. Recarregue a página.");
-      return;
-    }
     setLoading(btn, true);
     hideAlert(loginInfo);
 
-    const result = await window.CEPKApi.login({ email: email, password: pass });
-    setLoading(btn, false);
+    // Simulação de chamada à API (substituir por POST /auth/login)
+    setTimeout(() => {
+      setLoading(btn, false);
 
-    if (!result.ok) {
-      showAlert(loginError, window.CEPKApi.errorMessage(result, "E-mail ou senha inválidos."));
-      if (result.status === 401) {
+      const isSecretary = email.toLowerCase().startsWith("secretaria");
+
+      if (pass === "senhaerrada") {
+        showAlert(loginError, "E-mail ou senha incorretos. Verifique e tente novamente.");
         $("#f-pass").classList.add("invalid");
         $("#login-pass").focus();
+        return;
       }
-      return;
-    }
 
-    const data = result.data || {};
-    const user = data.user || {};
-    const displayName = user.name || email.split("@")[0];
-    const remember = $("#remember").checked;
-
-    window.CEPKApi.saveSession(data, remember);
-    localStorage.removeItem("cepk_user_pass");
-    sessionStorage.removeItem("cepk_user_pass");
-
-    const isStaff = String(user.role || "").toLowerCase() === "admin" || String(user.role || "").toLowerCase() === "secretaria";
-    const destParam = new URLSearchParams(location.search).get("dest");
-    const destOk = destParam && /^(painel|reserva|visualizacao-reservas|laboratorios)\.html/.test(destParam);
-    const to = new URL(destOk ? destParam : "painel.html", location.href);
-    if (isStaff && !destOk) to.hash = "admin-dashboard";
-    to.searchParams.set("name", displayName);
-    to.searchParams.set("email", email);
-    window.location.href = to.href;
+      showAlert(
+        loginInfo,
+        isSecretary
+          ? "Login validado (protótipo). Redirecionando para o painel da secretaria — aprovação de cadastros e gestão dos laboratórios."
+          : "Login validado (protótipo). Redirecionando para a grade semanal dos laboratórios."
+      );
+    }, 900);
   });
 
   // Remove erro ao digitar
@@ -1585,28 +1225,6 @@
   /* ---------- Cadastro ---------- */
   const formRegister = $("#form-register");
   const strength = $("#strength");
-  const roleRadios = $$('input[name="reg-role"]');
-  const adminSubjectField = $("#r-subject");
-
-  function selectedRegistrationType() {
-    const checked = document.querySelector('input[name="reg-role"]:checked');
-    return checked ? checked.value : "professor";
-  }
-
-  function syncRegistrationTypeFields() {
-    const isAdmin = selectedRegistrationType() === "admin";
-    if (adminSubjectField) adminSubjectField.style.display = isAdmin ? "none" : "";
-    roleRadios.forEach(function (radio) {
-      const option = radio.closest(".role-option");
-      if (option) option.classList.toggle("selected", radio.checked);
-    });
-    if (isAdmin) clearInvalid("r-subject");
-  }
-
-  roleRadios.forEach(function (radio) {
-    radio.addEventListener("change", syncRegistrationTypeFields);
-  });
-  syncRegistrationTypeFields();
 
   $("#reg-pass").addEventListener("input", (e) => {
     const val = e.target.value;
@@ -1632,16 +1250,15 @@
     $("#strength small").style.color = colors[Math.max(0, score - 1)];
   });
 
-  formRegister.addEventListener("submit", async (e) => {
+  formRegister.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const name     = $("#reg-name").value.trim();
-    const email    = $("#reg-email").value.trim();
-    const subjects = getSelectedSubjects();
-    const pass     = $("#reg-pass").value;
-    const confirm  = $("#reg-confirm").value;
-    const terms    = $("#terms").checked;
-    const adminRequest = selectedRegistrationType() === "admin";
+    const name    = $("#reg-name").value.trim();
+    const email   = $("#reg-email").value.trim();
+    const subject = $("#reg-subject").value.trim();
+    const pass    = $("#reg-pass").value;
+    const confirm = $("#reg-confirm").value;
+    const terms   = $("#terms").checked;
     let ok = true;
 
     clearInvalid("r-name", "r-email", "r-subject", "r-pass", "r-confirm");
@@ -1651,11 +1268,11 @@
       ok = false;
     }
     if (!matchesDomain(email)) {
-      setInvalid("r-email", true, "Informe um e-mail válido.");
+      setInvalid("r-email", true, "Use seu e-mail institucional @escola.pr.gov.br.");
       ok = false;
     }
-    if (!adminRequest && subjects.length === 0) {
-      setInvalid("r-subject", true, "Selecione ao menos uma disciplina.");
+    if (!subject) {
+      setInvalid("r-subject", true, "Informe a disciplina que você leciona.");
       ok = false;
     }
     if (pass.length < 8) {
@@ -1684,79 +1301,20 @@
     }
 
     const btn = $("#btn-register");
-    const errorBox = $("#register-error");
-    hideAlert(errorBox);
-    if (!window.CEPKApi) {
-      showAlert(errorBox, "Não foi possível carregar a integração com o servidor. Recarregue a página.");
-      return;
-    }
     setLoading(btn, true);
 
-    const result = await window.CEPKApi.register({ name: name, email: email, subjects: subjects, password: pass, adminRequest: adminRequest });
-    setLoading(btn, false);
-
-    if (!result.ok) {
-      showAlert(errorBox, window.CEPKApi.errorMessage(result, "Não foi possível registrar a solicitação. Tente novamente."));
-      errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-
-    const data = result.data || {};
-    const createdUser = data.user || {};
-    const requestedAdmin = Boolean(data.requestedAdmin) || String(createdUser.role || "").toLowerCase() === "admin";
-    const isActiveAdmin = Boolean(data.admin) && data.requiresApproval !== true;
-    const isPendingAdmin = !isActiveAdmin && requestedAdmin;
-    const warn = $("#ok-warn");
-    if (warn) { warn.style.display = "none"; warn.textContent = ""; }
-
-    $("#ok-email").textContent = createdUser.email || email;
-
-    const okTitle = $("#ok-title");
-    const okMessage = $("#ok-message");
-    const okStatus = $("#ok-status-text");
-    const okDetail = $("#ok-detail");
-    if (okTitle) okTitle.textContent = isActiveAdmin ? "Acesso administrativo liberado" : isPendingAdmin ? "Solicitação administrativa enviada" : "Solicitação enviada";
-    if (okMessage) {
-      okMessage.textContent = isActiveAdmin
-        ? "Seu cadastro de administrador foi criado e já está liberado. Entre com seu e-mail e senha para gerenciar as reservas."
-        : isPendingAdmin
-          ? "Recebemos seu pedido de acesso como responsável pelo agendamento. A secretaria vai validar sua solicitação."
-          : "Recebemos seu cadastro. A secretaria do colégio vai analisar e liberar seu acesso.";
-    }
-    if (okStatus) okStatus.textContent = isActiveAdmin ? "Conta de administrador ativa" : isPendingAdmin ? "Aguardando validação administrativa" : "Aguardando aprovação";
-    if (okDetail) {
-      okDetail.innerHTML = isActiveAdmin
-        ? "Conta administrativa registrada para <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong>. O painel de gestão de horários já está disponível."
-        : isPendingAdmin
-          ? "Pedido de administrador registrado para <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong>. Após a validação, você terá acesso à gestão de horários."
-          : "Você receberá um e-mail em <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong> quando o acesso for liberado.";
-    }
-
-    const links = $("#approval-links");
-    const isLocalApi = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(window.CEPKApi.apiBase());
-    if (links) {
-      const showLinks = Boolean(data.token) && isLocalApi && !isActiveAdmin;
-      if (showLinks) {
-        $("#approval-approve").href = window.CEPKApi.approvalUrl(data.token, "approve");
-        $("#approval-reject").href = window.CEPKApi.approvalUrl(data.token, "reject");
-        localStorage.setItem("cepk_prova_token", data.token);
-      }
-      links.style.display = showLinks ? "block" : "none";
-    }
-
-    if (warn && !isActiveAdmin && data.emailSent === false) {
-      warn.textContent = "O e-mail de autorização não pôde ser enviado. Avise a secretaria para liberar seu acesso.";
-      warn.style.display = "block";
-    }
-
-    showView("view-success");
+    // Simulação de POST /auth/register
+    setTimeout(() => {
+      setLoading(btn, false);
+      $("#ok-email").textContent = email;
+      showView("view-success");
+    }, 1000);
   });
 
   ["reg-name", "reg-email", "reg-subject", "reg-pass", "reg-confirm"].forEach((id) => {
     $("#" + id).addEventListener("input", () => {
       const field = $("#" + id).closest(".field");
       if (field) field.classList.remove("invalid");
-      hideAlert($("#register-error"));
     });
   });
 
@@ -1797,7 +1355,7 @@
     const email = $("#forgot-email").value.trim();
 
     if (!matchesDomain(email)) {
-      setInvalid("f-forgot-email", true, "Informe um e-mail válido.");
+      setInvalid("f-forgot-email", true, "Use seu e-mail institucional @escola.pr.gov.br.");
       $("#forgot-email").focus();
       return;
     }

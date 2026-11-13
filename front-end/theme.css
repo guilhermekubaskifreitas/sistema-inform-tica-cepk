@@ -23,6 +23,24 @@
   --bg: #e5eaf0;
   --shadow-lg: 0 24px 60px -24px rgba(4, 17, 32, 0.28);
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --radius: 10px;
+  --status-pendente-bg: #f6ecd9;
+  --status-pendente-fg: #8a4b08;
+  --status-pendente-border: #d99418;
+  --status-aprovada-bg: #dcefe5;
+  --status-aprovada-fg: #166534;
+  --status-aprovada-border: #16a34a;
+  --status-recusada-bg: #f7dfdc;
+  --status-recusada-fg: #991b1b;
+  --status-recusada-border: #dc4a42;
+  --status-cancelada-bg: #edf1f5;
+  --status-cancelada-fg: #4b5f75;
+  --status-cancelada-border: #93a3b5;
+  --slot-pendente-bg: #fffbeb;
+  --slot-aprovada-bg: #ecfdf3;
+  --slot-recusada-bg: #fef2f2;
+  --slot-cancelada-bg: #f1f5f9;
+  --danger-link: #b42318;
   color-scheme: light;
 }
 
@@ -51,6 +69,24 @@ html[data-theme="dark"] {
   --bg: #09111a;
   --shadow-lg: 0 24px 60px -24px rgba(0, 0, 0, 0.6);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --radius: 10px;
+  --status-pendente-bg: #382a13;
+  --status-pendente-fg: #fcd34d;
+  --status-pendente-border: #d9a441;
+  --status-aprovada-bg: #133626;
+  --status-aprovada-fg: #86efac;
+  --status-aprovada-border: #3fbd80;
+  --status-recusada-bg: #3a1b1d;
+  --status-recusada-fg: #fca5a5;
+  --status-recusada-border: #e06a62;
+  --status-cancelada-bg: #1e2f42;
+  --status-cancelada-fg: #a7b7c8;
+  --status-cancelada-border: #70849a;
+  --slot-pendente-bg: #2c2214;
+  --slot-aprovada-bg: #10281d;
+  --slot-recusada-bg: #2a1719;
+  --slot-cancelada-bg: #172534;
+  --danger-link: #fca5a5;
   color-scheme: dark;
 }
 
@@ -151,6 +187,53 @@ select option {
   background: var(--surface-2);
 }
 
+.fill-pop .pop-group {
+  padding: 10px 12px 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+
+.fill-pop .pop-new {
+  display: flex;
+  gap: 8px;
+  padding: 10px 6px 4px;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+}
+
+.fill-pop .pop-new input {
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 12px;
+}
+
+.fill-pop .pop-new .pop-add {
+  padding: 0 12px;
+  border: 1px solid var(--blue-600);
+  border-radius: 8px;
+  background: var(--blue-600);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fill-pop .pop-new .pop-add:hover {
+  background: var(--blue-500);
+}
+
 .fill-pop .pop-actions .primary {
   background: var(--blue-600);
   border-color: var(--blue-600);
@@ -238,7 +321,7 @@ tbody tr:hover td {
 }
 
 .badge.aula,
-.badge.estado {
+.badge.estado:not(.pendente):not(.aprovada):not(.recusada):not(.cancelada) {
   background: var(--surface-2) !important;
 }
 
@@ -294,43 +377,245 @@ html[data-theme="dark"] .theme-toggle .icon-sun {
 }
 
 html[data-theme="dark"] .alert-error {
-  color: #fca5a5;
+  color: var(--status-recusada-fg) !important;
 }
 
 html[data-theme="dark"] .alert-success {
-  color: #86efac;
+  color: var(--status-aprovada-fg) !important;
 }
 
 html[data-theme="dark"] .alert-info {
-  color: #93c5fd;
+  color: var(--blue-500) !important;
 }
 
 html[data-theme="dark"] .alert-warn,
 html[data-theme="dark"] .status-pill {
-  color: #fcd34d;
-}
-
-html[data-theme="dark"] .badge.aprovada {
-  color: #86efac;
-}
-
-html[data-theme="dark"] .badge.pendente,
-html[data-theme="dark"] .badge.tarde {
-  color: #fcd34d;
-}
-
-html[data-theme="dark"] .badge.recusada {
-  color: #fca5a5;
+  color: var(--status-pendente-fg) !important;
 }
 
 html[data-theme="dark"] .badge.dia,
 html[data-theme="dark"] .badge.manha,
 html[data-theme="dark"] .badge.hora {
-  color: #bfdbfe;
+  color: var(--blue-500) !important;
 }
 
-html[data-theme="dark"] .badge.noite {
+/* Badges de status: fonte única para todas as telas */
+.badge.pendente,
+.badge.estado.pendente {
+  background: var(--status-pendente-bg) !important;
+  color: var(--status-pendente-fg) !important;
+  border: 1px solid var(--status-pendente-border);
+}
+
+.badge.aprovada,
+.badge.aprovado,
+.badge.estado.aprovada {
+  background: var(--status-aprovada-bg) !important;
+  color: var(--status-aprovada-fg) !important;
+  border: 1px solid var(--status-aprovada-border);
+}
+
+.badge.recusada,
+.badge.recusado,
+.badge.estado.recusada {
+  background: var(--status-recusada-bg) !important;
+  color: var(--status-recusada-fg) !important;
+  border: 1px solid var(--status-recusada-border);
+}
+
+.badge.cancelada,
+.badge.cancelado,
+.badge.estado.cancelada {
+  background: var(--status-cancelada-bg) !important;
+  color: var(--status-cancelada-fg) !important;
+  border: 1px solid var(--status-cancelada-border);
+}
+
+/* Slots da grade */
+.admin-grid .slot {
+  background: var(--surface-2) !important;
+  border-left-color: var(--ink-500) !important;
+}
+
+.admin-grid .slot.pendente,
+.slot.pendente {
+  background: var(--slot-pendente-bg) !important;
+  border-left-color: var(--status-pendente-border) !important;
+}
+
+.admin-grid .slot.aprovada,
+.slot.aprovada {
+  background: var(--slot-aprovada-bg) !important;
+  border-left-color: var(--status-aprovada-border) !important;
+}
+
+.admin-grid .slot.recusada,
+.slot.recusada {
+  background: var(--slot-recusada-bg) !important;
+  border-left-color: var(--status-recusada-border) !important;
+}
+
+.admin-grid .slot.cancelada,
+.slot.cancelada {
+  background: var(--slot-cancelada-bg) !important;
+  border-left-color: var(--status-cancelada-border) !important;
+  text-decoration: line-through;
+  opacity: 0.85;
+}
+
+.admin-grid .slot.vazio {
+  background: var(--surface-2) !important;
+  border-left-color: var(--line) !important;
+  color: var(--ink-400) !important;
+}
+
+html[data-theme="dark"] .admin-grid td.admin-slot-cell:hover {
+  background: var(--surface-2) !important;
+}
+
+.btn-approve {
+  background: var(--blue-600) !important;
+  border-color: var(--blue-600) !important;
+  color: #fff !important;
+}
+
+.btn-approve:hover {
+  background: var(--blue-500) !important;
+}
+
+.btn-reject {
+  background: var(--surface) !important;
+  border-color: var(--status-recusada-border) !important;
+  color: var(--status-recusada-fg) !important;
+}
+
+.btn-reject:hover {
+  background: var(--status-recusada-bg) !important;
+  border-color: var(--status-recusada-border) !important;
+}
+
+.btn-danger {
+  border-color: var(--red-600);
+}
+
+.danger-link,
+.logout-link {
+  color: var(--danger-link) !important;
+}
+
+.shift-row {
+  background: var(--surface-2) !important;
+  color: var(--ink-700) !important;
+}
+
+.alert-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--status-recusada-border);
+  background: var(--status-recusada-bg);
+  color: var(--status-recusada-fg);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.alert-banner[hidden] { display: none; }
+
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.section-card h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: var(--ink-900);
+}
+
+.section-card > p {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--ink-500);
+}
+
+.lab-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.lab-form .field { display: flex; flex-direction: column; gap: 6px; }
+.lab-form .field.wide { grid-column: span 2; }
+.lab-form label { font-size: 12px; font-weight: 700; color: var(--ink-700); }
+.lab-form input[type="text"],
+.lab-form input[type="number"] {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface-2);
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 13px;
+}
+.lab-form .check-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--ink-700);
+}
+.lab-form-actions { display: flex; gap: 8px; align-items: center; }
+.lab-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-actions .btn { padding: 6px 10px; font-size: 12px; }
+.muted { color: var(--ink-500); }
+
+.nav-count {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--amber-500);
+  color: #1b1408;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+@media (max-width: 960px) {
+  .lab-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lab-form .field.wide { grid-column: span 2; }
+}
+
+@media (max-width: 640px) {
+  .lab-form { grid-template-columns: 1fr; }
+  .lab-form .field.wide { grid-column: span 1; }
+}
+
+.chip.recusada {
+  background: var(--status-recusada-bg) !important;
+  color: var(--status-recusada-fg) !important;
+}
+
+.chip.cancelada {
+  background: var(--status-cancelada-bg) !important;
+  color: var(--status-cancelada-fg) !important;
 }
 
 html[data-theme="dark"] .field.invalid .input-wrap input,

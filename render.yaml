@@ -1,27 +1,27 @@
-databases:
-  - name: cepk-db
-    databaseName: cepk
-    user: cepk
-    plan: free
-    postgresMajorVersion: "16"
-
 services:
+  # ---------------------------------------------------------------
+  # API real (Node + Express + Prisma) — grava no Neon
+  # ---------------------------------------------------------------
+  # NOTA: o serviço do mock (backend-informatica-cepk) é gerenciado
+  # manualmente no painel do Render e NÃO entra neste blueprint
+  # (evita conflito de nome). Ele roda `npm start` em back-end/,
+  # que aponta para scripts/mock-api.js.
   - type: web
     name: cepk-api
     runtime: node
     plan: free
     rootDir: back-end
     buildCommand: npm install --include=dev && npm run prisma:generate && npm run build
-    startCommand: npm run prisma:deploy && npm run prisma:seed && npm start
+    startCommand: npm run prisma:deploy && npm run prisma:seed && npm run start:api
     healthCheckPath: /health
     autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production
+      # String de conexão DIRETA do Neon (sem -pooler), com sslmode=require.
+      # Ex.: postgresql://USER:SENHA@ep-xxx.sa-east-1.aws.neon.tech/cepk?sslmode=require
       - key: DATABASE_URL
-        fromDatabase:
-          name: cepk-db
-          property: connectionString
+        sync: false
       - key: JWT_ACCESS_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
@@ -32,33 +32,37 @@ services:
         value: "7"
       - key: APP_URL
         value: https://frontend-informatica-cepk.onrender.com
+      - key: API_PUBLIC_URL
+        value: https://cepk-api.onrender.com
       - key: CORS_ORIGIN
         value: https://frontend-informatica-cepk.onrender.com
       - key: ALLOWED_EMAIL_DOMAINS
         value: escola.pr.gov.br
       - key: APPROVAL_EMAIL
-        sync: false
+        value: guilhermekf55@gmail.com
       - key: RESERVATION_EMAIL
-        sync: false
+        value: guilhermekf55@gmail.com
       - key: RESEND_API_KEY
         sync: false
       - key: RESEND_FROM
         value: onboarding@resend.dev
-      - key: SMTP_HOST
-        sync: false
-      - key: SMTP_PORT
-        value: "587"
-      - key: SMTP_SECURE
-        value: "false"
-      - key: SMTP_USER
-        sync: false
-      - key: SMTP_PASS
-        sync: false
-      - key: SMTP_FROM
-        sync: false
       - key: ADMIN_NAME
         value: Secretaria CEPK
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
+
+  # ---------------------------------------------------------------
+  # Front-end (site estático)
+  # ---------------------------------------------------------------
+  - type: web
+    name: frontend-informatica-cepk
+    runtime: static
+    buildCommand: echo "sem etapa de build"
+    staticPublishPath: ./front-end
+    autoDeploy: true
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-store, no-cache, must-revalidate

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.mock
+.env.render
+.mock-data.json
+*.log
+.DS_Store

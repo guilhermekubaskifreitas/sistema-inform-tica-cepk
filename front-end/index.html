@@ -298,7 +298,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
     padding: 0 44px 0 42px;
     border: 1px solid var(--line);
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     font: inherit;
     font-size: 14.5px;
     color: var(--ink-900);
@@ -309,7 +309,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
 #screen-login .input-wrap select:invalid{ color: #a8b4c4; }
 #screen-login .input-wrap select option{
     color: var(--ink-900);
-    background: #fff;
+    background: var(--surface);
     font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     font-size: 14.5px;
   }
@@ -332,7 +332,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
     z-index: 40;
     display: none;
     padding: 6px;
-    background: #fff;
+    background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 12px;
     box-shadow: 0 12px 32px -8px rgba(8, 25, 51, 0.28);
@@ -363,7 +363,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
     font: inherit;
     text-align: left;
   }
-#screen-login .fill-pop .row:hover{ background: #f1f5f9; }
+#screen-login .fill-pop .row:hover{ background: var(--surface-2); }
 #screen-login .fill-pop .g-key{
     width: 26px;
     height: 26px;
@@ -385,10 +385,10 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
   }
 #screen-login .fill-pop .pop-foot strong{ font-weight: 600; color: var(--ink-700); }
 #screen-login .input-wrap input::placeholder{ color: #a8b4c4; }
-#screen-login .input-wrap input:hover, #screen-login .input-wrap select:hover{ border-color: #cbd5e1; }
+#screen-login .input-wrap input:hover, #screen-login .input-wrap select:hover{ border-color: var(--ink-400); }
 #screen-login .input-wrap input:focus, #screen-login .input-wrap select:focus{
     outline: none;
-    background: #fff;
+    background: var(--surface);
     border-color: var(--blue-500);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
   }
@@ -418,7 +418,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
   }
 #screen-login .field.invalid .hint{ display: flex; }
 #screen-login .field.invalid .input-wrap input, #screen-login .field.invalid .input-wrap select{
-    border-color: #fca5a5;
+    border-color: var(--danger-link);
     background: #fffafa;
   }
 #screen-login .field.invalid .input-wrap input:focus, #screen-login .field.invalid .input-wrap select:focus{
@@ -445,7 +445,7 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
     margin: 0;
     border: 1.5px solid #cbd5e1;
     border-radius: 5px;
-    background: #fff;
+    background: var(--surface);
     cursor: pointer;
     display: grid;
     place-items: center;
@@ -476,11 +476,11 @@ body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;ba
     padding: 14px;
     border: 1.5px solid var(--line);
     border-radius: 12px;
-    background: #fff;
+    background: var(--surface);
     cursor: pointer;
     transition: border-color .15s, background .15s, box-shadow .15s;
   }
-#screen-login .role-option:hover{ border-color: #cbd5e1; background: #f8fafc; }
+#screen-login .role-option:hover{ border-color: var(--ink-400); background: var(--surface-2); }
 #screen-login .role-option.selected{
     border-color: var(--blue-600);
     background: #eff6ff;
@@ -528,13 +528,13 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     box-shadow: none;
   }
 #screen-login .btn-ghost{
-    background: #fff;
+    background: var(--surface);
     border: 1px solid var(--line);
     color: var(--ink-700);
     height: 46px;
     font-weight: 600;
   }
-#screen-login .btn-ghost:hover{ background: #f8fafc; border-color: #cbd5e1; }
+#screen-login .btn-ghost:hover{ background: var(--surface-2); border-color: var(--ink-400); }
 #screen-login .btn .spinner{
     width: 18px;
     height: 18px;
@@ -596,10 +596,10 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   }
 #screen-login .alert.show{ display: flex; animation: rise 0.25s ease both; }
 #screen-login .alert svg{ flex: 0 0 auto; margin-top: 1px; }
-#screen-login .alert-error{ background: var(--red-100); color: #991b1b; }
-#screen-login .alert-success{ background: var(--green-100); color: #166534; }
-#screen-login .alert-info{ background: var(--blue-100); color: #1e40af; }
-#screen-login .alert-warn{ background: var(--amber-100); color: #92400e; }
+#screen-login .alert-error{ background: var(--red-100); color: var(--status-recusada-fg); }
+#screen-login .alert-success{ background: var(--green-100); color: var(--status-aprovada-fg); }
+#screen-login .alert-info{ background: var(--blue-100); color: var(--blue-600); }
+#screen-login .alert-warn{ background: var(--amber-100); color: var(--status-pendente-fg); }
 #screen-login .strength{
     display: none;
     margin-top: 9px;
@@ -611,7 +611,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
 #screen-login .strength .bars span{
     height: 4px;
     border-radius: 2px;
-    background: #e2e8f0;
+    background: var(--surface-3);
     flex: 1;
     transition: background 0.2s;
   }
@@ -668,7 +668,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     padding: 7px 13px;
     border-radius: 999px;
     background: var(--amber-100);
-    color: #92400e;
+    color: var(--status-pendente-fg);
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -694,7 +694,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
 #screen-login .modal{
     width: 100%;
     max-width: 410px;
-    background: #fff;
+    background: var(--surface);
     border-radius: 18px;
     padding: 28px;
     box-shadow: var(--shadow-lg);
@@ -814,7 +814,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 #screen-painel .nav-foot a{
-    color: #94a3b8;
+    color: var(--ink-400);
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -846,11 +846,11 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 10px;
     padding: 8px 14px;
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--line);
     cursor: pointer;
   }
-#screen-painel .user:hover{ background: #f1f5f9; }
+#screen-painel .user:hover{ background: var(--surface-2); }
 #screen-painel .user-avatar{
     width: 34px;
     height: 34px;
@@ -974,7 +974,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     padding: 14px 20px;
     font-weight: 600;
     color: var(--ink-700);
-    background: #f8fafc;
+    background: var(--surface-2);
     border-bottom: 1px solid var(--line);
   }
 #screen-painel td{
@@ -983,7 +983,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     color: var(--ink-700);
   }
 #screen-painel tr:last-child td{ border-bottom: none; }
-#screen-painel tr:hover td{ background: #f8fafc; }
+#screen-painel tr:hover td{ background: var(--surface-2); }
 #screen-painel .badge{
     display: inline-flex;
     align-items: center;
@@ -993,19 +993,19 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     font-size: 11.5px;
     font-weight: 600;
   }
-#screen-painel .badge.aprovada{ background: var(--green-100); color: #166534; }
-#screen-painel .badge.pendente{ background: var(--amber-100); color: #92400e; }
-#screen-painel .badge.recusada{ background: var(--red-100); color: #991b1b; }
+#screen-painel .badge.aprovada{ background: var(--green-100); color: var(--status-aprovada-fg); }
+#screen-painel .badge.pendente{ background: var(--amber-100); color: var(--status-pendente-fg); }
+#screen-painel .badge.recusada{ background: var(--red-100); color: var(--status-recusada-fg); }
 #screen-painel .badge.dia{
     background: var(--blue-100);
-    color: #1e40af;
+    color: var(--blue-600);
     font-variant-numeric: tabular-nums;
   }
-#screen-painel .badge.manha{ background: var(--blue-100); color: #1e40af; }
-#screen-painel .badge.tarde{ background: var(--amber-100); color: #92400e; }
-#screen-painel .badge.noite{ background: #e2e8f0; color: #334155; }
+#screen-painel .badge.manha{ background: var(--blue-100); color: var(--blue-600); }
+#screen-painel .badge.tarde{ background: var(--amber-100); color: var(--status-pendente-fg); }
+#screen-painel .badge.noite{ background: var(--surface-3); color: var(--ink-700); }
 #screen-painel .badge.aula{
-    background: #f1f5f9;
+    background: var(--surface-2);
     color: var(--ink-700);
     border: 1px solid var(--line);
   }
@@ -1024,7 +1024,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 7px;
     transition: background 0.15s, border-color 0.15s;
   }
-#screen-painel .btn:hover{ background: #f8fafc; border-color: #cbd5e1; }
+#screen-painel .btn:hover{ background: var(--surface-2); border-color: var(--ink-400); }
 #screen-painel .btn-primary{
     background: linear-gradient(180deg, var(--blue-500), var(--blue-600));
     border: none;
@@ -1127,7 +1127,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 #screen-reserva .nav-foot a{
-    color: #94a3b8;
+    color: var(--ink-400);
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -1159,11 +1159,11 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 10px;
     padding: 8px 14px;
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--line);
     cursor: pointer;
   }
-#screen-reserva .user:hover{ background: #f1f5f9; }
+#screen-reserva .user:hover{ background: var(--surface-2); }
 #screen-reserva .user-avatar{
     width: 34px;
     height: 34px;
@@ -1247,7 +1247,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     padding: 0 14px;
     border: 1px solid var(--line);
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     font: inherit;
     font-size: 14.5px;
     color: var(--ink-900);
@@ -1268,7 +1268,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
 #screen-reserva .input-wrap input::placeholder{ color: var(--ink-400); }
 #screen-reserva .input-wrap input:focus, #screen-reserva .input-wrap select:focus{
     outline: none;
-    background: #fff;
+    background: var(--surface);
     border-color: var(--blue-500);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
   }
@@ -1293,7 +1293,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     padding: 14px 20px;
     font-weight: 600;
     color: var(--ink-700);
-    background: #f8fafc;
+    background: var(--surface-2);
     border-bottom: 1px solid var(--line);
     white-space: nowrap;
   }
@@ -1304,7 +1304,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     white-space: nowrap;
   }
 #screen-reserva tr:last-child td{ border-bottom: none; }
-#screen-reserva tr:hover td{ background: #f8fafc; }
+#screen-reserva tr:hover td{ background: var(--surface-2); }
 #screen-reserva .badge{
     display: inline-flex;
     align-items: center;
@@ -1316,12 +1316,12 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   }
 #screen-reserva .badge.hora{
     background: var(--blue-100);
-    color: #1e40af;
+    color: var(--blue-600);
     font-variant-numeric: tabular-nums;
   }
-#screen-reserva .badge.manha{ background: var(--blue-100); color: #1e40af; }
-#screen-reserva .badge.tarde{ background: var(--amber-100); color: #92400e; }
-#screen-reserva .badge.estado{ background: #f1f5f9; color: var(--ink-700); border: 1px solid var(--line); }
+#screen-reserva .badge.manha{ background: var(--blue-100); color: var(--blue-600); }
+#screen-reserva .badge.tarde{ background: var(--amber-100); color: var(--status-pendente-fg); }
+#screen-reserva .badge.estado{ background: var(--surface-2); color: var(--ink-700); border: 1px solid var(--line); }
 #screen-reserva .btn{
     padding: 9px 16px;
     border-radius: 10px;
@@ -1337,7 +1337,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 7px;
     transition: background 0.15s, border-color 0.15s;
   }
-#screen-reserva .btn:hover{ background: #f8fafc; border-color: #cbd5e1; }
+#screen-reserva .btn:hover{ background: var(--surface-2); border-color: var(--ink-400); }
 #screen-reserva .btn-primary{
     background: linear-gradient(180deg, var(--blue-500), var(--blue-600));
     border: none;
@@ -1361,7 +1361,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     padding: 7px 12px;
     border-radius: 999px;
     border: 1px solid var(--line);
-    background: #f8fafc;
+    background: var(--surface-2);
     color: var(--ink-700);
     font: inherit;
     font-size: 12.5px;
@@ -1369,7 +1369,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     cursor: pointer;
     transition: background 0.15s, color 0.15s, border-color 0.15s;
   }
-#screen-reserva .chip:hover{ border-color: #cbd5e1; }
+#screen-reserva .chip:hover{ border-color: var(--ink-400); }
 #screen-reserva .chip.sel{
     background: var(--blue-500);
     border-color: var(--blue-500);
@@ -1540,7 +1540,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 #screen-laboratorios .nav-foot a{
-    color: #94a3b8;
+    color: var(--ink-400);
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -1572,11 +1572,11 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 10px;
     padding: 8px 14px;
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--line);
     cursor: pointer;
   }
-#screen-laboratorios .user:hover{ background: #f1f5f9; }
+#screen-laboratorios .user:hover{ background: var(--surface-2); }
 #screen-laboratorios .user-avatar{
     width: 34px;
     height: 34px;
@@ -1648,7 +1648,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     border-radius: 10px;
     border: 1px solid #bbf7d0;
     background: var(--green-100);
-    color: #166534;
+    color: var(--status-aprovada-fg);
     font-size: 12.5px;
     line-height: 1.5;
   }
@@ -1680,7 +1680,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 7px;
     transition: background 0.15s, border-color 0.15s;
   }
-#screen-laboratorios .btn:hover{ background: #f8fafc; border-color: #cbd5e1; }
+#screen-laboratorios .btn:hover{ background: var(--surface-2); border-color: var(--ink-400); }
 #screen-laboratorios .btn-primary{
     background: linear-gradient(180deg, var(--blue-500), var(--blue-600));
     border: none;
@@ -1781,7 +1781,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 #screen-visualizacao-reservas .nav-foot a{
-    color: #94a3b8;
+    color: var(--ink-400);
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -1813,11 +1813,11 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 10px;
     padding: 8px 14px;
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--line);
     cursor: pointer;
   }
-#screen-visualizacao-reservas .user:hover{ background: #f1f5f9; }
+#screen-visualizacao-reservas .user:hover{ background: var(--surface-2); }
 #screen-visualizacao-reservas .user-avatar{
     width: 34px;
     height: 34px;
@@ -1915,7 +1915,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
-#screen-visualizacao-reservas .filters .filter:hover{ background: #f8fafc; border-color: #cbd5e1; }
+#screen-visualizacao-reservas .filters .filter:hover{ background: var(--surface-2); border-color: var(--ink-400); }
 #screen-visualizacao-reservas .filters .filter.active{
     background: var(--blue-500);
     border-color: var(--blue-500);
@@ -1937,7 +1937,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     padding: 14px 20px;
     font-weight: 600;
     color: var(--ink-700);
-    background: #f8fafc;
+    background: var(--surface-2);
     border-bottom: 1px solid var(--line);
     white-space: nowrap;
   }
@@ -1948,7 +1948,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     white-space: nowrap;
   }
 #screen-visualizacao-reservas tr:last-child td{ border-bottom: none; }
-#screen-visualizacao-reservas tr:hover td{ background: #f8fafc; }
+#screen-visualizacao-reservas tr:hover td{ background: var(--surface-2); }
 #screen-visualizacao-reservas .empty{
     display: none;
     padding: 40px 20px;
@@ -1966,19 +1966,19 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     font-size: 11.5px;
     font-weight: 600;
   }
-#screen-visualizacao-reservas .badge.aprovada{ background: var(--green-100); color: #166534; }
-#screen-visualizacao-reservas .badge.pendente{ background: var(--amber-100); color: #92400e; }
-#screen-visualizacao-reservas .badge.recusada{ background: var(--red-100); color: #991b1b; }
+#screen-visualizacao-reservas .badge.aprovada{ background: var(--green-100); color: var(--status-aprovada-fg); }
+#screen-visualizacao-reservas .badge.pendente{ background: var(--amber-100); color: var(--status-pendente-fg); }
+#screen-visualizacao-reservas .badge.recusada{ background: var(--red-100); color: var(--status-recusada-fg); }
 #screen-visualizacao-reservas .badge.dia{
     background: var(--blue-100);
-    color: #1e40af;
+    color: var(--blue-600);
     font-variant-numeric: tabular-nums;
   }
-#screen-visualizacao-reservas .badge.manha{ background: var(--blue-100); color: #1e40af; }
-#screen-visualizacao-reservas .badge.tarde{ background: var(--amber-100); color: #92400e; }
-#screen-visualizacao-reservas .badge.noite{ background: #e2e8f0; color: #334155; }
+#screen-visualizacao-reservas .badge.manha{ background: var(--blue-100); color: var(--blue-600); }
+#screen-visualizacao-reservas .badge.tarde{ background: var(--amber-100); color: var(--status-pendente-fg); }
+#screen-visualizacao-reservas .badge.noite{ background: var(--surface-3); color: var(--ink-700); }
 #screen-visualizacao-reservas .badge.aula{
-    background: #f1f5f9;
+    background: var(--surface-2);
     color: var(--ink-700);
     border: 1px solid var(--line);
   }
@@ -1997,7 +1997,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 7px;
     transition: background 0.15s, border-color 0.15s;
   }
-#screen-visualizacao-reservas .btn:hover{ background: #f8fafc; border-color: #cbd5e1; }
+#screen-visualizacao-reservas .btn:hover{ background: var(--surface-2); border-color: var(--ink-400); }
 #screen-visualizacao-reservas .btn-primary{
     background: linear-gradient(180deg, var(--blue-500), var(--blue-600));
     border: none;
@@ -2063,7 +2063,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   }
 #screen-reserva td[data-aula][data-dia]{ cursor: pointer; }
 #screen-reserva tr.shift-row td{
-    background: #eef4ff;
+    background: var(--surface-2);
     color: var(--blue-600);
     font-size: 11px;
     font-weight: 700;
@@ -2092,7 +2092,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     height: 38px;
     border: 1px solid var(--line);
     border-radius: 9px;
-    background: #fff;
+    background: var(--surface);
     color: var(--ink-900);
     font: inherit;
     font-size: 13px;
@@ -2105,17 +2105,17 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     gap: 7px;
   }
 #screen-painel .btn-approve{
-    background: #16803c;
-    border-color: #16803c;
+    background: var(--blue-600);
+    border-color: var(--blue-600);
     color: #fff;
   }
-#screen-painel .btn-approve:hover{ background: #116933; border-color: #116933; }
+#screen-painel .btn-approve:hover{ background: var(--blue-500); border-color: #116933; }
 #screen-painel .btn-reject{
-    background: #fff;
-    border-color: #fca5a5;
-    color: #b42318;
+    background: var(--surface);
+    border-color: var(--danger-link);
+    color: var(--status-recusada-fg);
   }
-#screen-painel .btn-reject:hover{ background: #fef3f2; border-color: #f87171; }
+#screen-painel .btn-reject:hover{ background: var(--status-recusada-bg); border-color: var(--status-recusada-border); }
 #screen-painel .admin-grid-wrap{ overflow-x: auto; margin-top: 4px; }
 #screen-painel .admin-grid{ min-width: 880px; }
 #screen-painel .admin-grid th,
@@ -2125,7 +2125,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   }
 #screen-painel .admin-grid td.slot-cell{ min-width: 130px; }
 #screen-painel .admin-grid tr.shift-row td{
-    background: #eef4ff;
+    background: var(--surface-2);
     color: var(--blue-600);
     font-size: 11px;
     font-weight: 700;
@@ -2137,18 +2137,18 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     margin-bottom: 5px;
     padding: 6px 8px;
     border-radius: 8px;
-    background: #f1f5f9;
-    border-left: 3px solid #94a3b8;
+    background: var(--surface-2);
+    border-left: 3px solid var(--ink-400);
     font-size: 11.5px;
     line-height: 1.35;
   }
 #screen-painel .admin-grid .slot.pendente{
-    background: #fffbeb;
-    border-left-color: #f59e0b;
+    background: var(--slot-pendente-bg);
+    border-left-color: var(--status-pendente-border);
   }
 #screen-painel .admin-grid .slot.aprovada{
-    background: #ecfdf3;
-    border-left-color: #16a34a;
+    background: var(--slot-aprovada-bg);
+    border-left-color: var(--status-aprovada-border);
   }
 #screen-painel .admin-grid .slot strong{
     display: block;
@@ -2160,9 +2160,9 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     color: var(--ink-500);
     font-size: 10.5px;
   }
-#screen-painel .admin-grid .vazio{ color: #cbd5e1; }
+#screen-painel .admin-grid .vazio{ color: var(--ink-400); }
 #screen-painel .admin-grid td.admin-slot-cell{ cursor: pointer; transition: background .15s; }
-#screen-painel .admin-grid td.admin-slot-cell:hover{ background: #f8fafc; }
+#screen-painel .admin-grid td.admin-slot-cell:hover{ background: var(--surface-2); }
 #screen-painel .admin-grid td.admin-slot-cell .slot{ pointer-events: none; }
 #screen-painel .admin-grid .slot-hint{ display: block; margin-top: 4px; font-size: 10px; color: var(--ink-400); }
 
@@ -2202,8 +2202,8 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
 .admin-slot-actions{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .admin-slot-actions .btn{ flex: 1 1 auto; }
 </style>
-<link rel="stylesheet" href="theme.css?v=20261109h" />
-<script src="theme.js?v=20261109h"></script>
+<link rel="stylesheet" href="theme.css?v=20261111d" />
+<script src="theme.js?v=20261111d"></script>
 </head>
 <body>
 
@@ -2399,9 +2399,34 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
                     </div>
                   </div>
                 </div>
-                <span class="hint"><span class="hint-text">Selecione ao menos uma disciplina.</span></span>
+              <span class="hint"><span class="hint-text">Selecione ao menos uma disciplina.</span></span>
+            </div>
+
+            <div class="field" id="r-classes" data-role-only="professor">
+              <label for="reg-classes">Turmas que dou aula</label>
+              <div class="input-wrap">
+                <span class="leading">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </span>
+                <input id="reg-classes" name="classes" type="text" readonly placeholder="Selecione uma ou mais turmas" autocomplete="off" />
+                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <div class="fill-pop" id="classes-pop" role="group" aria-label="Turmas"></div>
               </div>
-              <div class="field" id="r-pass">
+              <span class="hint"><span class="hint-text">Selecione as turmas que você leciona. É obrigatório.</span></span>
+            </div>
+
+            <div class="field" id="r-lab" data-role-only="professor">
+              <label for="reg-lab">Laboratório principal (opcional)</label>
+              <div class="input-wrap">
+                <span class="leading">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </span>
+                <select id="reg-lab" name="labId"></select>
+              </div>
+              <span class="hint"><span class="hint-text">O laboratório onde você costuma ministrar as aulas.</span></span>
+            </div>
+
+            <div class="field" id="r-pass">
                 <label for="reg-pass">Senha</label>
                 <div class="input-wrap">
                   <span class="leading">
@@ -2657,10 +2682,101 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
           </div>
         </section>
         <section class="view" id="view-cadastros">
-          <h2>Aprovação de cadastros</h2>
-          <p class="sub">Analise as solicitações de acesso de novos usuários.</p>
-          <div class="card">
-            <p style="color:var(--ink-500);font-size:13px">Não há solicitações pendentes no momento.</p>
+          <h2>Aprovações e cadastros</h2>
+          <p class="sub">Aprove o acesso de novos usuários e gerencie os laboratórios da escola.</p>
+
+          <div class="alert-banner" id="cadastros-error" hidden></div>
+
+          <div class="section-card">
+            <h3>Cadastros de usuários</h3>
+            <p>Solicitações aguardando aprovação.</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                <tr><th>Nome</th><th>E-mail</th><th>Disciplinas</th><th>Turmas / Lab</th><th>Perfil</th><th>Ação</th></tr>
+              </thead>
+              <tbody id="admin-users-body">
+                <tr><td colspan="6" class="muted">Carregando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        <div class="section-card">
+          <h3>Turmas</h3>
+          <p>Turmas disponíveis para reserva. As turmas também podem ser cadastradas pelo professor no momento do cadastro.</p>
+          <div class="lab-form" style="border-top:none; padding-top:0; margin-top:0">
+            <div class="field">
+              <label for="class-name">Nome da turma</label>
+              <input type="text" id="class-name" maxlength="40" placeholder="Ex.: 4A" />
+            </div>
+            <div class="field">
+              <label for="class-shift">Turno</label>
+              <select id="class-shift">
+                <option value="manha">Manhã</option>
+                <option value="tarde">Tarde</option>
+              </select>
+            </div>
+            <div class="lab-form-actions">
+              <button type="button" class="btn btn-primary" id="class-save">Cadastrar turma</button>
+            </div>
+          </div>
+          <div class="table-wrap" style="margin-top:14px">
+            <table>
+              <thead>
+                <tr><th>Turma</th><th>Turno</th></tr>
+              </thead>
+              <tbody id="admin-classes-body">
+                <tr><td colspan="2" class="muted">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h3>Laboratórios</h3>
+            <p>Cadastre, edite ou desative laboratórios usados no agendamento.</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Nome</th><th>Localização</th><th>Alunos</th><th>Computadores</th><th>Situação</th><th>Ação</th></tr>
+                </thead>
+                <tbody id="admin-labs-body">
+                  <tr><td colspan="6" class="muted">Carregando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <form class="lab-form" id="lab-form">
+              <input type="hidden" id="lab-id" />
+              <div class="field">
+                <label for="lab-name">Nome</label>
+                <input type="text" id="lab-name" maxlength="80" placeholder="Ex.: Lab 4" required />
+              </div>
+              <div class="field">
+                <label for="lab-location">Localização</label>
+                <input type="text" id="lab-location" maxlength="120" placeholder="Ex.: Bloco C" />
+              </div>
+              <div class="field">
+                <label for="lab-capacity">Capacidade (alunos)</label>
+                <input type="number" id="lab-capacity" min="0" step="1" />
+              </div>
+              <div class="field">
+                <label for="lab-pcs">Computadores</label>
+                <input type="number" id="lab-pcs" min="0" step="1" />
+              </div>
+              <div class="field wide">
+                <label for="lab-notes">Observações</label>
+                <input type="text" id="lab-notes" maxlength="200" placeholder="Opcional" />
+              </div>
+              <div class="field">
+                <span class="check-inline"><input type="checkbox" id="lab-active" checked /> Ativo</span>
+              </div>
+              <div class="lab-form-actions">
+                <button type="submit" class="btn btn-primary" id="lab-save">Cadastrar laboratório</button>
+                <button type="button" class="btn" id="lab-reset">Limpar</button>
+              </div>
+            </form>
           </div>
         </section>
         <section class="view" id="view-admin-reservas">
@@ -2697,11 +2813,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
             </div>
             <label class="admin-toolbar" style="margin:0">
               Laboratório
-              <select id="admin-grid-lab">
-                <option value="Lab 1">Laboratório 1</option>
-                <option value="Lab 2">Laboratório 2</option>
-                <option value="Lab 3">Laboratório 3</option>
-              </select>
+              <select id="admin-grid-lab"></select>
             </label>
           </div>
 
@@ -2781,10 +2893,13 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
           <form id="form-reserva" novalidate>
             <div class="fields">
               <div class="field">
-                <label>1 · Laboratório</label>
-                <div class="input-wrap" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font-size:13px;color:var(--ink-500)">
-                  Definido pela secretaria no momento da aprovação.
+                <label for="res-turma">1 · Turma que vai ao laboratório</label>
+                <div class="input-wrap">
+                  <select id="res-turma" name="turma" required>
+                    <option value="">Selecione a turma</option>
+                  </select>
                 </div>
+                <span class="hint"><span class="hint-text">Obrigatório. O laboratório é definido pela secretaria na aprovação.</span></span>
               </div>
               <div class="field">
                 <label for="res-turno">2 · Turno</label>
@@ -2910,7 +3025,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
       <div class="content">
         <h2>Laboratórios</h2>
         <p class="sub">Escolha uma sala e reserve conforme a grade do PLANO (aulas de 50 min).</p>
-        <div class="grid-3">
+        <div class="grid-3" id="labs-grid">
           <div class="card">
             <h3>Laboratório 1</h3>
             <p><strong>Capacidade:</strong> 30 estações</p>
@@ -3071,7 +3186,8 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   </div>
 </div>
 
-<script src="api.js"></script>
+<script src="api.js?v=20261111d"></script>
+<script src="turmas.js?v=20261111d"></script>
 <script>
 (function () {
   "use strict";
@@ -3081,6 +3197,8 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   function enviarEmailAutorizacaoReserva(r) {
     const disciplina = r.disciplina || localStorage.getItem("cepk_user_subject") || "";
     return window.CEPKApi.createReservation({
+      lab: r.lab || "A definir",
+      turma: r.turma || "",
       dia: r.dia,
       dias: r.dias,
       turno: r.turno,
@@ -3243,6 +3361,40 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   function normalizeReserva(reserva) {
     return window.CEPKApi && window.CEPKApi.normalizeReservation ? window.CEPKApi.normalizeReservation(reserva) : reserva;
   }
+  function removeReservaLocal(id) {
+    const restantes = getReservas(storedEmail).filter(function (reserva) {
+      const item = normalizeReserva(reserva);
+      return String(item.id || "") !== String(id);
+    });
+    saveReservas(storedEmail, restantes);
+  }
+  async function excluirReserva(button) {
+    const id = button.getAttribute("data-delete-reservation");
+    if (!id) return;
+    if (!confirm("Excluir esta reserva? Essa acao nao pode ser desfeita.")) return;
+
+    const label = button.textContent;
+    button.disabled = true;
+    button.textContent = "Excluindo...";
+
+    let result = null;
+    if (window.CEPKApi && typeof window.CEPKApi.deleteReservation === "function") {
+      result = await window.CEPKApi.deleteReservation(id);
+    }
+
+    if (result && !result.ok && result.status !== 404 && result.status !== 0) {
+      alert(window.CEPKApi.errorMessage(result, "Nao foi possivel excluir a reserva."));
+      button.disabled = false;
+      button.textContent = label;
+      return;
+    }
+
+    removeReservaLocal(id);
+    const active = document.querySelector("section.screen.active");
+    const screenId = active ? active.id : "";
+    if (screenId === "screen-visualizacao-reservas") renderVisualizacaoData();
+    if (screenId === "screen-painel") renderTabelasPainel();
+  }
   let syncReservasEmAndamento = false;
   async function syncReservasApi() {
     if (syncReservasEmAndamento || !isLoggedIn() || !window.CEPKApi || typeof window.CEPKApi.reservations !== "function") return;
@@ -3268,11 +3420,19 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   }
   function escHtml(v) { return String(v).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
   function statusBadge(status) {
-    const s = String(status).toLowerCase();
-    const label = s === "aprovada" ? "Aprovada" : s === "recusada" ? "Recusada" : "Pendente";
-    return '<span class="badge ' + s + '">' + label + '</span>';
+    const s = String(status || "pendente").toLowerCase();
+    const known = ["aprovada", "aprovado", "recusada", "recusado", "cancelada", "cancelado", "pendente"];
+    const norm = known.indexOf(s) !== -1 ? s : "pendente";
+    const cls = norm === "aprovado" ? "aprovada" : norm === "recusado" ? "recusada" : norm === "cancelado" ? "cancelada" : norm;
+    const labels = { aprovada: "Aprovada", recusada: "Recusada", cancelada: "Cancelada", pendente: "Pendente"};
+    return '<span class="badge ' + cls + '">' + labels[cls] + "</span>";
   }
-  function turnoBadge(turno) { const t = String(turno); const cls = t === "Tarde" ? "tarde" : t === "Ambos" ? "noite" : "manha"; return '<span class="badge ' + cls + '">' + escHtml(t) + '</span>'; }
+  function turnoBadge(turno) {
+    const raw = String(turno || "").trim();
+    const key = raw.toLowerCase();
+    const cls = key.indexOf("tarde") !== -1 ? "tarde" : key.indexOf("noite") !== -1 || key.indexOf("ambos") !== -1 ? "noite" : "manha";
+    return '<span class="badge ' + cls + '">' + escHtml(raw || "—") + "</span>";
+  }
   function fmtAulas(r) {
     if (Array.isArray(r.aulas) && r.aulas.length) { return r.aulas.map(function (n) { return n + "ª"; }).join(", "); }
     return r.aula ? String(r.aula).split(",").map(function (n) { return n.trim() + "ª"; }).join(", ") : "—";
@@ -3401,6 +3561,9 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     const strength = document.getElementById("strength");
     const roleRadios = $$('input[name="reg-role"]');
     const adminSubjectField = document.getElementById("r-subject");
+    const professorOnlyFields = $$('[data-role-only="professor"]');
+    const classesPicker = window.CEPKTurmas ? window.CEPKTurmas.setupPicker({ inputId: "reg-classes", popId: "classes-pop" }) : null;
+    if (window.CEPKTurmas) window.CEPKTurmas.setupLabSelect("reg-lab");
     function selectedRegistrationType() {
       const checked = document.querySelector('input[name="reg-role"]:checked');
       return checked ? checked.value : "professor";
@@ -3408,6 +3571,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     function syncRegistrationTypeFields() {
       const isAdmin = selectedRegistrationType() === "admin";
       if (adminSubjectField) adminSubjectField.style.display = isAdmin ? "none" : "";
+      professorOnlyFields.forEach(function (field) { field.style.display = isAdmin ? "none" : ""; });
       roleRadios.forEach(function (radio) {
         const option = radio.closest(".role-option");
         if (option) option.classList.toggle("selected", radio.checked);
@@ -3438,6 +3602,8 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
       const name = document.getElementById("reg-name").value.trim();
       const email = document.getElementById("reg-email").value.trim().toLowerCase();
       const subjects = getSelectedSubjects();
+      const classes = classesPicker ? classesPicker.value() : [];
+      const labId = document.getElementById("reg-lab") ? document.getElementById("reg-lab").value : "";
       const pass = document.getElementById("reg-pass").value;
       const confirm = document.getElementById("reg-confirm").value;
       const terms = document.getElementById("terms").checked;
@@ -3446,6 +3612,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
       setInvalid("r-name", name.length < 3, "Informe seu nome completo.");
       setInvalid("r-email", !matchesDomain(email), "Informe um e-mail válido.");
       setInvalid("r-subject", !adminRequest && subjects.length === 0, "Selecione ao menos uma disciplina.");
+      setInvalid("r-classes", !adminRequest && classes.length === 0, "Selecione ao menos uma turma.");
       setInvalid("r-pass", pass.length < 8, "A senha deve ter no mínimo 8 caracteres.");
       setInvalid("r-confirm", confirm !== pass || !confirm, "As senhas não coincidem.");
       if (!terms) { ok = false; const check = document.getElementById("terms").closest(".check-row"); check.style.color = "var(--red-600)"; check.animate([{ transform: "translateX(0)" }, { transform: "translateX(-4px)" }, { transform: "translateX(4px)" }, { transform: "translateX(0)" }], { duration: 260 }); setTimeout(function () { check.style.color = ""; }, 1200); }
@@ -3458,7 +3625,15 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
         return;
       }
       setLoading(btn, true);
-      const result = await window.CEPKApi.register({ name: name, email: email, subjects: subjects, password: pass, adminRequest: adminRequest });
+      const result = await window.CEPKApi.register({
+        name: name,
+        email: email,
+        subjects: subjects,
+        classes: adminRequest ? [] : classes,
+        labId: adminRequest || !labId ? undefined : labId,
+        password: pass,
+        adminRequest: adminRequest
+      });
       setLoading(btn, false);
       if (!result.ok) {
         showAlert(errorBox, window.CEPKApi.errorMessage(result, "Não foi possível registrar a solicitação. Tente novamente."));
@@ -3601,6 +3776,8 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   function init() {
     removerSolicitacaoGislaine();
     migrateLegacyUser();
+    initCadastros();
+    carregarAdminLabs();
     const respostaCadastro = aplicarRespostaCadastro();
     if (document.getElementById("screen-login")) initLogin();
     const logoutCandidates = document.querySelectorAll("#screen-login #linkLogout, #screen-painel #linkLogout-p, #screen-reserva #linkLogout-r, #screen-laboratorios #linkLogout-l, #screen-visualizacao-reservas #linkLogout-v");
@@ -3687,7 +3864,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
       const titleMap = {
         "view-dashboard": ["Painel", "Bem-vindo de volta, " + storedName + "."],
         "view-admin-dashboard": ["Painel administrativo", "Visão geral das solicitações e da ocupação dos laboratórios."],
-        "view-cadastros": ["Aprovação de cadastros", "Analise as solicitações de acesso de novos usuários."],
+        "view-cadastros": ["Aprovações e cadastros", "Aprove os acessos e gerencie os laboratórios."],
         "view-admin-reservas": ["Gestão de horários e laboratórios", "Aprove solicitações e acompanhe a grade semanal dos laboratórios."]
       };
       const staffViews = ["view-admin-dashboard", "view-admin-reservas", "view-cadastros"];
@@ -3702,6 +3879,12 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
       renderTabelasPainel();
       if (targetView === "view-admin-dashboard") renderAdminDashboard();
       if (targetView === "view-admin-reservas" || targetView === "view-admin-dashboard") carregarAdminReservas();
+      if (targetView === "view-cadastros") {
+        carregarAdminUsuarios(true);
+        carregarAdminLabs();
+        renderAdminLabs();
+        carregarAdminClasses(false);
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
     window.showPainelView = showViewPainel;
@@ -3710,7 +3893,10 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     if (btnNova) { btnNova.addEventListener("click", function (e) { e.preventDefault(); navigate("reserva"); }); }
   }
 
-  const ADMIN_LABS = ["Lab 1", "Lab 2", "Lab 3"];
+  let ADMIN_LABS = [];
+  let ADMIN_LABS_DATA = [];
+  let adminUsersList = [];
+  let adminClassesList = [];
   const ADMIN_DAYS = [
     { short: "Seg", full: "Segunda", num: 1 },
     { short: "Ter", full: "Terça", num: 2 },
@@ -3725,12 +3911,271 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   let adminBound = false;
   let adminSlotEditing = null;
 
+  function labLabel(name) { return String(name || "").replace(/^Lab\s+/i, "Laboratório "); }
+
+  function applyAdminLabs(list) {
+    if (!Array.isArray(list) || !list.length) return;
+    ADMIN_LABS_DATA = list;
+    ADMIN_LABS = list.filter(function (lab) { return lab && lab.active !== false && lab.name; }).map(function (lab) { return lab.name; });
+    const select = document.getElementById("admin-grid-lab");
+    if (select) {
+      const previous = select.value;
+      select.innerHTML = ADMIN_LABS.map(function (name) {
+        return '<option value="' + escHtml(name) + '">' + escHtml(labLabel(name)) + "</option>";
+      }).join("");
+      if (previous && ADMIN_LABS.indexOf(previous) !== -1) select.value = previous;
+    }
+  }
+
+  async function carregarAdminLabs() {
+    if (!window.CEPKApi || typeof window.CEPKApi.labs !== "function") return;
+    const result = await window.CEPKApi.labs(true);
+    if (!result.ok || !result.data || !Array.isArray(result.data.labs)) {
+      if (!ADMIN_LABS.length) ADMIN_LABS = ["Lab 1", "Lab 2", "Lab 3"];
+      return;
+    }
+    applyAdminLabs(result.data.labs);
+    renderLabsGrid();
+    renderAdminLabs();
+  }
+
+  function setCadastrosError(message) {
+    const banner = document.getElementById("cadastros-error");
+    if (!banner) return;
+    banner.textContent = message || "";
+    banner.hidden = !message;
+  }
+
+  function renderAdminLabs() {
+    const body = document.getElementById("admin-labs-body");
+    if (!body) return;
+    if (!ADMIN_LABS_DATA.length) {
+      body.innerHTML = '<tr><td colspan="6" class="muted">Nenhum laboratório cadastrado.</td></tr>';
+      return;
+    }
+    body.innerHTML = ADMIN_LABS_DATA.map(function (lab) {
+      const active = lab.active !== false;
+      return "<tr>" +
+        "<td><strong>" + escHtml(lab.name) + "</strong></td>" +
+        "<td>" + escHtml(lab.location || "—") + "</td>" +
+        "<td>" + escHtml(lab.studentCapacity != null ? lab.studentCapacity : "—") + "</td>" +
+        "<td>" + escHtml(lab.pcCount != null ? lab.pcCount : "—") + "</td>" +
+        '<td><span class="badge ' + (active ? "aprovada" : "cancelada") + '">' + (active ? "Ativo" : "Inativo") + "</span></td>" +
+        '<td><div class="lab-actions">' +
+          '<button type="button" class="btn" data-lab-edit="' + escHtml(lab.id) + '">Editar</button>' +
+          '<button type="button" class="btn btn-danger" data-lab-delete="' + escHtml(lab.id) + '">Excluir</button>' +
+        "</div></td></tr>";
+    }).join("");
+  }
+
+  function renderAdminClasses() {
+    const body = document.getElementById("admin-classes-body");
+    if (!body) return;
+    if (!adminClassesList.length) {
+      body.innerHTML = '<tr><td colspan="2" class="muted">Nenhuma turma cadastrada.</td></tr>';
+      return;
+    }
+    body.innerHTML = adminClassesList.map(function (c) {
+      return "<tr><td><strong>" + escHtml(c.name) + "</strong></td>" +
+        "<td>" + escHtml(c.shift === "tarde" ? "Tarde" : "Manhã") + "</td></tr>";
+    }).join("");
+  }
+
+  async function carregarAdminClasses(force) {
+    if (!window.CEPKApi || typeof window.CEPKApi.classes !== "function") return false;
+    const result = await window.CEPKApi.classes();
+    if (!result.ok || !result.data || !Array.isArray(result.data.classes)) {
+      if (force) setCadastrosError(window.CEPKApi.errorMessage(result, "Não foi possível carregar as turmas."));
+      return false;
+    }
+    adminClassesList = result.data.classes;
+    renderAdminClasses();
+    return true;
+  }
+
+  async function salvarTurma() {
+    if (!window.CEPKApi || typeof window.CEPKApi.createClass !== "function") return;
+    const name = document.getElementById("class-name").value.trim();
+    const shift = document.getElementById("class-shift").value;
+    if (!name) {
+      setCadastrosError("Informe o nome da turma.");
+      return;
+    }
+    const result = await window.CEPKApi.createClass({ name: name, shift: shift });
+    if (!result.ok) {
+      setCadastrosError(window.CEPKApi.errorMessage(result, "Não foi possível cadastrar a turma."));
+      return;
+    }
+    setCadastrosError("");
+    document.getElementById("class-name").value = "";
+    await carregarAdminClasses(false);
+  }
+
+  function renderAdminUsuarios() {
+    const body = document.getElementById("admin-users-body");
+    if (!body) return;
+    const pendentes = adminUsersList.filter(function (u) { return String(u.status || "").toLowerCase() === "pendente"; });
+    if (!pendentes.length) {
+      body.innerHTML = '<tr><td colspan="6" class="muted">Nenhuma solicitação pendente no momento.</td></tr>';
+      return;
+    }
+    body.innerHTML = pendentes.map(function (u) {
+      const subjects = Array.isArray(u.subjects) ? u.subjects.join(", ") : String(u.subjects || "");
+      const classes = Array.isArray(u.classes) ? u.classes.join(", ") : String(u.classes || "");
+      const roleLabel = u.role === "admin" ? "Administrador" : u.role === "secretaria" ? "Secretaria" : "Professor";
+      return "<tr>" +
+        "<td><strong>" + escHtml(u.name || "—") + "</strong></td>" +
+        "<td>" + escHtml(u.email || "—") + "</td>" +
+        "<td>" + escHtml(subjects || "—") + "</td>" +
+        '<td><span class="badge aula">' + escHtml(classes || "—") + "</span>" +
+          (u.labName ? '<br><span style="font-size:11px;color:var(--ink-500)">Lab: ' + escHtml(u.labName) + "</span>" : "") + "</td>" +
+        "<td>" + escHtml(roleLabel) + "</td>" +
+        '<td><div class="admin-actions">' +
+        '<button type="button" class="btn btn-approve" data-user-action="approve" data-user-id="' + escHtml(u.id) + '">Aprovar</button>' +
+        '<button type="button" class="btn btn-reject" data-user-action="reject" data-user-id="' + escHtml(u.id) + '">Recusar</button>' +
+        "</div></td></tr>";
+    }).join("");
+  }
+
+  async function carregarAdminUsuarios(force) {
+    if (!window.CEPKApi || typeof window.CEPKApi.adminUsers !== "function") return false;
+    const result = await window.CEPKApi.adminUsers("pendente");
+    if (!result.ok || !result.data || !Array.isArray(result.data.users)) {
+      if (force) setCadastrosError(window.CEPKApi.errorMessage(result, "Não foi possível carregar os cadastros."));
+      return false;
+    }
+    adminUsersList = result.data.users;
+    setCadastrosError("");
+    renderAdminUsuarios();
+    return true;
+  }
+
+  function resetLabForm() {
+    if (!document.getElementById("lab-form")) return;
+    document.getElementById("lab-id").value = "";
+    document.getElementById("lab-name").value = "";
+    document.getElementById("lab-location").value = "";
+    document.getElementById("lab-capacity").value = "";
+    document.getElementById("lab-pcs").value = "";
+    document.getElementById("lab-notes").value = "";
+    document.getElementById("lab-active").checked = true;
+    document.getElementById("lab-save").textContent = "Cadastrar laboratório";
+  }
+
+  function fillLabForm(lab) {
+    if (!lab) return;
+    document.getElementById("lab-id").value = lab.id || "";
+    document.getElementById("lab-name").value = lab.name || "";
+    document.getElementById("lab-location").value = lab.location || "";
+    document.getElementById("lab-capacity").value = lab.studentCapacity != null ? lab.studentCapacity : "";
+    document.getElementById("lab-pcs").value = lab.pcCount != null ? lab.pcCount : "";
+    document.getElementById("lab-notes").value = lab.notes || "";
+    document.getElementById("lab-active").checked = lab.active !== false;
+    document.getElementById("lab-save").textContent = "Salvar alterações";
+  }
+
+  async function submitLabForm(event) {
+    event.preventDefault();
+    if (!window.CEPKApi) return;
+    const id = document.getElementById("lab-id").value;
+    const payload = {
+      name: document.getElementById("lab-name").value.trim(),
+      location: document.getElementById("lab-location").value.trim(),
+      studentCapacity: Number(document.getElementById("lab-capacity").value || 0),
+      pcCount: Number(document.getElementById("lab-pcs").value || 0),
+      notes: document.getElementById("lab-notes").value.trim(),
+      active: document.getElementById("lab-active").checked
+    };
+    if (payload.name.length < 2) {
+      setCadastrosError("Informe o nome do laboratório (mínimo 2 caracteres).");
+      return;
+    }
+    const button = document.getElementById("lab-save");
+    button.disabled = true;
+    const original = button.textContent;
+    button.textContent = "Salvando...";
+    const result = id ? await window.CEPKApi.updateLab(id, payload) : await window.CEPKApi.createLab(payload);
+    button.disabled = false;
+    button.textContent = original;
+    if (!result.ok) {
+      setCadastrosError(window.CEPKApi.errorMessage(result, "Não foi possível salvar o laboratório."));
+      return;
+    }
+    setCadastrosError("");
+    resetLabForm();
+    await carregarAdminLabs();
+    renderAdminLabs();
+  }
+
+  async function deleteLabById(id) {
+    const lab = ADMIN_LABS_DATA.find(function (item) { return item.id === id; });
+    if (!lab) return;
+    if (!confirm('Excluir o laboratório "' + lab.name + '"? Se houver reservas vinculadas, desative-o em vez de excluir.')) return;
+    const result = await window.CEPKApi.deleteLab(id);
+    if (!result.ok) {
+      setCadastrosError(window.CEPKApi.errorMessage(result, "Não foi possível excluir o laboratório."));
+      return;
+    }
+    setCadastrosError("");
+    await carregarAdminLabs();
+    renderAdminLabs();
+  }
+
+  function initCadastros() {
+    if (initCadastros.bound) return;
+    initCadastros.bound = true;
+    const usersBody = document.getElementById("admin-users-body");
+    if (usersBody) {
+      usersBody.addEventListener("click", async function (e) {
+        const button = e.target.closest("[data-user-action]");
+        if (!button) return;
+        const id = button.dataset.userId;
+        const action = button.dataset.userAction;
+        if (!id) return;
+        const row = button.closest("tr");
+        const nameEl = row ? row.querySelector("strong") : null;
+        const name = nameEl ? nameEl.textContent : "este usuário";
+        if (action === "reject" && !confirm("Recusar o cadastro de " + name + "?")) return;
+        const buttons = row ? row.querySelectorAll("[data-user-action]") : [button];
+        buttons.forEach(function (btn) { btn.disabled = true; });
+        const result = action === "approve"
+          ? await window.CEPKApi.approveUser(id)
+          : await window.CEPKApi.rejectUser(id, {});
+        if (!result.ok) {
+          alert(window.CEPKApi.errorMessage(result, "Não foi possível concluir a ação."));
+          buttons.forEach(function (btn) { btn.disabled = false; });
+          return;
+        }
+        await carregarAdminUsuarios(true);
+      });
+    }
+    const labsBody = document.getElementById("admin-labs-body");
+    if (labsBody) {
+      labsBody.addEventListener("click", function (e) {
+        const edit = e.target.closest("[data-lab-edit]");
+        if (edit) {
+          fillLabForm(ADMIN_LABS_DATA.find(function (item) { return item.id === edit.dataset.labEdit; }));
+          return;
+        }
+        const remove = e.target.closest("[data-lab-delete]");
+        if (remove) deleteLabById(remove.dataset.labDelete);
+      });
+    }
+    const labForm = document.getElementById("lab-form");
+    if (labForm) labForm.addEventListener("submit", submitLabForm);
+    const labReset = document.getElementById("lab-reset");
+    if (labReset) labReset.addEventListener("click", function () { resetLabForm(); setCadastrosError(""); });
+    const classSave = document.getElementById("class-save");
+    if (classSave) classSave.addEventListener("click", salvarTurma);
+  }
+
   function adminLabOptions(selected) {
-    const hasSelected = ADMIN_LABS.indexOf(selected) !== -1;
+    if (!ADMIN_LABS.length) return '<option value="">Nenhum laboratório cadastrado</option>';
+    const hasSelected = selected && ADMIN_LABS.indexOf(selected) !== -1;
     const placeholder = hasSelected ? "" : '<option value="" selected>Selecione o laboratório</option>';
     return placeholder + ADMIN_LABS.map(function (lab) {
       return '<option value="' + escHtml(lab) + '"' + (lab === selected ? " selected" : "") + ">" +
-        escHtml(lab.replace("Lab ", "Laboratório ")) + "</option>";
+        escHtml(labLabel(lab)) + "</option>";
     }).join("");
   }
 
@@ -3979,7 +4424,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     if (status) status.textContent = "Carregando solicitações...";
     try {
       const [reservationsResult, scheduleResult] = await Promise.all([
-        window.CEPKApi.reservations(),
+        typeof window.CEPKApi.adminReservations === "function" ? window.CEPKApi.adminReservations() : window.CEPKApi.reservations(),
         typeof window.CEPKApi.schedule === "function" ? window.CEPKApi.schedule() : Promise.resolve({ ok: false, data: null })
       ]);
 
@@ -4114,6 +4559,21 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
       const fromStorage = stored.split(/[,;]/).map(function (item) { return item.trim(); }).filter(Boolean);
       return fromUser.concat(fromStorage).filter(function (item, index, list) { return list.indexOf(item) === index; });
     }
+    function getUserClasses() {
+      const user = window.CEPKApi && window.CEPKApi.user ? window.CEPKApi.user() : null;
+      const fromUser = user && Array.isArray(user.classes) ? user.classes : [];
+      const stored = localStorage.getItem("cepk_user_classes") || sessionStorage.getItem("cepk_user_classes") || "";
+      const fromStorage = stored.split(/[,;]/).map(function (item) { return item.trim(); }).filter(Boolean);
+      return fromUser.concat(fromStorage).filter(function (item, index, list) { return list.indexOf(item) === index; });
+    }
+    const turmaSelect = window.CEPKTurmas
+      ? window.CEPKTurmas.setupSelect({
+          selectId: "res-turma",
+          required: true,
+          placeholder: "Selecione a turma",
+          preferred: getUserClasses()
+        })
+      : null;
     function renderDisciplinas() {
       const subjects = getUserSubjects();
       const options = subjects.length ? subjects : SUBJECTS;
@@ -4255,13 +4715,14 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
       const dias = getDiasSelecionados();
       const disciplina = resDisciplina.value || getUserSubjects()[0] || "";
       const aulas = getAulasSelecionadas();
-      if (!turno || dias.length === 0 || !disciplina || aulas.length === 0) { alert("Preencha os itens do checklist, selecione ao menos um dia, uma aula e a disciplina da reserva."); return; }
+      const turma = turmaSelect ? turmaSelect.value() : "";
+      if (!turno || dias.length === 0 || !disciplina || aulas.length === 0 || !turma) { alert("Preencha os itens do checklist, selecione a turma, ao menos um dia, uma aula e a disciplina da reserva."); return; }
       const hoje = new Date();
       const criadaEm = ("0" + hoje.getDate()).slice(-2) + "/" + ("0" + (hoje.getMonth() + 1)).slice(-2) + "/" + hoje.getFullYear();
       let todas = {};
       try { todas = JSON.parse(localStorage.getItem("cepk_reservas") || "{}"); } catch (err2) { todas = {}; }
       if (!Array.isArray(todas[storedEmail])) todas[storedEmail] = [];
-      const nova = { id: String(Date.now()), lab: "A definir", professor: storedName, professorEmail: storedEmail, disciplina: disciplina, disciplinas: [disciplina], turno: turno, dias: dias, dia: dias.join(", "), aulas: aulas, aula: aulas.join(","), status: "pendente", criadaEm: criadaEm };
+      const nova = { id: String(Date.now()), lab: "A definir", turma: turma, classe: turma, professor: storedName, professorEmail: storedEmail, disciplina: disciplina, disciplinas: [disciplina], turno: turno, dias: dias, dia: dias.join(", "), aulas: aulas, aula: aulas.join(","), status: "pendente", criadaEm: criadaEm };
       todas[storedEmail].unshift(nova);
       localStorage.setItem("cepk_reservas", JSON.stringify(todas));
       enviarEmailAutorizacaoReserva(nova);
@@ -4269,13 +4730,35 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     });
   }
 
+  function renderLabsGrid() {
+    const grid = document.getElementById("labs-grid");
+    if (!grid) return;
+    const labs = ADMIN_LABS_DATA.filter(function (lab) { return lab && lab.active !== false; });
+    if (!labs.length) return;
+    grid.innerHTML = labs.map(function (lab, index) {
+      const nome = lab.name;
+      const capacidade = lab.studentCapacity ? lab.studentCapacity + " alunos" : "—";
+      const pcs = lab.pcCount ? lab.pcCount + " computadores" : "—";
+      return '<div class="card">' +
+        "<h3>" + escHtml(labLabel(nome)) + "</h3>" +
+        "<p><strong>Capacidade:</strong> " + escHtml(capacidade) + "</p>" +
+        "<p><strong>Equipamentos:</strong> " + escHtml(pcs) + "</p>" +
+        (lab.location ? "<p><strong>Local:</strong> " + escHtml(lab.location) + "</p>" : "") +
+        '<div class="status-line"><span class="status-dot disponivel"></span><span class="disponivel-txt">Disponível para agendamento</span></div>' +
+        '<div class="lab-reserva" id="lab-reserva-' + (index + 1) + '" hidden></div>' +
+        '<button class="btn btn-primary" data-goto="#reserva" data-lab="' + escHtml(nome) + '">Reservar ' + escHtml(labLabel(nome)) + "</button>" +
+        "</div>";
+    }).join("");
+  }
+
   function renderLabReservas() {
     if (!document.getElementById("screen-laboratorios")) return;
     const reservas = getReservas(storedEmail).map(normalizeReserva);
-    [1, 2, 3].forEach(function (n) {
-      const box = document.getElementById("lab-reserva-" + n);
+    const nomes = ADMIN_LABS.length ? ADMIN_LABS : ["Lab 1", "Lab 2", "Lab 3"];
+    nomes.forEach(function (nome, index) {
+      const box = document.getElementById("lab-reserva-" + (index + 1));
       if (!box) return;
-      const r = reservas.find(function (x) { return x.lab === "Lab " + n && String(x.status).toLowerCase() !== "recusada"; });
+      const r = reservas.find(function (x) { return x.lab === nome && String(x.status).toLowerCase() !== "recusada"; });
       if (!r) { box.hidden = true; box.innerHTML = ""; return; }
       const prof = r.professor || storedName || nameFromEmail(storedEmail);
       const nums = Array.isArray(r.aulas) && r.aulas.length ? r.aulas : String(r.aula || "").split(",").map(function (x) { return parseInt(x, 10); }).filter(function (x) { return !isNaN(x); });
@@ -4306,7 +4789,7 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     const tbody = document.querySelector("#screen-visualizacao-reservas #tabela-reservas tbody");
     if (!tbody) return;
     const reservas = getReservas(storedEmail).map(normalizeReserva);
-    tbody.innerHTML = reservas.length ? reservas.map(function (r) { return "<tr data-status=\"" + escHtml(r.status) + "\">" + "<td>" + escHtml(r.lab) + "</td><td>" + escHtml(r.disciplina || "—") + "</td><td><span class='badge dia'>" + escHtml(r.dia) + "</span></td><td><span class='badge aula'>" + escHtml(fmtAulas(r)) + " aula" + (fmtAulas(r).includes(",") ? "s" : "") + "</span></td><td><span class='badge " + (r.turno === "Tarde" ? "tarde" : "manha") + '">' + escHtml(r.turno) + "</span></td><td>" + escHtml(r.criadaEm) + "</td>" + statusBadge(r.status) + "<td><button class='btn' data-goto='#reserva'>Detalhes</button></td></tr>"; }).join("") : "";
+    tbody.innerHTML = reservas.length ? reservas.map(function (r) { return "<tr data-status=\"" + escHtml(r.status) + "\">" + "<td>" + escHtml(r.lab) + "</td><td>" + escHtml(r.disciplina || "—") + "</td><td><span class='badge dia'>" + escHtml(r.dia) + "</span></td><td><span class='badge aula'>" + escHtml(fmtAulas(r)) + " aula" + (fmtAulas(r).includes(",") ? "s" : "") + "</span></td><td><span class='badge " + (r.turno === "Tarde" ? "tarde" : "manha") + '">' + escHtml(r.turno) + "</span></td><td>" + escHtml(r.criadaEm) + "</td>" + statusBadge(r.status) + "<td><button class='btn' data-goto='#reserva'>Detalhes</button> <button class='btn btn-danger' data-delete-reservation='" + escHtml(r.id || "") + "'>Excluir</button></td></tr>"; }).join("") : "";
     visRows = Array.from(tbody.querySelectorAll("tr"));
     const count = { aprovada: 0, pendente: 0, recusada: 0 };
     visRows.forEach(function (r) { const s = r.dataset.status; if (count[s] !== undefined) count[s]++; });
@@ -4332,7 +4815,16 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     visBound = true;
     const filterBtns = Array.from(document.querySelectorAll("#screen-visualizacao-reservas #filters-v .filter"));
     filterBtns.forEach(function (b) { b.addEventListener("click", function () { applyVisFilter(b.dataset.filter); }); });
-    document.addEventListener("click", function (e) { const el = e.target.closest("#screen-visualizacao-reservas [data-goto], #screen-visualizacao-reservas table [data-goto]"); if (el) { const go = el.getAttribute("data-goto"); if (go) { e.preventDefault(); navigate(go.replace(/^#/, "")); } } });
+    document.addEventListener("click", function (e) {
+      const deleteBtn = e.target.closest("#screen-visualizacao-reservas [data-delete-reservation]");
+      if (deleteBtn) {
+        e.preventDefault();
+        excluirReserva(deleteBtn);
+        return;
+      }
+      const el = e.target.closest("#screen-visualizacao-reservas [data-goto], #screen-visualizacao-reservas table [data-goto]");
+      if (el) { const go = el.getAttribute("data-goto"); if (go) { e.preventDefault(); navigate(go.replace(/^#/, "")); } }
+    });
   }
 
   document.addEventListener("DOMContentLoaded", function () { init(); });

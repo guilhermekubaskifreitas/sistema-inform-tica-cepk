@@ -144,7 +144,7 @@
   }
 
   .nav-foot a {
-    color: #94a3b8;
+    color: var(--ink-400);
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -183,12 +183,12 @@
     gap: 10px;
     padding: 8px 14px;
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--line);
     cursor: pointer;
   }
 
-  .user:hover { background: #f1f5f9; }
+  .user:hover { background: var(--surface-2); }
 
   .user-avatar {
     width: 34px;
@@ -300,7 +300,7 @@
     transition: background 0.15s, border-color 0.15s;
   }
 
-  .btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+  .btn:hover { background: var(--surface-2); border-color: var(--ink-400); }
 
   .btn-primary {
     background: linear-gradient(180deg, var(--blue-500), var(--blue-600));
@@ -332,8 +332,8 @@
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 </style>
-<link rel="stylesheet" href="theme.css" />
-<script src="theme.js"></script>
+<link rel="stylesheet" href="theme.css?v=20261111d" />
+<script src="theme.js?v=20261111d"></script>
 </head>
 <body>
 
@@ -393,7 +393,7 @@
       <h2>Laboratórios</h2>
       <p class="sub">Escolha uma sala e reserve conforme a grade do PLANO (aulas de 50 min).</p>
 
-      <div class="grid-3">
+      <div class="grid-3" id="labs-grid">
         <div class="card">
           <h3>Laboratório 1</h3>
           <p><strong>Capacidade:</strong> 30 estações</p>
@@ -435,7 +435,7 @@
   </main>
 </div>
 
-<script src="api.js"></script>
+<script src="api.js?v=20261111d"></script>
 <script>
   (function () {
     "use strict";
@@ -493,6 +493,36 @@
     document.getElementById("userDisplayName").textContent = storedName;
     document.getElementById("userRole").textContent = storedEmail;
     document.getElementById("userAvatar").textContent = storedName.charAt(0).toUpperCase();
+
+    // Laboratórios vêm da API (cadastro da secretaria)
+    function escHtml(v) { return String(v).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+    function labLabel(name) { return String(name || "").replace(/^Lab\s+/i, "Laboratório "); }
+
+    async function carregarLaboratorios() {
+      if (!window.CEPKApi || typeof window.CEPKApi.labs !== "function") return;
+      const result = await window.CEPKApi.labs();
+      if (!result.ok || !result.data || !Array.isArray(result.data.labs)) return;
+      const labs = result.data.labs.filter(function (lab) { return lab && lab.active !== false; });
+      const grid = document.getElementById("labs-grid");
+      if (!grid || !labs.length) return;
+      grid.innerHTML = labs.map(function (lab) {
+        const capacidade = lab.studentCapacity ? lab.studentCapacity + " alunos" : "—";
+        const pcs = lab.pcCount ? lab.pcCount + " computadores" : "—";
+        return '<div class="card">' +
+          "<h3>" + escHtml(labLabel(lab.name)) + "</h3>" +
+          "<p><strong>Capacidade:</strong> " + escHtml(capacidade) + "</p>" +
+          "<p><strong>Equipamentos:</strong> " + escHtml(pcs) + "</p>" +
+          (lab.location ? "<p><strong>Local:</strong> " + escHtml(lab.location) + "</p>" : "") +
+          '<div class="status-line"><span class="status-dot disponivel"></span><span class="disponivel-txt">Disponível para agendamento</span></div>' +
+          '<button class="btn btn-primary" data-goto="reserva.html">Reservar ' + escHtml(labLabel(lab.name)) + "</button>" +
+          "</div>";
+      }).join("");
+      grid.querySelectorAll("[data-goto]").forEach(function (el) {
+        el.addEventListener("click", function () { window.location.href = el.dataset.goto; });
+      });
+    }
+
+    carregarLaboratorios();
   })();
 </script>
 </body>

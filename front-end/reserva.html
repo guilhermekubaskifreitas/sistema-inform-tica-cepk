@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
@@ -144,7 +144,7 @@
   }
 
   .nav-foot a {
-    color: #94a3b8;
+    color: var(--ink-400);
     font-size: 12.5px;
     font-weight: 600;
   }
@@ -183,12 +183,12 @@
     gap: 10px;
     padding: 8px 14px;
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--line);
     cursor: pointer;
   }
 
-  .user:hover { background: #f1f5f9; }
+  .user:hover { background: var(--surface-2); }
 
   .user-avatar {
     width: 34px;
@@ -293,7 +293,7 @@
     padding: 0 14px;
     border: 1px solid var(--line);
     border-radius: 12px;
-    background: #f8fafc;
+    background: var(--surface-2);
     font: inherit;
     font-size: 14.5px;
     color: var(--ink-900);
@@ -318,7 +318,7 @@
   .input-wrap input:focus,
   .input-wrap select:focus {
     outline: none;
-    background: #fff;
+    background: var(--surface);
     border-color: var(--blue-500);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
   }
@@ -348,7 +348,7 @@
     padding: 14px 20px;
     font-weight: 600;
     color: var(--ink-700);
-    background: #f8fafc;
+    background: var(--surface-2);
     border-bottom: 1px solid var(--line);
     white-space: nowrap;
   }
@@ -361,7 +361,7 @@
   }
 
   tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f8fafc; }
+  tr:hover td { background: var(--surface-2); }
 
   /* ---------- Badges ---------- */
   .badge {
@@ -376,14 +376,14 @@
 
   .badge.hora {
     background: var(--blue-100);
-    color: #1e40af;
+    color: var(--blue-600);
     font-variant-numeric: tabular-nums;
   }
 
-  .badge.manha { background: var(--blue-100); color: #1e40af; }
-  .badge.tarde { background: var(--amber-100); color: #92400e; }
+  .badge.manha { background: var(--blue-100); color: var(--blue-600); }
+  .badge.tarde { background: var(--amber-100); color: var(--status-pendente-fg); }
 
-  .badge.estado { background: #f1f5f9; color: var(--ink-700); border: 1px solid var(--line); }
+  .badge.estado { background: var(--surface-2); color: var(--ink-700); border: 1px solid var(--line); }
 
   /* ---------- Buttons ---------- */
   .btn {
@@ -402,7 +402,7 @@
     transition: background 0.15s, border-color 0.15s;
   }
 
-  .btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+  .btn:hover { background: var(--surface-2); border-color: var(--ink-400); }
 
   .btn-primary {
     background: linear-gradient(180deg, var(--blue-500), var(--blue-600));
@@ -432,7 +432,7 @@
     padding: 7px 12px;
     border-radius: 999px;
     border: 1px solid var(--line);
-    background: #f8fafc;
+    background: var(--surface-2);
     color: var(--ink-700);
     font: inherit;
     font-size: 12.5px;
@@ -441,7 +441,7 @@
     transition: background 0.15s, color 0.15s, border-color 0.15s;
   }
 
-  .chip:hover { border-color: #cbd5e1; }
+  .chip:hover { border-color: var(--ink-400); }
 
   .chip.sel {
     background: var(--blue-500);
@@ -477,7 +477,7 @@
   td[data-aula][data-dia] { cursor: pointer; }
 
   tr.shift-row td {
-    background: #eef4ff;
+    background: var(--surface-2);
     color: var(--blue-600);
     font-size: 11px;
     font-weight: 700;
@@ -542,8 +542,8 @@
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 </style>
-<link rel="stylesheet" href="theme.css" />
-<script src="theme.js"></script>
+<link rel="stylesheet" href="theme.css?v=20261111d" />
+<script src="theme.js?v=20261111d"></script>
 </head>
 <body>
 
@@ -603,16 +603,21 @@
       <h2>Reservar laboratório</h2>
       <p class="sub">Preencha os dados abaixo para solicitar sua reserva. Grade conforme o PLANO (aulas de 50 min).</p>
 
+      <div class="alert-banner" id="reserva-error" hidden></div>
+
       <div class="form-card">
         <h3>Checklist da reserva</h3>
         <p>Selecione cada item do checklist e clique em “Criar reserva”.</p>
         <form id="form-reserva" novalidate>
           <div class="fields">
             <div class="field">
-              <label>1 · Laboratório</label>
-              <div class="input-wrap" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font-size:13px;color:var(--ink-500)">
-                Definido pela secretaria no momento da aprovação.
+              <label for="res-turma">1 · Turma que vai ao laboratório</label>
+              <div class="input-wrap">
+                <select id="res-turma" name="turma" required>
+                  <option value="">Selecione a turma</option>
+                </select>
               </div>
+              <span class="hint"><span class="hint-text">Obrigatório. O laboratório é definido pela secretaria na aprovação.</span></span>
             </div>
 
             <div class="field">
@@ -684,7 +689,8 @@
   <span>Processando solicitação de reserva...</span>
 </div>
 
-<script src="api.js"></script>
+<script src="api.js?v=20261111d"></script>
+<script src="turmas.js?v=20261111d"></script>
 <script>
   (function () {
     "use strict";
@@ -736,6 +742,22 @@
     const resDisciplinaField = document.getElementById("res-disciplina-field");
     const resDisciplina = document.getElementById("res-disciplina");
     const gridBody = document.getElementById("grid-body");
+    const turmaSelect = window.CEPKTurmas
+      ? window.CEPKTurmas.setupSelect({
+          selectId: "res-turma",
+          required: true,
+          placeholder: "Selecione a turma",
+          preferred: getUserClasses()
+        })
+      : null;
+
+    function getUserClasses() {
+      const user = window.CEPKApi && window.CEPKApi.user ? window.CEPKApi.user() : null;
+      const fromUser = user && Array.isArray(user.classes) ? user.classes : [];
+      const stored = localStorage.getItem("cepk_user_classes") || sessionStorage.getItem("cepk_user_classes") || "";
+      const fromStorage = stored.split(/[,;]/).map(function (item) { return item.trim(); }).filter(Boolean);
+      return fromUser.concat(fromStorage).filter(function (item, index, list) { return list.indexOf(item) === index; });
+    }
 
     function getUserSubjects() {
       const user = window.CEPKApi && window.CEPKApi.user ? window.CEPKApi.user() : null;
@@ -913,8 +935,9 @@
       const dias = getDiasSelecionados();
       const aulas = getAulasSelecionadas();
       const disciplina = resDisciplina.value || getUserSubjects()[0] || "";
-      if (!turno || dias.length === 0 || aulas.length === 0 || !disciplina) {
-        alert("Preencha os itens do checklist e selecione pelo menos um dia, uma aula e a disciplina da reserva.");
+      const turma = turmaSelect ? turmaSelect.value() : "";
+      if (!turno || dias.length === 0 || aulas.length === 0 || !disciplina || !turma) {
+        alert("Preencha os itens do checklist e selecione a turma, pelo menos um dia, uma aula e a disciplina da reserva.");
         return;
       }
 
@@ -928,6 +951,8 @@
       const nova = {
         id: String(Date.now()),
         lab: "A definir",
+        turma: turma,
+        classe: turma,
         professor: storedName,
         professorEmail: storedEmail,
         disciplina: disciplina,
@@ -953,8 +978,12 @@
       const result = await enviarEmailAutorizacao(nova);
 
       if (!result.ok) {
-        showToast(window.CEPKApi.errorMessage(result, "Reserva salva localmente, mas a API não respondeu."));
-        setTimeout(() => { window.location.href = "visualizacao-reservas.html"; }, 4000);
+        // A reserva precisa existir no servidor: remove a cópia local para não gerar expectativa falsa.
+        todas[storedEmail] = todas[storedEmail].filter((item) => item.id !== nova.id);
+        localStorage.setItem("cepk_reservas", JSON.stringify(todas));
+        const mensagem = window.CEPKApi.errorMessage(result, "Não foi possível registrar a reserva. Tente novamente.");
+        showToast(mensagem);
+        showReservaError(mensagem);
         return;
       }
 
@@ -976,9 +1005,19 @@
       setTimeout(() => { window.location.href = "visualizacao-reservas.html"; }, 1200);
     });
 
+    function showReservaError(message) {
+      const banner = document.getElementById("reserva-error");
+      if (!banner) return;
+      banner.textContent = message || "";
+      banner.hidden = !message;
+      if (message) banner.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
     function enviarEmailAutorizacao(r) {
       const disciplina = r.disciplina || localStorage.getItem("cepk_user_subject") || "";
       return window.CEPKApi.createReservation({
+        lab: r.lab || "A definir",
+        turma: r.turma || "",
         dia: r.dia,
         dias: r.dias,
         turno: r.turno,
