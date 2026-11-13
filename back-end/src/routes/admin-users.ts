@@ -199,8 +199,19 @@ router.delete(
       );
     }
 
-    await prisma.user.delete({ where: { id: user.id } });
-    res.status(204).send();
+      // Remove o perfil do professor junto (evita registros orfaos).
+      const profile = await prisma.professor.findUnique({
+        where: { userId: user.id },
+      });
+      if (profile) {
+        await prisma.professorClass.deleteMany({
+          where: { professorId: profile.id },
+        });
+        await prisma.professor.delete({ where: { id: profile.id } });
+      }
+
+      await prisma.user.delete({ where: { id: user.id } });
+      res.status(204).send();
   })
 );
 
