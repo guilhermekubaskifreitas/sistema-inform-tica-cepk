@@ -1,25 +1,19 @@
 services:
-  # ---------------------------------------------------------------
-  # API real (Node + Express + Prisma) — grava no Neon
-  # ---------------------------------------------------------------
-  # NOTA: o serviço do mock (backend-informatica-cepk) é gerenciado
-  # manualmente no painel do Render e NÃO entra neste blueprint
-  # (evita conflito de nome). Ele roda `npm start` em back-end/,
-  # que aponta para scripts/mock-api.js.
+  # API real (Node + Express + Prisma) -> grava no Neon.
+  # O front-end e o mock sao gerenciados manualmente no painel do Render,
+  # por isso nao entram aqui (evita criar servicos duplicados a cada apply).
   - type: web
     name: cepk-api
     runtime: node
     plan: free
     rootDir: back-end
     buildCommand: npm install --include=dev && npm run prisma:generate && npm run build
-    startCommand: npm run prisma:deploy && npm run prisma:seed && npm run start:api
+    startCommand: npm run prisma:deploy && npm run start:api
     healthCheckPath: /health
     autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production
-      # String de conexão DIRETA do Neon (sem -pooler), com sslmode=require.
-      # Ex.: postgresql://USER:SENHA@ep-xxx.sa-east-1.aws.neon.tech/cepk?sslmode=require
       - key: DATABASE_URL
         sync: false
       - key: JWT_ACCESS_SECRET
@@ -37,7 +31,7 @@ services:
       - key: CORS_ORIGIN
         value: https://frontend-informatica-cepk.onrender.com
       - key: ALLOWED_EMAIL_DOMAINS
-        value: escola.pr.gov.br
+        value: escola.pr.gov.br,gmail.com
       - key: APPROVAL_EMAIL
         value: guilhermekf55@gmail.com
       - key: RESERVATION_EMAIL
@@ -49,20 +43,6 @@ services:
       - key: ADMIN_NAME
         value: Secretaria CEPK
       - key: ADMIN_EMAIL
-        sync: false
+        value: guilhermekf55@gmail.com
       - key: ADMIN_PASSWORD
         sync: false
-
-  # ---------------------------------------------------------------
-  # Front-end (site estático)
-  # ---------------------------------------------------------------
-  - type: web
-    name: frontend-informatica-cepk
-    runtime: static
-    buildCommand: echo "sem etapa de build"
-    staticPublishPath: ./front-end
-    autoDeploy: true
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: no-store, no-cache, must-revalidate
