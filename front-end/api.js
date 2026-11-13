@@ -6,11 +6,15 @@
   var USER_KEY = "cepk_user";
   var LOCAL_HOST = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
   // Candidatas: a API real (Node + Prisma + Neon) tem prioridade; o mock fica de reserva.
-  var DEFAULT_BASE = LOCAL_HOST ? "http://localhost:3000" : "https://cepk-api.onrender.com";
+  var DEFAULT_BASE = LOCAL_HOST ? "http://localhost:3000" : "https://cepk-api-96uq.onrender.com";
   var FALLBACK_BASE = "https://backend-informatica-cepk.onrender.com";
   var CANDIDATE_BASES = LOCAL_HOST
     ? ["http://localhost:3000"]
-    : ["https://cepk-api.onrender.com", "https://backend-informatica-cepk.onrender.com"];
+    : [
+        "https://cepk-api-96uq.onrender.com",
+        "https://cepk-api.onrender.com",
+        "https://backend-informatica-cepk.onrender.com"
+      ];
   var PROBE_KEY = "cepk_api_probe_v1";
   var PROBE_TTL = 30 * 60 * 1000;
   var FALLBACK_KEY = "cepk_api_last_good_v1";

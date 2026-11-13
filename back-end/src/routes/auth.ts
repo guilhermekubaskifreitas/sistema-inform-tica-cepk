@@ -322,7 +322,7 @@ router.post(
       admin: autoApprove,
       requestedAdmin: elevatedRole,
       requiresApproval: !autoApprove,
-      user: publicUser(user),
+      user: { ...publicUser(user), classes },
       emailSent: email.sent,
       emailError: email.sent ? undefined : email.error,
       ...(!autoApprove && env.NODE_ENV !== "production"
