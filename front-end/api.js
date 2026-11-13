@@ -255,7 +255,7 @@
       }
 
       if (response.status === 401 && path !== "/auth/login" && path !== "/auth/refresh") {
-        clearSession();
+        // Token vencido: o refresh e tentado em request() antes de encerrar a sessao.
       }
 
       return { ok: response.ok, status: response.status, data: data };
@@ -294,10 +294,23 @@
 
     if (DEAD_STATUS.indexOf(result.status) < 0) {
       markGood(base);
+      if (result.status === 401 && path !== "/auth/login" && path !== "/auth/refresh") {
+        // Token vencido: renova a sessao e repete a requisicao.
+        var renewed = await renewSession(base);
+        if (renewed) {
+          var retryHeaders = Object.assign({}, headers);
+          var freshToken = token();
+          if (freshToken) retryHeaders.Authorization = "Bearer " + freshToken;
+          var retryOpts = Object.assign({}, opts, { headers: retryHeaders });
+          var retried = await send(base, path, retryOpts, opts.timeout);
+          if (DEAD_STATUS.indexOf(retried.status) < 0) return retried;
+          result = retried;
+        }
+      }
       return result;
     }
 
-    // A base ativa died: try the other candidates in order (real API -> other real -> mock).
+    // A base ativa caiu: tenta as outras candidatas em ordem (API real -> outra real -> mock).
     for (var i = 0; i < CANDIDATE_BASES.length; i++) {
       var candidate = CANDIDATE_BASES[i];
       if (candidate === base) continue;
@@ -311,6 +324,48 @@
     }
 
     return result;
+  }
+
+  var renewing = null;
+
+  function sessionRemembered() {
+    try {
+      return localStorage.getItem(TOKEN_KEY) !== null;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function expireSession() {
+    clearSession();
+    try {
+      var here = (window.location.pathname.split("/").pop() || "index.html");
+      if (here.indexOf("login") === -1) {
+        window.location.href = "login.html?sessao=expirada&dest=" + encodeURIComponent(here);
+      }
+    } catch (error) {}
+  }
+
+  function renewSession(base) {
+    if (renewing) return renewing;
+    renewing = request("/auth/refresh", { method: "POST" })
+      .then(function (result) {
+        if (result && result.ok && result.data && result.data.accessToken) {
+          saveSession(result.data, sessionRemembered());
+          return true;
+        }
+        expireSession();
+        return false;
+      })
+      .catch(function () {
+        expireSession();
+        return false;
+      })
+      .then(function (ok) {
+        renewing = null;
+        return ok;
+      });
+    return renewing;
   }
 
   function register(payload) {
