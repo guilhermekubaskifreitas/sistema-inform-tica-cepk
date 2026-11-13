@@ -29,16 +29,30 @@ export function createApp() {
     })
   );
   app.use(
-    cors({
-      origin(origin, callback) {
-        if (!origin || corsOrigins.includes("*") || corsOrigins.includes(origin)) {
-          callback(null, true);
-          return;
-        }
+    cors((req, callback) => {
+      const origin = req.headers.origin;
+      const isNavigation = req.headers["sec-fetch-mode"] === "navigate";
+      const knownOrigin =
+        !origin ||
+        corsOrigins.includes("*") ||
+        corsOrigins.includes(origin);
 
+      // Link aberto de app de e-mail/Word chega com Origin: null, e navegacao
+      // de pagina nao deve ser barrada pelo CORS.
+      const allowed = knownOrigin || origin === "null" || isNavigation;
+
+      if (!allowed) {
         callback(new AppError(403, "Origem não permitida pelo CORS."));
-      },
-      credentials: true,
+        return;
+      }
+
+      if (!origin || origin === "null") {
+        // Sem origem confiavel: o pedido segue, mas sem liberar leitura no navegador.
+        callback(null, { origin: false, credentials: true });
+        return;
+      }
+
+      callback(null, { origin: true, credentials: true });
     })
   );
   app.use(express.json({ limit: "1mb" }));
