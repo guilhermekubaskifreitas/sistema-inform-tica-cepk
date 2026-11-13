@@ -5,8 +5,8 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 const labs = [
-  { name: "Lab 1", location: "Bloco A", studentCapacity: 30, pcCount: 30, notes: "Sala de informatica com 30 estacoes." },
-  { name: "Lab 2", location: "Bloco A", studentCapacity: 25, pcCount: 25, notes: "Sala de informatica com 25 estacoes." },
+  { name: "Lab 1", location: "Bloco A", studentCapacity: 35, pcCount: 35, notes: "Sala de informatica com 35 estacoes." },
+  { name: "Lab 2", location: "Bloco A", studentCapacity: 30, pcCount: 30, notes: "Sala de informatica com 30 estacoes." },
   { name: "Lab 3", location: "Bloco B", studentCapacity: 30, pcCount: 30, notes: "Sala de informatica com 30 estacoes." },
 ];
 
