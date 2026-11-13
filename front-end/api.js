@@ -6,15 +6,16 @@
   var USER_KEY = "cepk_user";
   var LOCAL_HOST = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
   // Candidatas: a API real (Node + Prisma + Neon) tem prioridade; o mock fica de reserva.
-  var DEFAULT_BASE = LOCAL_HOST ? "http://localhost:3000" : "https://cepk-api.onrender.com";
+  var DEFAULT_BASE = LOCAL_HOST ? "http://localhost:3000" : "https://cepk-api-96uq.onrender.com";
   var FALLBACK_BASE = "https://backend-informatica-cepk.onrender.com";
   var CANDIDATE_BASES = LOCAL_HOST
     ? ["http://localhost:3000"]
     : [
+        "https://cepk-api-96uq.onrender.com",
         "https://cepk-api.onrender.com",
-        "https://backend-informatica-cepk.onrender.com"
+        FALLBACK_BASE
       ];
-  var PROBE_KEY = "cepk_api_probe_v1";
+  var PROBE_KEY = "cepk_api_probe_v2";
   var PROBE_TTL = 30 * 60 * 1000;
   var FALLBACK_KEY = "cepk_api_last_good_v1";
   var FALLBACK_TTL = 10 * 60 * 1000;
@@ -162,11 +163,6 @@
     return probePromise;
   }
 
-  function shouldFallback(base, result) {
-    var other = base === FALLBACK_BASE ? apiBase() : FALLBACK_BASE;
-    if (!other || other === base) return false;
-    return DEAD_STATUS.indexOf(result.status) >= 0;
-  }
 
   function readValue(key) {
     return localStorage.getItem(key) || sessionStorage.getItem(key) || "";
@@ -296,16 +292,21 @@
     var base = await resolveBase();
     var result = await send(base, path, opts, opts.timeout);
 
-    if (DEAD_STATUS.indexOf(result.status) < 0) markGood(base);
+    if (DEAD_STATUS.indexOf(result.status) < 0) {
+      markGood(base);
+      return result;
+    }
 
-    if (shouldFallback(base, result)) {
-      var fallbackBase = base === FALLBACK_BASE ? apiBase() : FALLBACK_BASE;
-      var fallbackResult = await send(fallbackBase, path, opts, opts.timeout);
-      if (DEAD_STATUS.indexOf(fallbackResult.status) < 0) {
-        markGood(fallbackBase);
-        resolvedBase = fallbackBase;
-        console.warn("API principal indisponível; usando contingência " + fallbackBase + ".");
-        return fallbackResult;
+    // A base ativa died: try the other candidates in order (real API -> other real -> mock).
+    for (var i = 0; i < CANDIDATE_BASES.length; i++) {
+      var candidate = CANDIDATE_BASES[i];
+      if (candidate === base) continue;
+      var attempt = await send(candidate, path, opts, opts.timeout);
+      if (DEAD_STATUS.indexOf(attempt.status) < 0) {
+        markGood(candidate);
+        resolvedBase = candidate;
+        console.warn("API " + base + " indisponível; usando " + candidate + ".");
+        return attempt;
       }
     }
 
