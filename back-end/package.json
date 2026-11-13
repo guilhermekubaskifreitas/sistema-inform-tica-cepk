@@ -2,7 +2,7 @@
     "name":  "cepk-api",
     "version":  "0.1.0",
     "private":  true,
-    "description":  "API de autenticaÃ§Ã£o e aprovaÃ§Ã£o de cadastros da Agenda dos LaboratÃ³rios CEPK",
+    "description":  "API de autenticação e aprovação de cadastros da Agenda dos Laboratórios CEPK",
     "main":  "dist/server.js",
     "scripts":  {
                     "dev":  "tsx watch src/server.ts",
