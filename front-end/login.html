@@ -1538,6 +1538,13 @@
   const loginError = $("#login-error");
   const loginInfo = $("#login-info");
 
+  // Aviso de sessao expirada (o front-end redireciona aqui com ?sessao=expirada)
+  try {
+    if (new URLSearchParams(location.search).get("sessao") === "expirada") {
+      showAlert(loginError, "Sua sessao expirou. Entre novamente para continuar.");
+    }
+  } catch (error) {}
+
   formLogin.addEventListener("submit", async (e) => {
     e.preventDefault();
     hideAlert(loginError);
