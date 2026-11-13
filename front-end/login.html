@@ -13,9 +13,17 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Acesso ao sistema de agendamento dos laboratórios de informática do Colégio Estadual Presidente Kennedy." />
-<title>Entrar · Agenda dos Laboratórios · CEPK</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
+<meta name="description" content="Acesso ao sistema de agendamento dos laboratÃ³rios de informÃ¡tica do ColÃ©gio Estadual Presidente Kennedy." />
+<title>Entrar Â· Agenda dos LaboratÃ³rios Â· CEPK</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="icon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0d3655" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="CEPK" /><link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
@@ -257,7 +265,7 @@
     box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
   }
 
-  /* ---------- Painel do formulário ---------- */
+  /* ---------- Painel do formulÃ¡rio ---------- */
   .form-panel {
     display: grid;
     place-items: center;
@@ -408,7 +416,7 @@
 
   .input-wrap input[readonly] { cursor: pointer; }
 
-  /* ---------- Popover (lista de opções / gerenciador de senhas) ---------- */
+  /* ---------- Popover (lista de opÃ§Ãµes / gerenciador de senhas) ---------- */
   .fill-pop {
     position: absolute;
     top: calc(100% + 6px);
@@ -647,7 +655,7 @@
     border-color: var(--blue-500);
   }
 
-  /* ---------- Botões ---------- */
+  /* ---------- BotÃµes ---------- */
   .btn {
     width: 100%;
     height: 50px;
@@ -773,7 +781,7 @@
   .alert-info { background: var(--blue-100); color: var(--blue-600); }
   .alert-warn { background: var(--amber-100); color: var(--status-pendente-fg); }
 
-  /* ---------- Barra de força ---------- */
+  /* ---------- Barra de forÃ§a ---------- */
   .strength {
     display: none;
     margin-top: 9px;
@@ -920,7 +928,7 @@
 
   .modal .actions .btn { height: 44px; font-size: 14px; }
 
-  /* ---------- Rodapé ---------- */
+  /* ---------- RodapÃ© ---------- */
   .page-foot {
     margin-top: 22px;
     text-align: center;
@@ -962,6 +970,7 @@
   #subjects-pop::-webkit-scrollbar-thumb:hover { background: var(--blue-500); }
 </style>
 <link rel="stylesheet" href="theme.css?v=20261111e" />
+<script src="pwa.js?v=20261111f"></script>
 <script src="theme.js?v=20261111e"></script>
 </head>
 <body>
@@ -978,13 +987,13 @@
             <path d="M8 21h8M12 17v4"></path>
           </svg>
         </span>
-        Colégio Estadual Presidente Kennedy
+        ColÃ©gio Estadual Presidente Kennedy
       </div>
 
       <div class="brand-headline">
-        <p class="eyebrow">Secretaria · Laboratórios</p>
-        <h1>Agenda dos<br /><span>laboratórios</span> de informática</h1>
-        <p>Reserve, acompanhe e organize os horários dos laboratórios 1, 2 e 3 em um só lugar.</p>
+        <p class="eyebrow">Secretaria Â· LaboratÃ³rios</p>
+        <h1>Agenda dos<br /><span>laboratÃ³rios</span> de informÃ¡tica</h1>
+        <p>Reserve, acompanhe e organize os horÃ¡rios dos laboratÃ³rios 1, 2 e 3 em um sÃ³ lugar.</p>
 
         <ul class="features">
           <li>
@@ -997,26 +1006,26 @@
             <span class="tick">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </span>
-            Validação automática de conflitos de horário
+            ValidaÃ§Ã£o automÃ¡tica de conflitos de horÃ¡rio
           </li>
           <li>
             <span class="tick">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </span>
-            Cadastro aprovado pela secretaria do colégio
+            Cadastro aprovado pela secretaria do colÃ©gio
           </li>
         </ul>
       </div>
     </div>
 
     <div class="labs-strip">
-      <span class="lab-chip"><i></i> Laboratório 1</span>
-      <span class="lab-chip busy"><i></i> Laboratório 2 · em uso</span>
-      <span class="lab-chip"><i></i> Laboratório 3</span>
+      <span class="lab-chip"><i></i> LaboratÃ³rio 1</span>
+      <span class="lab-chip busy"><i></i> LaboratÃ³rio 2 Â· em uso</span>
+      <span class="lab-chip"><i></i> LaboratÃ³rio 3</span>
     </div>
   </aside>
 
-  <!-- ================= FORMULÁRIO ================= -->
+  <!-- ================= FORMULÃRIO ================= -->
   <main class="form-panel">
     <div>
       <div class="card">
@@ -1028,13 +1037,13 @@
               <path d="M8 21h8M12 17v4"></path>
             </svg>
           </span>
-          CEPK · Laboratórios
+          CEPK Â· LaboratÃ³rios
         </div>
 
         <!-- ---------- VIEW: LOGIN ---------- -->
         <section class="view active" id="view-login" aria-labelledby="login-title">
           <h2 id="login-title">Acessar o sistema</h2>
-          <p class="sub">Modo de teste: use <strong>qualquer e-mail válido</strong>.</p>
+          <p class="sub">Modo de teste: use <strong>qualquer e-mail vÃ¡lido</strong>.</p>
 
           <div class="alert alert-error" id="login-error" role="alert" aria-live="assertive">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
@@ -1043,7 +1052,7 @@
 
           <div class="alert alert-info show" id="login-info" role="status">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-            <span>Protótipo: use <strong>seu.nome@escola.pr.gov.br</strong> como e-mail e qualquer senha com 8+ caracteres. E-mail começando com "secretaria" simula o perfil da secretaria.</span>
+            <span>ProtÃ³tipo: use <strong>seu.nome@escola.pr.gov.br</strong> como e-mail e qualquer senha com 8+ caracteres. E-mail comeÃ§ando com "secretaria" simula o perfil da secretaria.</span>
           </div>
 
           <form id="form-login" novalidate>
@@ -1068,12 +1077,12 @@
                       <span class="sub" id="pm-email" style="display:block"></span>
                     </span>
                   </button>
-                  <div class="pop-foot">Senhas salvas neste dispositivo · <strong>Gerenciar senhas…</strong></div>
+                  <div class="pop-foot">Senhas salvas neste dispositivo Â· <strong>Gerenciar senhasâ€¦</strong></div>
                 </div>
               </div>
               <span class="hint">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-                <span class="hint-text">Informe um e-mail válido.</span>
+                <span class="hint-text">Informe um e-mail vÃ¡lido.</span>
               </span>
             </div>
 
@@ -1094,7 +1103,7 @@
               </div>
               <span class="hint">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-                <span class="hint-text">A senha deve ter no mínimo 8 caracteres.</span>
+                <span class="hint-text">A senha deve ter no mÃ­nimo 8 caracteres.</span>
               </span>
             </div>
 
@@ -1109,17 +1118,18 @@
               <svg class="label" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </button>
           </form>
+        <div data-install-slot></div>
 
           <div class="divider">primeiro acesso</div>
 
           <p class="alt-action">
-            Ainda não tem cadastro?
+            Ainda nÃ£o tem cadastro?
             <a href="#" id="link-register">Solicitar cadastro</a>
           </p>
 
           <div class="security-note">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
-            <span>Acesso restrito a professores e servidores do colégio. Atividades são registradas para fins de segurança.</span>
+            <span>Acesso restrito a professores e servidores do colÃ©gio. Atividades sÃ£o registradas para fins de seguranÃ§a.</span>
           </div>
         </section>
 
@@ -1131,7 +1141,7 @@
           </button>
 
           <h2 id="reg-title">Solicitar cadastro</h2>
-          <p class="sub">Seu acesso será liberado após aprovação da secretaria.</p>
+          <p class="sub">Seu acesso serÃ¡ liberado apÃ³s aprovaÃ§Ã£o da secretaria.</p>
 
           <div class="alert alert-error" id="register-error" role="alert" aria-live="assertive">
             <span id="register-error-text"></span>
@@ -1157,7 +1167,7 @@
                 </span>
                 <input id="reg-email" name="email" type="email" placeholder="seu.email@escola" autocomplete="email" spellcheck="false" required />
               </div>
-              <span class="hint"><span class="hint-text">Informe um e-mail válido.</span></span>
+              <span class="hint"><span class="hint-text">Informe um e-mail vÃ¡lido.</span></span>
             </div>
 
             <div class="field" id="r-role">
@@ -1167,14 +1177,14 @@
                   <input type="radio" name="reg-role" value="professor" checked />
                   <span>
                     <strong>Professor</strong>
-                    <small>Para solicitar reservas de aulas nos laboratórios.</small>
+                    <small>Para solicitar reservas de aulas nos laboratÃ³rios.</small>
                   </span>
                 </label>
                 <label class="role-option">
                   <input type="radio" name="reg-role" value="admin" />
                   <span>
                     <strong>Administrador</strong>
-                    <small>Declaro que sou responsável pelo agendamento dos laboratórios do CEPK.</small>
+                    <small>Declaro que sou responsÃ¡vel pelo agendamento dos laboratÃ³rios do CEPK.</small>
                   </span>
                 </label>
               </div>
@@ -1189,27 +1199,27 @@
                 <input id="reg-subject" name="subject" type="text" readonly placeholder="Selecione uma ou mais disciplinas" autocomplete="off" required />
                 <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 <div class="fill-pop" id="subjects-pop" role="group" aria-label="Disciplinas">
-                  <div class="pop-head">20 disciplinas — role para ver todas</div>
-                  <button type="button" class="row" data-value="Matemática" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Matemática</span></button>
-                  <button type="button" class="row" data-value="Português" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Português</span></button>
-                  <button type="button" class="row" data-value="Química" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Química</span></button>
-                  <button type="button" class="row" data-value="Biologia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Biologia</span></button>
-                  <button type="button" class="row" data-value="Ciências" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Ciências</span></button>
-                  <button type="button" class="row" data-value="Geografia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Geografia</span></button>
-                  <button type="button" class="row" data-value="Física" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Física</span></button>
-                  <button type="button" class="row" data-value="Filosofia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Filosofia</span></button>
-                  <button type="button" class="row" data-value="História" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">História</span></button>
-                  <button type="button" class="row" data-value="Sociologia" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Sociologia</span></button>
-                  <button type="button" class="row" data-value="Educação Física" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Educação Física</span></button>
-                  <button type="button" class="row" data-value="Inglês" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Inglês</span></button>
-                  <button type="button" class="row" data-value="Arte" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Arte</span></button>
-                  <button type="button" class="row" data-value="Educação Digital" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Educação Digital</span></button>
-                  <button type="button" class="row" data-value="Banco de Dados" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Banco de Dados</span></button>
-                  <button type="button" class="row" data-value="Introdução à Computação" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Introdução à Computação</span></button>
-                  <button type="button" class="row" data-value="Introdução à Programação" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Introdução à Programação</span></button>
-                  <button type="button" class="row" data-value="Lógica Computacional" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Lógica Computacional</span></button>
-                  <button type="button" class="row" data-value="Análise e Métodos para Sistema" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Análise e Métodos para Sistema</span></button>
-                  <button type="button" class="row" data-value="Projeto/Outro" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="meta">Projeto/Outro</span></button>
+                  <div class="pop-head">20 disciplinas â€” role para ver todas</div>
+                  <button type="button" class="row" data-value="MatemÃ¡tica" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">MatemÃ¡tica</span></button>
+                  <button type="button" class="row" data-value="PortuguÃªs" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">PortuguÃªs</span></button>
+                  <button type="button" class="row" data-value="QuÃ­mica" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">QuÃ­mica</span></button>
+                  <button type="button" class="row" data-value="Biologia" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">Biologia</span></button>
+                  <button type="button" class="row" data-value="CiÃªncias" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">CiÃªncias</span></button>
+                  <button type="button" class="row" data-value="Geografia" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">Geografia</span></button>
+                  <button type="button" class="row" data-value="FÃ­sica" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">FÃ­sica</span></button>
+                  <button type="button" class="row" data-value="Filosofia" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">Filosofia</span></button>
+                  <button type="button" class="row" data-value="HistÃ³ria" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">HistÃ³ria</span></button>
+                  <button type="button" class="row" data-value="Sociologia" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">Sociologia</span></button>
+                  <button type="button" class="row" data-value="EducaÃ§Ã£o FÃ­sica" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">EducaÃ§Ã£o FÃ­sica</span></button>
+                  <button type="button" class="row" data-value="InglÃªs" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">InglÃªs</span></button>
+                  <button type="button" class="row" data-value="Arte" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">Arte</span></button>
+                  <button type="button" class="row" data-value="EducaÃ§Ã£o Digital" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">EducaÃ§Ã£o Digital</span></button>
+                  <button type="button" class="row" data-value="Banco de Dados" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">Banco de Dados</span></button>
+                  <button type="button" class="row" data-value="IntroduÃ§Ã£o Ã  ComputaÃ§Ã£o" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">IntroduÃ§Ã£o Ã  ComputaÃ§Ã£o</span></button>
+                  <button type="button" class="row" data-value="IntroduÃ§Ã£o Ã  ProgramaÃ§Ã£o" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">IntroduÃ§Ã£o Ã  ProgramaÃ§Ã£o</span></button>
+                  <button type="button" class="row" data-value="LÃ³gica Computacional" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">LÃ³gica Computacional</span></button>
+                  <button type="button" class="row" data-value="AnÃ¡lise e MÃ©todos para Sistema" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">AnÃ¡lise e MÃ©todos para Sistema</span></button>
+                  <button type="button" class="row" data-value="Projeto/Outro" aria-pressed="false"><span class="check" aria-hidden="true">âœ“</span><span class="meta">Projeto/Outro</span></button>
                   <div class="pop-actions">
                     <button type="button" id="subjects-clear">Limpar</button>
                     <button type="button" id="subjects-done" class="primary">Concluir</button>
@@ -1229,18 +1239,18 @@
                 <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 <div class="fill-pop" id="classes-pop" role="group" aria-label="Turmas"></div>
               </div>
-              <span class="hint"><span class="hint-text">Selecione as turmas que você leciona. É obrigatório.</span></span>
+              <span class="hint"><span class="hint-text">Selecione as turmas que vocÃª leciona. Ã‰ obrigatÃ³rio.</span></span>
             </div>
 
             <div class="field" id="r-lab" data-role-only="professor">
-              <label for="reg-lab">Laboratório principal (opcional)</label>
+              <label for="reg-lab">LaboratÃ³rio principal (opcional)</label>
               <div class="input-wrap">
                 <span class="leading">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                 </span>
                 <select id="reg-lab" name="labId"></select>
               </div>
-              <span class="hint"><span class="hint-text">O laboratório onde você costuma ministrar as aulas.</span></span>
+              <span class="hint"><span class="hint-text">O laboratÃ³rio onde vocÃª costuma ministrar as aulas.</span></span>
             </div>
 
             <div class="field" id="r-pass">
@@ -1259,7 +1269,7 @@
                 <div class="bars"><span></span><span></span><span></span><span></span></div>
                 <small>Fraca</small>
               </div>
-              <span class="hint"><span class="hint-text">A senha deve ter no mínimo 8 caracteres.</span></span>
+              <span class="hint"><span class="hint-text">A senha deve ter no mÃ­nimo 8 caracteres.</span></span>
             </div>
 
             <div class="field" id="r-confirm">
@@ -1270,17 +1280,17 @@
                 </span>
                 <input id="reg-confirm" name="confirm" type="password" placeholder="Repita a senha" autocomplete="new-password" required />
               </div>
-              <span class="hint"><span class="hint-text">As senhas não coincidem.</span></span>
+              <span class="hint"><span class="hint-text">As senhas nÃ£o coincidem.</span></span>
             </div>
 
             <label class="check-row" style="align-items:flex-start">
               <input type="checkbox" id="terms" style="margin-top:2px" />
-              <span style="font-size:12.5px;line-height:1.45">Declaro que sou servidor(a) do colégio e concordo com as regras de uso dos laboratórios.</span>
+              <span style="font-size:12.5px;line-height:1.45">Declaro que sou servidor(a) do colÃ©gio e concordo com as regras de uso dos laboratÃ³rios.</span>
             </label>
 
             <button type="submit" class="btn btn-primary" id="btn-register">
               <span class="spinner"></span>
-              <span class="label">Enviar solicitação</span>
+              <span class="label">Enviar solicitaÃ§Ã£o</span>
             </button>
           </form>
         </section>
@@ -1291,14 +1301,14 @@
             <div class="success-icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
-            <h2 id="ok-title">Solicitação enviada</h2>
-            <p id="ok-message">Recebemos seu cadastro. A secretaria do colégio vai analisar e liberar seu acesso.</p>
-            <div class="status-pill"><i></i> <span id="ok-status-text">Aguardando aprovação</span></div>
-            <p style="font-size:12.5px;margin-bottom:22px" id="ok-detail">Você receberá um e-mail em <strong id="ok-email" style="color:var(--ink-700)">seu e-mail institucional</strong> quando o acesso for liberado.</p>
+            <h2 id="ok-title">SolicitaÃ§Ã£o enviada</h2>
+            <p id="ok-message">Recebemos seu cadastro. A secretaria do colÃ©gio vai analisar e liberar seu acesso.</p>
+            <div class="status-pill"><i></i> <span id="ok-status-text">Aguardando aprovaÃ§Ã£o</span></div>
+            <p style="font-size:12.5px;margin-bottom:22px" id="ok-detail">VocÃª receberÃ¡ um e-mail em <strong id="ok-email" style="color:var(--ink-700)">seu e-mail institucional</strong> quando o acesso for liberado.</p>
             <p id="approval-links" style="display:none;font-size:12.5px;margin-bottom:18px;line-height:1.8">
-              Link de aprovação para teste:
+              Link de aprovaÃ§Ã£o para teste:
               <a id="approval-approve" href="#" target="_blank" rel="noopener">aprovar</a>
-              <span aria-hidden="true"> · </span>
+              <span aria-hidden="true"> Â· </span>
               <a id="approval-reject" href="#" target="_blank" rel="noopener">recusar</a>
             </p>
             <p id="ok-warn" style="display:none;font-size:12px;color:var(--red-600);margin-bottom:18px"></p>
@@ -1308,7 +1318,7 @@
 
       </div>
 
-      <p class="page-foot">Colégio Estadual Presidente Kennedy · Secretaria Digital</p>
+      <p class="page-foot">ColÃ©gio Estadual Presidente Kennedy Â· Secretaria Digital</p>
     </div>
   </main>
 </div>
@@ -1328,12 +1338,12 @@
           </span>
           <input id="forgot-email" type="email" placeholder="seu.email@escola" autocomplete="email" spellcheck="false" required />
         </div>
-        <span class="hint"><span class="hint-text">Informe um e-mail válido.</span></span>
+        <span class="hint"><span class="hint-text">Informe um e-mail vÃ¡lido.</span></span>
       </div>
 
       <div class="alert alert-success" id="forgot-ok" role="status">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span>Se o e-mail estiver cadastrado, o link de recuperação chegará em instantes.</span>
+        <span>Se o e-mail estiver cadastrado, o link de recuperaÃ§Ã£o chegarÃ¡ em instantes.</span>
       </div>
 
       <div class="actions">
@@ -1358,7 +1368,7 @@
 
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
 
-  /* ---------- Navegação entre views ---------- */
+  /* ---------- NavegaÃ§Ã£o entre views ---------- */
   function showView(id) {
     $$(".view").forEach((v) => v.classList.toggle("active", v.id === id));
     const firstInput = $("#" + id + " input");
@@ -1487,7 +1497,7 @@
     if (e.key === "Escape") closePops();
   });
 
-  /* ---------- Helpers de validação ---------- */
+  /* ---------- Helpers de validaÃ§Ã£o ---------- */
   function setInvalid(fieldId, invalid, message) {
     const field = document.getElementById(fieldId);
     if (!field) return;
@@ -1542,7 +1552,7 @@
       setInvalid("f-email", true, "Informe seu e-mail institucional.");
       ok = false;
     } else if (!matchesDomain(email)) {
-      setInvalid("f-email", true, "Informe um e-mail válido.");
+      setInvalid("f-email", true, "Informe um e-mail vÃ¡lido.");
       ok = false;
     }
 
@@ -1550,7 +1560,7 @@
       setInvalid("f-pass", true, "Informe sua senha.");
       ok = false;
     } else if (pass.length < 8) {
-      setInvalid("f-pass", true, "A senha deve ter no mínimo 8 caracteres.");
+      setInvalid("f-pass", true, "A senha deve ter no mÃ­nimo 8 caracteres.");
       ok = false;
     }
 
@@ -1562,7 +1572,7 @@
 
     const btn = $("#btn-login");
     if (!window.CEPKApi) {
-      showAlert(loginError, "Não foi possível carregar a integração com o servidor. Recarregue a página.");
+      showAlert(loginError, "NÃ£o foi possÃ­vel carregar a integraÃ§Ã£o com o servidor. Recarregue a pÃ¡gina.");
       return;
     }
     setLoading(btn, true);
@@ -1572,7 +1582,7 @@
     setLoading(btn, false);
 
     if (!result.ok) {
-      showAlert(loginError, window.CEPKApi.errorMessage(result, "E-mail ou senha inválidos."));
+      showAlert(loginError, window.CEPKApi.errorMessage(result, "E-mail ou senha invÃ¡lidos."));
       if (result.status === 401) {
         $("#f-pass").classList.add("invalid");
         $("#login-pass").focus();
@@ -1657,7 +1667,7 @@
     if (/\d/.test(val) && /[^A-Za-z0-9]/.test(val)) score++;
 
     const colors = ["#e11d48", "#f59e0b", "#eab308", "#16a34a"];
-    const labels = ["Fraca", "Razoável", "Boa", "Forte"];
+    const labels = ["Fraca", "RazoÃ¡vel", "Boa", "Forte"];
     const bars = $$("#strength .bars span");
     bars.forEach((bar, i) => {
       bar.style.background = i < score ? colors[Math.max(0, score - 1)] : "#e2e8f0";
@@ -1687,7 +1697,7 @@
       ok = false;
     }
     if (!matchesDomain(email)) {
-      setInvalid("r-email", true, "Informe um e-mail válido.");
+      setInvalid("r-email", true, "Informe um e-mail vÃ¡lido.");
       ok = false;
     }
     if (!adminRequest && subjects.length === 0) {
@@ -1699,11 +1709,11 @@
       ok = false;
     }
     if (pass.length < 8) {
-      setInvalid("r-pass", true, "A senha deve ter no mínimo 8 caracteres.");
+      setInvalid("r-pass", true, "A senha deve ter no mÃ­nimo 8 caracteres.");
       ok = false;
     }
     if (confirm !== pass || !confirm) {
-      setInvalid("r-confirm", true, "As senhas não coincidem.");
+      setInvalid("r-confirm", true, "As senhas nÃ£o coincidem.");
       ok = false;
     }
     if (!terms) {
@@ -1727,7 +1737,7 @@
     const errorBox = $("#register-error");
     hideAlert(errorBox);
     if (!window.CEPKApi) {
-      showAlert(errorBox, "Não foi possível carregar a integração com o servidor. Recarregue a página.");
+      showAlert(errorBox, "NÃ£o foi possÃ­vel carregar a integraÃ§Ã£o com o servidor. Recarregue a pÃ¡gina.");
       return;
     }
     setLoading(btn, true);
@@ -1744,7 +1754,7 @@
     setLoading(btn, false);
 
     if (!result.ok) {
-      showAlert(errorBox, window.CEPKApi.errorMessage(result, "Não foi possível registrar a solicitação. Tente novamente."));
+      showAlert(errorBox, window.CEPKApi.errorMessage(result, "NÃ£o foi possÃ­vel registrar a solicitaÃ§Ã£o. Tente novamente."));
       errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
@@ -1763,21 +1773,21 @@
     const okMessage = $("#ok-message");
     const okStatus = $("#ok-status-text");
     const okDetail = $("#ok-detail");
-    if (okTitle) okTitle.textContent = isActiveAdmin ? "Acesso administrativo liberado" : isPendingAdmin ? "Solicitação administrativa enviada" : "Solicitação enviada";
+    if (okTitle) okTitle.textContent = isActiveAdmin ? "Acesso administrativo liberado" : isPendingAdmin ? "SolicitaÃ§Ã£o administrativa enviada" : "SolicitaÃ§Ã£o enviada";
     if (okMessage) {
       okMessage.textContent = isActiveAdmin
-        ? "Seu cadastro de administrador foi criado e já está liberado. Entre com seu e-mail e senha para gerenciar as reservas."
+        ? "Seu cadastro de administrador foi criado e jÃ¡ estÃ¡ liberado. Entre com seu e-mail e senha para gerenciar as reservas."
         : isPendingAdmin
-          ? "Recebemos seu pedido de acesso como responsável pelo agendamento. A secretaria vai validar sua solicitação."
-          : "Recebemos seu cadastro. A secretaria do colégio vai analisar e liberar seu acesso.";
+          ? "Recebemos seu pedido de acesso como responsÃ¡vel pelo agendamento. A secretaria vai validar sua solicitaÃ§Ã£o."
+          : "Recebemos seu cadastro. A secretaria do colÃ©gio vai analisar e liberar seu acesso.";
     }
-    if (okStatus) okStatus.textContent = isActiveAdmin ? "Conta de administrador ativa" : isPendingAdmin ? "Aguardando validação administrativa" : "Aguardando aprovação";
+    if (okStatus) okStatus.textContent = isActiveAdmin ? "Conta de administrador ativa" : isPendingAdmin ? "Aguardando validaÃ§Ã£o administrativa" : "Aguardando aprovaÃ§Ã£o";
     if (okDetail) {
       okDetail.innerHTML = isActiveAdmin
-        ? "Conta administrativa registrada para <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong>. O painel de gestão de horários já está disponível."
+        ? "Conta administrativa registrada para <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong>. O painel de gestÃ£o de horÃ¡rios jÃ¡ estÃ¡ disponÃ­vel."
         : isPendingAdmin
-          ? "Pedido de administrador registrado para <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong>. Após a validação, você terá acesso à gestão de horários."
-          : "Você receberá um e-mail em <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong> quando o acesso for liberado.";
+          ? "Pedido de administrador registrado para <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong>. ApÃ³s a validaÃ§Ã£o, vocÃª terÃ¡ acesso Ã  gestÃ£o de horÃ¡rios."
+          : "VocÃª receberÃ¡ um e-mail em <strong style=\"color:var(--ink-700)\">" + (createdUser.email || email) + "</strong> quando o acesso for liberado.";
     }
 
     const links = $("#approval-links");
@@ -1793,7 +1803,7 @@
     }
 
     if (warn && !isActiveAdmin && data.emailSent === false) {
-      warn.textContent = "O e-mail de autorização não pôde ser enviado. Avise a secretaria para liberar seu acesso.";
+      warn.textContent = "O e-mail de autorizaÃ§Ã£o nÃ£o pÃ´de ser enviado. Avise a secretaria para liberar seu acesso.";
       warn.style.display = "block";
     }
 
@@ -1808,7 +1818,7 @@
     });
   });
 
-  /* ---------- Modal de recuperação ---------- */
+  /* ---------- Modal de recuperaÃ§Ã£o ---------- */
   const modal = $("#modal-forgot");
 
   function openModal() {
@@ -1845,7 +1855,7 @@
     const email = $("#forgot-email").value.trim();
 
     if (!matchesDomain(email)) {
-      setInvalid("f-forgot-email", true, "Informe um e-mail válido.");
+      setInvalid("f-forgot-email", true, "Informe um e-mail vÃ¡lido.");
       $("#forgot-email").focus();
       return;
     }
