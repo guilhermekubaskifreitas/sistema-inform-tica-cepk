@@ -1,6 +1,6 @@
 {
-  "name": "Agenda dos Laboratórios — CEPK",
-  "short_name": "CEPK",
+  "name": "Sistema de Agendamento de Laboratórios CEPK",
+  "short_name": "Reservas CEPK",
   "description": "Sistema de agendamento dos laboratórios de informática do Colégio Estadual Presidente Kennedy.",
   "lang": "pt-BR",
   "dir": "ltr",

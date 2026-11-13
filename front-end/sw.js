@@ -2,7 +2,7 @@
    - app shell em cache (network-first nas navegacoes, stale-while-revalidate nos assets)
    - a API (outra origem) NUNCA e cacheada                              */
 
-const CACHE = "cepk-v1";
+const CACHE = "cepk-v2";
 
 const SHELL = [
   "./",
