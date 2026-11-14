@@ -2215,9 +2215,9 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
 .admin-slot-actions{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .admin-slot-actions .btn{ flex: 1 1 auto; }
 </style>
-<link rel="stylesheet" href="theme.css?v=20261111g" />
-<script src="pwa.js?v=20261111g"></script>
-<script src="theme.js?v=20261111g"></script>
+<link rel="stylesheet" href="theme.css?v=20261111h" />
+<script src="pwa.js?v=20261111h"></script>
+<script src="theme.js?v=20261111h"></script>
 </head>
 <body>
 
@@ -2304,10 +2304,18 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
                   <span class="hint-text">A senha deve ter no mínimo 8 caracteres.</span>
                 </span>
               </div>
-              <label class="check-row">
-                <input type="checkbox" id="remember" />
-                Manter conectado neste computador
-              </label>
+                <label class="check-row">
+                  <input type="checkbox" id="remember" />
+                  Manter conectado neste computador
+                </label>
+                <label class="check-row">
+                  <input type="checkbox" id="remember-pass" />
+                  Lembrar senha neste computador
+                </label>
+                <p class="hint-text" style="margin:2px 0 0;font-size:12px;line-height:1.45">
+                  A senha fica salva apenas neste navegador (e-mails <strong>@escola.pr.gov.br</strong>).
+                  Não use em computador compartilhado. <button type="button" id="link-forget-pass" class="link-like">Esquecer senha salva</button>
+                </p>
               <button type="submit" class="btn btn-primary" id="btn-login">
                 <span class="spinner"></span>
                 <span class="label">Entrar</span>
@@ -3207,8 +3215,8 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   </div>
 </div>
 
-<script src="api.js?v=20261111g"></script>
-<script src="turmas.js?v=20261111g"></script>
+<script src="api.js?v=20261111h"></script>
+<script src="turmas.js?v=20261111h"></script>
 <script>
 (function () {
   "use strict";
@@ -3550,10 +3558,45 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   function hideAlert(el) { el.classList.remove("show"); }
   function setLoading(btn, loading) { btn.disabled = loading; btn.classList.toggle("loading", loading); }
   function matchesDomain(value) { return EMAIL_RE.test(value.trim()); }
+
+  // Preenche a senha automaticamente quando o e-mail @escola.pr.gov.br casa com
+  // uma senha salva neste dispositivo (opt-in "Lembrar senha neste computador").
+  function setupRememberedPassword() {
+    const emailInput = document.getElementById("login-email");
+    const passInput = document.getElementById("login-pass");
+    const info = document.getElementById("login-info");
+    if (!emailInput || !passInput) return;
+    if (!window.CEPKApi || typeof window.CEPKApi.setupPasswordAutofill !== "function") return;
+
+    window.CEPKApi.setupPasswordAutofill(emailInput, passInput, {
+      onFill: function () {
+        if (!info) return;
+        const target = info.querySelector("span:last-child") || info;
+        target.textContent = "Senha preenchida automaticamente. Se nao for voce, use \"Esquecer senha salva\".";
+        info.classList.add("show");
+      }
+    });
+
+    const esquecer = document.getElementById("link-forget-pass");
+    if (esquecer) {
+      esquecer.addEventListener("click", function () {
+        const email = (emailInput.value || "").trim();
+        window.CEPKApi.forgetPassword(email);
+        passInput.value = "";
+        if (info) {
+          const target = info.querySelector("span:last-child") || info;
+          target.textContent = "Senha salva esquecida. Ela nao sera mais preenchida automaticamente.";
+          info.classList.add("show");
+        }
+      });
+    }
+  }
+
   function initLogin() {
     const formLogin = document.getElementById("form-login");
     const loginError = document.getElementById("login-error");
     const loginInfo = document.getElementById("login-info");
+    setupRememberedPassword();
     function showViewLogin(id) {
       const screen = document.getElementById("screen-login");
       screen.querySelectorAll(".view").forEach(function (v) { v.classList.remove("active"); });
@@ -3750,10 +3793,25 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
     const data = result.data || {};
     const user = data.user || {};
     const displayName = user.name || nameFromEmail(email);
-    const remember = Boolean(document.getElementById("remember").checked);
-    window.CEPKApi.saveSession(data, remember);
-    localStorage.removeItem("cepk_user_pass");
-    sessionStorage.removeItem("cepk_user_pass");
+      const remember = Boolean(document.getElementById("remember").checked);
+      window.CEPKApi.saveSession(data, remember);
+      localStorage.removeItem("cepk_user_pass");
+      sessionStorage.removeItem("cepk_user_pass");
+
+      // Lembrar a senha (opt-in): a partir do 2o acesso neste dispositivo.
+      const lembraSenha = Boolean(document.getElementById("remember-pass") && document.getElementById("remember-pass").checked);
+      if (lembraSenha) {
+        const acesso = window.CEPKApi.registerLogin(email);
+        if (acesso <= 1) {
+          window.CEPKApi.rememberPending(email, pass);
+        } else {
+          window.CEPKApi.savePassword(email, pass);
+          window.CEPKApi.rememberPending(email, pass);
+          window.CEPKApi.nativeStorePassword(email, pass, displayName);
+        }
+      } else {
+        window.CEPKApi.registerLogin(email);
+      }
     storedEmail = email;
     storedName = displayName;
     const staff = applyUserRole(user.role);

@@ -969,9 +969,9 @@
   #subjects-pop::-webkit-scrollbar-thumb { background: var(--cyan-400); border: 2px solid var(--surface-2); border-radius: 8px; }
   #subjects-pop::-webkit-scrollbar-thumb:hover { background: var(--blue-500); }
 </style>
-<link rel="stylesheet" href="theme.css?v=20261111g" />
-<script src="pwa.js?v=20261111g"></script>
-<script src="theme.js?v=20261111g"></script>
+<link rel="stylesheet" href="theme.css?v=20261111h" />
+<script src="pwa.js?v=20261111h"></script>
+<script src="theme.js?v=20261111h"></script>
 </head>
 <body>
 
@@ -1077,7 +1077,11 @@
                       <span class="sub" id="pm-email" style="display:block"></span>
                     </span>
                   </button>
-                  <div class="pop-foot">Senhas salvas neste dispositivo · <strong>Gerenciar senhas⬦</strong></div>
+                  <div class="pop-foot">
+                    Senhas salvas neste dispositivo ·
+                    <button type="button" id="pm-forget" class="link-like" style="display:none">Esquecer senha salva</button>
+                    <span id="pm-manage">Gerenciar senhas</span>
+                  </div>
                 </div>
               </div>
               <span class="hint">
@@ -1111,6 +1115,15 @@
               <input type="checkbox" id="remember" />
               Manter conectado neste computador
             </label>
+
+            <label class="check-row">
+              <input type="checkbox" id="remember-pass" />
+              Lembrar senha neste computador
+            </label>
+            <p class="hint-text" style="margin:2px 0 0;font-size:12px;line-height:1.45">
+              A senha fica salva apenas neste navegador (e-mails <strong>@escola.pr.gov.br</strong>).
+              Não use em computador compartilhado.
+            </p>
 
             <button type="submit" class="btn btn-primary" id="btn-login">
               <span class="spinner"></span>
@@ -1357,8 +1370,8 @@
   </div>
 </div>
 
-<script src="api.js?v=20261111g"></script>
-<script src="turmas.js?v=20261111g"></script>
+<script src="api.js?v=20261111h"></script>
+<script src="turmas.js?v=20261111h"></script>
 <script>
 (function () {
   "use strict";
@@ -1425,28 +1438,51 @@
     });
   }
 
-  pmRow.addEventListener("click", () => {
-    loginEmailInput.value = pmRow.dataset.email || "";
-    closePops();
-    $("#login-pass").focus();
-    ["login-email", "login-pass"].forEach((id) => {
-      const f = $("#" + id).closest(".field");
-      if (f) f.classList.remove("invalid");
+    pmRow.addEventListener("click", () => {
+      loginEmailInput.value = pmRow.dataset.email || "";
+      loginEmailInput.dispatchEvent(new Event("input", { bubbles: true }));
+      closePops();
+      const passInput = $("#login-pass");
+      if (!passInput.value) passInput.focus();
+      ["login-email", "login-pass"].forEach((id) => {
+        const f = $("#" + id).closest(".field");
+        if (f) f.classList.remove("invalid");
+      });
     });
-  });
 
-  loginEmailInput.addEventListener("focus", () => {
-    const savedName = localStorage.getItem("cepk_user_name") || sessionStorage.getItem("cepk_user_name");
-    const savedEmail = localStorage.getItem("cepk_user_email") || sessionStorage.getItem("cepk_user_email");
+    loginEmailInput.addEventListener("focus", () => {
+      const savedName = localStorage.getItem("cepk_user_name") || sessionStorage.getItem("cepk_user_name");
+      const savedEmail = localStorage.getItem("cepk_user_email") || sessionStorage.getItem("cepk_user_email");
 
-    if (!savedEmail) return;
+      if (!savedEmail) return;
 
-    pmRow.dataset.email = savedEmail;
-    $("#pm-name").textContent = savedName || "Seu nome";
-    $("#pm-email").textContent = savedEmail;
-    pmRow.style.display = "flex";
-    openPop(pmPop);
-  });
+      pmRow.dataset.email = savedEmail;
+      $("#pm-name").textContent = savedName || "Seu nome";
+      $("#pm-email").textContent = savedEmail;
+      pmRow.style.display = "flex";
+      const temSenha = Boolean(
+        (window.CEPKApi && window.CEPKApi.savedPasswordFor(savedEmail)) ||
+        (window.CEPKApi && window.CEPKApi.passwordFor(savedEmail))
+      );
+      const forget = $("#pm-forget");
+      if (forget) forget.style.display = temSenha ? "" : "none";
+      openPop(pmPop);
+    });
+
+    // Esquecer a senha salva neste dispositivo
+    const pmForget = $("#pm-forget");
+    if (pmForget) {
+      pmForget.addEventListener("click", () => {
+        const email = pmRow.dataset.email || loginEmailInput.value;
+        if (window.CEPKApi) window.CEPKApi.forgetPassword(email);
+        pmRow.style.display = "none";
+        pmForget.style.display = "none";
+        const pass = $("#login-pass");
+        if (pass) pass.value = "";
+        closePops();
+        showAlert(loginInfo, "Senha salva esquecida. Ela nao sera mais preenchida automaticamente.");
+      });
+    }
 
   /* ---------- Dropdown: disciplinas (cadastro) ---------- */
   const subjectsPop = $("#subjects-pop");
@@ -1538,6 +1574,25 @@
   const loginError = $("#login-error");
   const loginInfo = $("#login-info");
 
+  // Preenche a senha automaticamente quando o e-mail @escola.pr.gov.br casa com
+  // uma senha salva neste dispositivo (opt-in "Lembrar senha neste computador").
+  if (window.CEPKApi && typeof window.CEPKApi.setupPasswordAutofill === "function") {
+    const autofill = window.CEPKApi.setupPasswordAutofill($("#login-email"), $("#login-pass"), {
+      onFill: function () {
+        showAlert(loginInfo, "Senha preenchida automaticamente. Se nao for voce, use \"Esquecer senha salva\".");
+      }
+    });
+
+    ["login-email", "login-pass"].forEach((id) => {
+      const input = $("#" + id);
+      if (!input) return;
+      input.addEventListener("input", () => {
+        const field = input.closest(".field");
+        if (field) field.classList.remove("invalid");
+      });
+    });
+  }
+
   // Aviso de sessao expirada (o front-end redireciona aqui com ?sessao=expirada)
   try {
     if (new URLSearchParams(location.search).get("sessao") === "expirada") {
@@ -1605,6 +1660,22 @@
     window.CEPKApi.saveSession(data, remember);
     localStorage.removeItem("cepk_user_pass");
     sessionStorage.removeItem("cepk_user_pass");
+
+    // Lembrar a senha (opt-in): a partir do 2o acesso neste dispositivo.
+    const lembraSenha = $("#remember-pass") && $("#remember-pass").checked;
+    if (lembraSenha) {
+      const acesso = window.CEPKApi.registerLogin(email);
+      if (acesso <= 1) {
+        // 1o acesso: guarda apenas na sessao para o 2o acesso ja vir preenchido.
+        window.CEPKApi.rememberPending(email, pass);
+      } else {
+        window.CEPKApi.savePassword(email, pass);
+        window.CEPKApi.rememberPending(email, pass);
+        window.CEPKApi.nativeStorePassword(email, pass, displayName);
+      }
+    } else {
+      window.CEPKApi.registerLogin(email);
+    }
 
     const isStaff = String(user.role || "").toLowerCase() === "admin" || String(user.role || "").toLowerCase() === "secretaria";
     const destParam = new URLSearchParams(location.search).get("dest");

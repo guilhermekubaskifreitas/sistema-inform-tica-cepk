@@ -21,6 +21,11 @@
   var FALLBACK_TTL = 10 * 60 * 1000;
   var REQUEST_TIMEOUT = 15000;
   var DEAD_STATUS = [0, 404, 502, 503, 504];
+  // Senha lembrada no dispositivo (opt-in do usuario, apenas e-mails @escola).
+  var PASS_KEY = "cepk_saved_pass_v1";
+  var PASS_PENDING_KEY = "cepk_pass_pending_v1";
+  var LOGIN_COUNT_KEY = "cepk_login_count_v1";
+  var ESCOLA_DOMAIN = "@escola.pr.gov.br";
   var LEGACY_BASES = [
     /^https?:\/\/cepk-mock\.onrender\.com$/i
   ];
@@ -210,6 +215,173 @@
       storage.removeItem("cepk_user_classes");
       storage.removeItem("cepk_user_role");
     });
+  }
+
+  /* ------------------------------------------------------------------
+     Senha lembrada no dispositivo (opt-in "Lembrar senha neste computador")
+     - Somente e-mails @escola.pr.gov.br
+     - A partir do 2o acesso (o 1o nao grava; o preenchimento vale do 2o em diante)
+     ------------------------------------------------------------------ */
+  function normalizeEmail(value) {
+    return String(value == null ? "" : value).trim().toLowerCase();
+  }
+
+  function isEscolaEmail(value) {
+    return normalizeEmail(value).endsWith(ESCOLA_DOMAIN);
+  }
+
+  function readPasswordMap() {
+    try {
+      var parsed = JSON.parse(localStorage.getItem(PASS_KEY) || "{}");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function savedPasswords() {
+    var out = {};
+    var map = readPasswordMap();
+    Object.keys(map).forEach(function (key) {
+      if (map[key]) out[key] = String(map[key]);
+    });
+    return out;
+  }
+
+  function savedPasswordFor(email) {
+    var map = readPasswordMap();
+    return map[normalizeEmail(email)] || "";
+  }
+
+  function savePassword(email, pass) {
+    var key = normalizeEmail(email);
+    var secret = String(pass == null ? "" : pass);
+    if (!key || !secret) return false;
+    try {
+      var map = readPasswordMap();
+      map[key] = secret;
+      localStorage.setItem(PASS_KEY, JSON.stringify(map));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function forgetPassword(email) {
+    try {
+      if (!email) {
+        localStorage.removeItem(PASS_KEY);
+        sessionStorage.removeItem(PASS_PENDING_KEY);
+        return true;
+      }
+      var map = readPasswordMap();
+      delete map[normalizeEmail(email)];
+      localStorage.setItem(PASS_KEY, JSON.stringify(map));
+      var pending = readPendingPassword();
+      if (pending && pending.email === normalizeEmail(email)) {
+        sessionStorage.removeItem(PASS_PENDING_KEY);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function loginCounts() {
+    try {
+      var parsed = JSON.parse(localStorage.getItem(LOGIN_COUNT_KEY) || "{}");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function registerLogin(email) {
+    var key = normalizeEmail(email);
+    if (!key) return 0;
+    try {
+      var counts = loginCounts();
+      var next = (Number(counts[key]) || 0) + 1;
+      counts[key] = next;
+      localStorage.setItem(LOGIN_COUNT_KEY, JSON.stringify(counts));
+      return next;
+    } catch (error) {
+      return 1;
+    }
+  }
+
+  function loginCount(email) {
+    return Number(loginCounts()[normalizeEmail(email)]) || 0;
+  }
+
+  // Ponte do 1o acesso: guarda a senha apenas na sessao do navegador (nao sobrevive
+  // ao fechamento) para que o 2o acesso, na mesma sessao, ja venha preenchido.
+  function rememberPending(email, pass) {
+    var key = normalizeEmail(email);
+    var secret = String(pass == null ? "" : pass);
+    if (!key || !secret) return false;
+    try {
+      sessionStorage.setItem(PASS_PENDING_KEY, JSON.stringify({ email: key, pass: secret }));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function readPendingPassword() {
+    try {
+      var parsed = JSON.parse(sessionStorage.getItem(PASS_PENDING_KEY) || "null");
+      if (parsed && parsed.email && parsed.pass) return { email: parsed.email, pass: parsed.pass };
+    } catch (error) {}
+    return null;
+  }
+
+  function passwordFor(email) {
+    var key = normalizeEmail(email);
+    if (!key) return "";
+    var saved = savedPasswordFor(key);
+    if (saved) return saved;
+    // Ponte do 1o acesso: so vale para o mesmo e-mail.
+    var pending = readPendingPassword();
+    return pending && pending.email === key ? pending.pass : "";
+  }
+
+  function nativeStorePassword(email, pass, name) {
+    try {
+      if (!navigator.credentials || typeof window.PasswordCredential !== "function") return false;
+      var cred = new window.PasswordCredential({
+        id: normalizeEmail(email),
+        password: String(pass == null ? "" : pass),
+        name: String(name == null ? "" : name)
+      });
+      navigator.credentials.store(cred);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function setupPasswordAutofill(emailInput, passInput, options) {
+    if (!emailInput || !passInput) return { check: function () {} };
+    var opts = options || {};
+
+    function check() {
+      var email = normalizeEmail(emailInput.value);
+      if (!email || !isEscolaEmail(email)) return false;
+      if (String(passInput.value || "").length > 0) return false; // nao sobrescreve o que o usuario digitou
+      var pass = passwordFor(email);
+      if (!pass) return false;
+      passInput.value = pass;
+      if (typeof opts.onFill === "function") opts.onFill(email);
+      return true;
+    }
+
+    ["input", "change", "blur"].forEach(function (eventName) {
+      emailInput.addEventListener(eventName, check);
+    });
+
+    setTimeout(check, 0);
+    return { check: check };
   }
 
   function clearOldBase() {
@@ -606,8 +778,19 @@
     setBase: setBase,
     token: token,
     user: user,
-    saveSession: saveSession,
-    clearSession: clearSession,
+      saveSession: saveSession,
+      clearSession: clearSession,
+      savedPasswords: savedPasswords,
+      savedPasswordFor: savedPasswordFor,
+      savePassword: savePassword,
+      forgetPassword: forgetPassword,
+      passwordFor: passwordFor,
+      registerLogin: registerLogin,
+      loginCount: loginCount,
+      isEscolaEmail: isEscolaEmail,
+      rememberPending: rememberPending,
+      nativeStorePassword: nativeStorePassword,
+      setupPasswordAutofill: setupPasswordAutofill,
     request: request,
     register: register,
     login: login,

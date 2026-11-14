@@ -654,6 +654,22 @@ html[data-theme="dark"] .admin-grid td.admin-slot-cell:hover {
   min-width: 150px;
 }
 
+/* Link com aparencia de link (usado em "Esquecer senha salva") */
+.link-like {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent, #1d4ed8);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-like:hover {
+  opacity: 0.8;
+}
+
 .section-card {
   background: var(--surface);
   border: 1px solid var(--line);
