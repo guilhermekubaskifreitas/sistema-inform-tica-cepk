@@ -3217,8 +3217,11 @@ html[data-theme="dark"] #screen-login .role-option.selected{ background: var(--b
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
   function enviarEmailAutorizacaoReserva(r) {
     const disciplina = r.disciplina || localStorage.getItem("cepk_user_subject") || "";
+    // O laboratorio e definido pela secretaria na aprovacao: nao enviamos o
+    // placeholder "A definir" para a API (ela espera um laboratorio real ou nada).
+    const lab = r.lab && r.lab !== "A definir" ? r.lab : undefined;
     return window.CEPKApi.createReservation({
-      lab: r.lab || "A definir",
+      lab: lab,
       turma: r.turma || "",
       dia: r.dia,
       dias: r.dias,

@@ -55,6 +55,22 @@ const WEEKDAY_ALIASES = new Map<string, number>([
   ["6", 6],
 ]);
 
+  // O laboratorio e escolhido pela secretaria na aprovacao da reserva.
+  // O app manda "A definir" (ou variantes) quando o professor ainda nao escolheu:
+  // esses valores NAO sao um laboratorio e nao podem gerar erro.
+  const PLACEHOLDER_LABS = new Set([
+    "a definir",
+    "a_definir",
+    "a-definir",
+    "a definir pela secretaria",
+    "-",
+    "--",
+    "n/a",
+    "tbd",
+    "undefined",
+    "null",
+  ]);
+
   const reservationInclude = {
     lab: true,
     class: true,
@@ -318,6 +334,7 @@ async function syncScheduleEntries(
         update: {
           professor: row.professor.name,
           subject: scheduleSubject(row),
+          classId: row.classId,
         },
         create: {
           labId,
@@ -325,6 +342,7 @@ async function syncScheduleEntries(
           periodId: item.periodId,
           professor: row.professor.name,
           subject: scheduleSubject(row),
+          classId: row.classId,
         },
       });
     }
@@ -825,16 +843,22 @@ router.post(
 
     const rows = await prisma.$transaction(
       async (tx) => {
-          const lab = data.lab
+          // O laboratorio e definido pela secretaria na aprovacao.
+          // O app (inclusive versoes antigas) envia "A definir": isso NAO e um laboratorio.
+          const labName =
+            data.lab && !PLACEHOLDER_LABS.has(String(data.lab).trim().toLowerCase())
+              ? data.lab
+              : null;
+          const lab = labName
             ? await tx.lab.findFirst({
                 where: {
-                  name: { equals: data.lab, mode: "insensitive" },
+                  name: { equals: labName, mode: "insensitive" },
                   active: true,
                 },
               })
             : null;
-          if (data.lab && !lab) {
-            throw new AppError(404, `Laboratorio nao encontrado: ${data.lab}.`);
+          if (labName && !lab) {
+            throw new AppError(404, `Laboratorio nao encontrado: ${labName}.`);
           }
 
           // Turma e obrigatoria: aceita classId ou o nome da turma (cria se nao existir).
