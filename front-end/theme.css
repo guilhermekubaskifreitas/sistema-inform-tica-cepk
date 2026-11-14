@@ -469,6 +469,26 @@ html[data-theme="dark"] .badge.hora {
   color: var(--ink-400) !important;
 }
 
+/* Turma dentro da celula da grade */
+.slot-turma {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--surface-3, var(--surface-2));
+  border: 1px solid var(--line);
+  color: var(--ink-700);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+html[data-theme="dark"] .slot-turma {
+  color: var(--ink-200);
+}
+
 html[data-theme="dark"] .admin-grid td.admin-slot-cell:hover {
   background: var(--surface-2) !important;
 }
@@ -588,6 +608,51 @@ html[data-theme="dark"] .admin-grid td.admin-slot-cell:hover {
 }
 
 .alert-banner[hidden] { display: none; }
+
+.alerta-reserva {
+  position: sticky;
+  top: 8px;
+  z-index: 40;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 16px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.45;
+  box-shadow: 0 10px 28px rgba(13, 54, 85, 0.18);
+  border-width: 2px;
+}
+
+.alerta-reserva-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.alerta-reserva-texto strong {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.alerta-reserva-texto span {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.alerta-reserva-texto small {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.alerta-reserva .btn {
+  align-self: flex-start;
+  min-width: 150px;
+}
 
 .section-card {
   background: var(--surface);

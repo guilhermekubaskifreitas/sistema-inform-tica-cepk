@@ -550,9 +550,9 @@
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 </style>
-<link rel="stylesheet" href="theme.css?v=20261111e" />
-<script src="pwa.js?v=20261111f"></script>
-<script src="theme.js?v=20261111e"></script>
+<link rel="stylesheet" href="theme.css?v=20261111g" />
+<script src="pwa.js?v=20261111g"></script>
+<script src="theme.js?v=20261111g"></script>
 </head>
 <body>
 
@@ -612,7 +612,15 @@
       <h2>Reservar laboratório</h2>
       <p class="sub">Preencha os dados abaixo para solicitar sua reserva. Grade conforme o PLANO (aulas de 50 min).</p>
 
-      <div class="alert-banner" id="reserva-error" hidden></div>
+      <div class="alert-banner alerta-reserva" id="reserva-error" hidden role="alert">
+        <div class="alerta-reserva-texto">
+          <strong>Não foi possível enviar a reserva</strong>
+          <span id="reserva-error-msg"></span>
+          <small>Dica: se a mensagem mencionar turma ou disciplina, recarregue a página (Ctrl+F5) — o aplicativo em cache está desatualizado.</small>
+        </div>
+        <button type="button" class="btn btn-primary" id="reserva-retry">Tentar de novo</button>
+      </div>
+
 
       <div class="form-card">
         <h3>Checklist da reserva</h3>
@@ -698,8 +706,8 @@
   <span>Processando solicitação de reserva...</span>
 </div>
 
-<script src="api.js?v=20261111e"></script>
-<script src="turmas.js?v=20261111e"></script>
+<script src="api.js?v=20261111g"></script>
+<script src="turmas.js?v=20261111g"></script>
 <script>
   (function () {
     "use strict";
@@ -1016,11 +1024,28 @@
 
     function showReservaError(message) {
       const banner = document.getElementById("reserva-error");
+      const texto = document.getElementById("reserva-error-msg");
       if (!banner) return;
-      banner.textContent = message || "";
+      if (texto) texto.textContent = message || "";
+      else banner.textContent = message || "";
       banner.hidden = !message;
-      if (message) banner.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (message) {
+        banner.scrollIntoView({ behavior: "smooth", block: "center" });
+        banner.classList.add("visivel");
+      } else {
+        banner.classList.remove("visivel");
+      }
     }
+
+    const botaoRetry = document.getElementById("reserva-retry");
+    if (botaoRetry) {
+      botaoRetry.addEventListener("click", function () {
+        showReservaError("");
+        const form = document.getElementById("form-reserva");
+        if (form) form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true }));
+      });
+    }
+
 
     function enviarEmailAutorizacao(r) {
       const disciplina = r.disciplina || localStorage.getItem("cepk_user_subject") || "";

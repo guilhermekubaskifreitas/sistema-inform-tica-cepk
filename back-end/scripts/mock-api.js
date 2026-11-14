@@ -238,6 +238,8 @@ function syncMockSchedule(reservation) {
       if (existing) {
         existing.professor = reservation.professor;
         existing.subject = subject;
+        existing.turma = reservation.turma || existing.turma || "";
+        existing.className = existing.turma;
         existing.updatedAt = new Date().toISOString();
       } else {
         scheduleEntries.push({
@@ -247,6 +249,8 @@ function syncMockSchedule(reservation) {
           period,
           professor: reservation.professor,
           subject,
+          turma: reservation.turma || "",
+          className: reservation.turma || "",
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         });
@@ -1279,9 +1283,23 @@ async function handle(req, res) {
     period = Number(body.period);
     const professor = String(body.professor || "").trim();
     const subject = String(body.subject || "").trim();
+    const classId = String(body.classId || "").trim();
+    const turmaName = String(body.turma || "").trim();
 
     if (!lab || !Number.isInteger(weekday) || weekday < 1 || weekday > 5 || !Number.isInteger(period) || period < 1 || period > 12 || !professor || !subject) {
       return sendJson(res, 400, { error: "Informe laboratório, dia, aula, professor e matéria." });
+    }
+
+    let turma = null;
+    if (classId) {
+      turma = MOCK_CLASSES.find((c) => c.id === classId) || null;
+      if (!turma) return sendJson(res, 404, { error: "Turma não encontrada." });
+    } else if (turmaName) {
+      turma = MOCK_CLASSES.find((c) => c.name.toLowerCase() === turmaName.toLowerCase()) || null;
+      if (!turma) {
+        turma = { id: id("cls"), name: turmaName, shift: "manha" };
+        MOCK_CLASSES.push(turma);
+      }
     }
 
     let entry = scheduleEntries.find(
@@ -1294,6 +1312,9 @@ async function handle(req, res) {
     if (entry) {
       entry.professor = professor;
       entry.subject = subject;
+      entry.classId = turma ? turma.id : null;
+      entry.turma = turma ? turma.name : "";
+      entry.className = turma ? turma.name : "";
       entry.updatedAt = new Date().toISOString();
     } else {
       entry = {
@@ -1303,6 +1324,9 @@ async function handle(req, res) {
         period,
         professor,
         subject,
+        classId: turma ? turma.id : null,
+        turma: turma ? turma.name : "",
+        className: turma ? turma.name : "",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1527,7 +1551,25 @@ async function handle(req, res) {
         MOCK_CLASSES.push(turma);
       }
     } else {
-      return sendJson(res, 400, { error: "Informe a turma que vai ao laboratorio." });
+      // Rede de seguranca (igual a API real): 1 turma -> preenche; 2+ -> lista; 0 -> orienta.
+      const turmasDoProfessor = Array.isArray(user.classes) ? user.classes : [];
+      if (turmasDoProfessor.length === 1) {
+        turma =
+          MOCK_CLASSES.find((c) => c.name === turmasDoProfessor[0]) || {
+            id: id("cls"),
+            name: turmasDoProfessor[0],
+            shift: "manha"
+          };
+        if (!MOCK_CLASSES.includes(turma)) MOCK_CLASSES.push(turma);
+      } else if (turmasDoProfessor.length > 1) {
+        return sendJson(res, 400, {
+          error: `Este professor tem ${turmasDoProfessor.length} turmas (${turmasDoProfessor.join(", ")}). Escolha qual turma vai ao laboratorio.`
+        });
+      } else {
+        return sendJson(res, 400, {
+          error: "Informe a turma que vai ao laboratorio (o professor ainda nao tem turmas cadastradas)."
+        });
+      }
     }
 
     if (Object.keys(fields).length) return validationError(res, fields);

@@ -221,7 +221,7 @@
 
   function statusMessage(status) {
     if (status === 0) return "Não foi possível conectar à API.";
-    if (status === 400) return "Dados inválidos. Revise as informações enviadas.";
+    if (status === 400) return "Dados inválidos. Se o erro mencionar turma ou disciplina, atualize a página (Ctrl+F5): sua versão do aplicativo está desatualizada.";
     if (status === 401) return "Sessão expirada. Faça login novamente.";
     if (status === 403) return "Você não tem permissão para esta ação.";
     if (status === 404) return "Recurso não encontrado na API (versão desatualizada?).";

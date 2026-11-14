@@ -238,6 +238,125 @@
   }
 
   /* --------------------------------------------------------------------
+     Select de turma com cadastro (painel do calendario)
+     - turmas do professor digitado no topo
+     - lista oficial (28) + turmas extras vindas da API
+     - opcao de cadastrar uma nova turma
+     -------------------------------------------------------------------- */
+  function setupClassSelect(options) {
+    var select = document.getElementById(options.selectId);
+    if (!select) return null;
+
+    var state = { list: [], extra: [], professorClasses: [], selected: "" };
+
+    function key(value) {
+      return String(value == null ? "" : value)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toUpperCase();
+    }
+
+    function allClasses() {
+      var out = [];
+      function add(name, shift) {
+        var k = key(name);
+        if (!k) return;
+        for (var i = 0; i < out.length; i++) if (out[i].key === k) return;
+        out.push({ key: k, name: String(name).trim(), shift: shift || shiftOf(name) || "manha" });
+      }
+      state.list.forEach(function (t) { add(t.name, t.shift); });
+      TURMAS.forEach(function (t) { add(t.name, t.shift); });
+      state.extra.forEach(function (t) { add(t.name, t.shift); });
+      return out;
+    }
+
+    function optionHtml(turma, selectedKey) {
+      return (
+        '<option value="' + escapeAttr(turma.name) + '"' +
+        (turma.key === selectedKey ? " selected" : "") + ">" + escapeHtml(turma.name) + "</option>"
+      );
+    }
+
+    function render() {
+      var selectedKey = key(state.selected);
+      var all = allClasses();
+      var profKeys = state.professorClasses.map(key);
+      var prof = all.filter(function (t) { return profKeys.indexOf(t.key) !== -1; });
+      var rest = all.filter(function (t) { return profKeys.indexOf(t.key) === -1; });
+
+      var html = '<option value="">' + escapeHtml(options.placeholder || "— sem turma —") + "</option>";
+      if (prof.length) {
+        html += '<optgroup label="Turmas do professor">';
+        prof.forEach(function (t) { html += optionHtml(t, selectedKey); });
+        html += "</optgroup>";
+      }
+      ["manha", "tarde"].forEach(function (shift) {
+        var group = rest.filter(function (t) { return t.shift === shift; });
+        if (!group.length) return;
+        html += '<optgroup label="' + escapeHtml(SHIFT_LABEL[shift] || shift) + '">';
+        group.forEach(function (t) { html += optionHtml(t, selectedKey); });
+        html += "</optgroup>";
+      });
+      var outras = rest.filter(function (t) { return t.shift !== "manha" && t.shift !== "tarde"; });
+      if (outras.length) {
+        html += '<optgroup label="Outras turmas">';
+        outras.forEach(function (t) { html += optionHtml(t, selectedKey); });
+        html += "</optgroup>";
+      }
+      html += '<option value="__nova__">➕ Cadastrar outra turma…</option>';
+      select.innerHTML = html;
+    }
+
+    return {
+      element: select,
+      value: function () {
+        var v = select.value ? String(select.value).trim() : "";
+        return v === "__nova__" ? "" : v;
+      },
+      setValue: function (name) {
+        state.selected = name || "";
+        render();
+      },
+      refresh: function (selectedName) {
+        if (selectedName !== undefined) state.selected = selectedName || "";
+        var professorName = options.getProfessorName ? (options.getProfessorName() || "") : "";
+        var api = window.CEPKApi;
+        var jobs = [];
+        if (api && typeof api.classes === "function") {
+          jobs.push(
+            api.classes().then(function (result) {
+              if (result && result.ok && result.data && Array.isArray(result.data.classes)) {
+                state.list = result.data.classes.map(function (c) {
+                  return { name: c.name, shift: c.shift || shiftOf(c.name) || "manha" };
+                });
+              }
+            }).catch(function () {})
+          );
+        }
+        if (api && typeof api.professors === "function" && professorName) {
+          jobs.push(
+            api.professors().then(function (result) {
+              if (!result || !result.ok || !result.data || !Array.isArray(result.data.professors)) return;
+              var target = null;
+              result.data.professors.forEach(function (p) {
+                if (!target && key(p.name) === key(professorName)) target = p;
+              });
+              state.professorClasses = target && Array.isArray(target.classes) ? target.classes : [];
+            }).catch(function () {})
+          );
+        } else {
+          state.professorClasses = [];
+        }
+        return Promise.all(jobs).then(function () {
+          render();
+          return true;
+        });
+      }
+    };
+  }
+
+  /* --------------------------------------------------------------------
      Select de laboratorios (cadastro) — populado pela API
      -------------------------------------------------------------------- */
   function setupLabSelect(selectId) {
@@ -279,6 +398,7 @@
     normalize: normalize,
     setupPicker: setupPicker,
     setupSelect: setupSelect,
+    setupClassSelect: setupClassSelect,
     setupLabSelect: setupLabSelect
   };
 })();

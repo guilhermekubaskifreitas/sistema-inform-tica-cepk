@@ -31,6 +31,7 @@ const WEEKDAY_ALIASES = new Map<string, number>([
 const scheduleInclude = {
   lab: true,
   period: true,
+  class: true,
 } satisfies Prisma.ScheduleEntryInclude;
 
 type ScheduleRow = Prisma.ScheduleEntryGetPayload<{
@@ -79,8 +80,44 @@ function publicScheduleEntry(entry: ScheduleRow) {
     endTime: entry.period.endTime,
     professor: entry.professor,
     subject: entry.subject,
+    classId: entry.classId ?? null,
+    turma: entry.class?.name ?? "",
+    className: entry.class?.name ?? "",
     notes: entry.notes ?? "",
   };
+}
+
+/**
+ * Resolve a turma da celula: aceita classId ou o nome da turma.
+ * Sem turma informada, a celula fica sem turma (campo opcional).
+ */
+async function resolveClass(input: { classId?: string; turma?: string }) {
+  const classId = input.classId?.trim();
+  const turma = input.turma?.trim();
+
+  if (classId) {
+    const found = await prisma.class.findFirst({
+      where: { id: classId, active: true },
+    });
+
+    if (!found) {
+      throw new AppError(404, "Turma nao encontrada.");
+    }
+
+    return found;
+  }
+
+  if (!turma) {
+    return null;
+  }
+
+  // Reaproveita a turma existente (qualquer turno) para nao duplicar a lista oficial.
+  const existing = await prisma.class.findFirst({
+    where: { name: turma },
+    orderBy: { shift: "asc" },
+  });
+
+  return existing ?? prisma.class.create({ data: { name: turma } });
 }
 
 async function resolveCell(input: {
@@ -131,6 +168,7 @@ router.put(
   asyncHandler(async (req, res) => {
     const data = saveScheduleEntrySchema.parse(req.body);
     const { lab, period, weekday } = await resolveCell(data);
+    const turma = await resolveClass(data);
 
     const entry = await prisma.scheduleEntry.upsert({
       where: {
@@ -143,12 +181,14 @@ router.put(
       update: {
         professor: data.professor,
         subject: data.subject,
+        classId: turma?.id ?? null,
         notes: data.notes,
       },
       create: {
         labId: lab.id,
         weekday,
         periodId: period.id,
+        classId: turma?.id ?? null,
         professor: data.professor,
         subject: data.subject,
         notes: data.notes,

@@ -146,6 +146,7 @@ model Class {
   professorSubjects ProfessorSubject[]
   professorClasses  ProfessorClass[]
   reservations      Reservation[]
+  scheduleEntries   ScheduleEntry[]
 
   @@unique([name, shift])
   @@map("classes")
@@ -315,6 +316,8 @@ model ScheduleEntry {
   weekday   Int
   periodId  String
   period    Period   @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  classId   String?
+  class     Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
   professor String   @db.VarChar(120)
   subject   String   @db.VarChar(160)
   notes     String?  @db.Text

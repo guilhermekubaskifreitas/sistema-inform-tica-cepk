@@ -16,6 +16,8 @@ export const saveScheduleEntrySchema = z.object({
   ...scheduleKey,
   professor: z.string().trim().min(1, "Informe o professor.").max(120),
   subject: z.string().trim().min(1, "Informe a materia.").max(160),
+  classId: z.string().trim().max(80).optional(),
+  turma: z.string().trim().max(80).optional(),
   notes: z.string().trim().max(1000).optional(),
 });
 

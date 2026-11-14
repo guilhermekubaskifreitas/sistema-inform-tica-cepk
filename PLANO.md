@@ -142,6 +142,8 @@ Todos os casos (manutenção, prova, evento, feriado) usam esse mesmo formulári
 8. Alterações e exclusões de reservas geram registro de auditoria.
 9. O professor só edita/cancela **suas próprias** reservas; a secretária pode agir em nome de qualquer professor.
 10. A validação de conflito é feita em transação no backend para evitar reservas simultâneas no mesmo horário.
+11. A **turma é obrigatória** na reserva. Rede de segurança para aplicativos desatualizados (sem o campo na tela): se o professor tiver **exatamente 1 turma** cadastrada, o servidor preenche automaticamente; com **2 ou mais**, a API devolve `400` listando as turmas; com **nenhuma**, orienta cadastrar a turma.
+12. A **turma da grade** (horário fixo do calendário) é **opcional** e **varia por célula**: cada horário do laboratório guarda seu próprio professor, matéria e turma.
 
 ---
 
@@ -156,6 +158,9 @@ Todos os casos (manutenção, prova, evento, feriado) usam esse mesmo formulári
    - Abas por laboratório (Lab 1, Lab 2, Lab 3)
    - Cada célula exibe professor, turma, disciplina e cor por status
    - Clique em célula livre abre a nova reserva naquele horário
+   - Clicar numa célula abre o editor do horário: professor, matéria e **turma**
+     (seletor com as 28 turmas oficiais + opção de cadastrar nova; as turmas do
+     professor digitado aparecem no topo do seletor)
 5. **Nova / editar reserva** — laboratório, dia da semana, períodos, vigência, turma, disciplina e observações; validação de conflito em tempo real
 6. **Minhas reservas** — lista com status, edição, cancelamento da série ou de uma semana
 7. **Aprovação de reservas** (caso a secretária opte por exigir aprovação)

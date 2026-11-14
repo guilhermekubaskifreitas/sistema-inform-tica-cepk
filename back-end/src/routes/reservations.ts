@@ -854,7 +854,30 @@ router.post(
             });
             turma = existing ?? await tx.class.create({ data: { name: data.turma } });
           } else {
-            throw new AppError(400, "Informe a turma que vai ao laboratorio.");
+            // Rede de seguranca: o app antigo nao manda a turma.
+            // Se o professor tem apenas uma turma, preenche automaticamente.
+            const profile = await tx.professor.findFirst({
+              where: { userId: req.user!.id },
+              include: { classes: { include: { class: true } } },
+            });
+            const turmasDoProfessor = (profile?.classes ?? [])
+              .map((item) => item.class)
+              .filter((item) => item.active);
+            if (turmasDoProfessor.length === 1) {
+              turma = turmasDoProfessor[0];
+            } else if (turmasDoProfessor.length > 1) {
+              throw new AppError(
+                400,
+                `Este professor tem ${turmasDoProfessor.length} turmas (${turmasDoProfessor
+                  .map((item) => item.name)
+                  .join(", ")}). Escolha qual turma vai ao laboratorio.`
+              );
+            } else {
+              throw new AppError(
+                400,
+                "Informe a turma que vai ao laboratorio (o professor ainda nao tem turmas cadastradas)."
+              );
+            }
           }
 
 

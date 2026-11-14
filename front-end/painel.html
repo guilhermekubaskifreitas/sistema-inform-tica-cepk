@@ -521,7 +521,8 @@
   .admin-slot-box h3 { margin: 0 0 6px; font-size: 18px; color: var(--ink-900); }
   .admin-slot-box p { margin: 0 0 16px; font-size: 12.5px; color: var(--ink-500); }
   .admin-slot-box label { display: block; margin-top: 12px; font-size: 12px; font-weight: 700; color: var(--ink-700); }
-  .admin-slot-box input {
+  .admin-slot-box input,
+  .admin-slot-box select {
     width: 100%;
     height: 40px;
     margin-top: 6px;
@@ -533,7 +534,17 @@
     font: inherit;
     font-size: 13.5px;
   }
+  .admin-slot-nova {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    margin-top: 10px;
+  }
+  .admin-slot-nova[hidden] { display: none; }
+  .admin-slot-nova input { margin-top: 0; }
+  .admin-slot-nova .btn { height: 40px; white-space: nowrap; }
   .admin-slot-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+
   .admin-slot-actions .btn { flex: 1 1 auto; }
 
   .nav-count {
@@ -642,9 +653,9 @@
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 </style>
-<link rel="stylesheet" href="theme.css?v=20261111e" />
-<script src="pwa.js?v=20261111f"></script>
-<script src="theme.js?v=20261111e"></script>
+<link rel="stylesheet" href="theme.css?v=20261111g" />
+<script src="pwa.js?v=20261111g"></script>
+<script src="theme.js?v=20261111g"></script>
 </head>
 <body>
 
@@ -1050,7 +1061,14 @@
     <input id="admin-slot-professor" type="text" maxlength="120" placeholder="Nome do professor" autocomplete="off" />
     <label for="admin-slot-subject">Matéria</label>
     <input id="admin-slot-subject" type="text" maxlength="160" placeholder="Matéria ou disciplina" autocomplete="off" />
+    <label for="admin-slot-turma">Turma (opcional)</label>
+    <select id="admin-slot-turma"></select>
+    <div class="admin-slot-nova" id="admin-slot-nova" hidden>
+      <input id="admin-slot-nova-nome" type="text" maxlength="40" placeholder="Nome da nova turma (ex.: 4A)" autocomplete="off" />
+      <button type="button" class="btn" id="admin-slot-nova-salvar">Cadastrar</button>
+    </div>
     <div class="admin-slot-actions">
+
       <button type="button" class="btn btn-primary" id="admin-slot-save">Salvar</button>
       <button type="button" class="btn btn-reject" id="admin-slot-clear">Limpar</button>
       <button type="button" class="btn" id="admin-slot-cancel">Cancelar</button>
@@ -1058,7 +1076,9 @@
   </div>
 </div>
 
-<script src="api.js?v=20261111e"></script>
+<script src="api.js?v=20261111g"></script>
+<script src="turmas.js?v=20261111g"></script>
+
 <script>
   (function () {
     "use strict";
@@ -1300,8 +1320,13 @@
             let content = "";
             if (entry) {
               entriesShown += 1;
-              content = '<span class="slot aprovada"><strong>' + escHtml(entry.professor) + "</strong><span>" + escHtml(entry.subject) + "</span></span>";
+              const turmaEntry = entry.turma || entry.className || "";
+              content =
+                '<span class="slot aprovada"><strong>' + escHtml(entry.professor) + "</strong><span>" + escHtml(entry.subject) + "</span>" +
+                (turmaEntry ? '<span class="slot-turma">' + escHtml(turmaEntry) + "</span>" : "") +
+                "</span>";
             } else {
+
               const items = relevant.filter(function (r) {
                 const dias = Array.isArray(r.dias) ? r.dias : [];
                 const aulas = Array.isArray(r.aulas) ? r.aulas.map(Number) : [];
@@ -1309,8 +1334,12 @@
               });
               content = items.map(function (r) {
                 const st = String(r.status).toLowerCase();
-                return '<span class="slot ' + escHtml(st) + '"><strong>' + escHtml(r.professor || "Professor") + "</strong><span>" + escHtml(r.disciplina || "—") + "</span></span>";
+                const turmaReserva = r.turma || r.classe || "";
+                return '<span class="slot ' + escHtml(st) + '"><strong>' + escHtml(r.professor || "Professor") + "</strong><span>" + escHtml(r.disciplina || "—") + "</span>" +
+                  (turmaReserva ? '<span class="slot-turma">' + escHtml(turmaReserva) + "</span>" : "") +
+                  "</span>";
               }).join("");
+
             }
 
             rows += '<td class="slot-cell admin-slot-cell" data-lab="' + escHtml(lab) + '" data-weekday="' + day.num + '" data-period="' + period + '" title="Clique para editar">' +
@@ -1340,6 +1369,68 @@
       }) || null;
     }
 
+    let adminTurmaSelect = null;
+
+    function initAdminTurmaSelect() {
+      if (!window.CEPKTurmas || typeof window.CEPKTurmas.setupClassSelect !== "function") return;
+      if (adminTurmaSelect) return;
+      adminTurmaSelect = window.CEPKTurmas.setupClassSelect({
+        selectId: "admin-slot-turma",
+        placeholder: "— sem turma —",
+        getProfessorName: function () {
+          const input = document.getElementById("admin-slot-professor");
+          return input ? input.value : "";
+        }
+      });
+
+      const select = document.getElementById("admin-slot-turma");
+      const novaBox = document.getElementById("admin-slot-nova");
+      if (select) {
+        select.addEventListener("change", function () {
+          if (novaBox) novaBox.hidden = select.value !== "__nova__";
+        });
+      }
+
+      const professorInput = document.getElementById("admin-slot-professor");
+      if (professorInput) {
+        professorInput.addEventListener("input", function () {
+          if (!adminTurmaSelect) return;
+          const atual = adminTurmaSelect.value();
+          adminTurmaSelect.refresh(atual);
+        });
+      }
+
+      const novaNome = document.getElementById("admin-slot-nova-nome");
+      const novaSalvar = document.getElementById("admin-slot-nova-salvar");
+      if (novaSalvar) {
+        novaSalvar.addEventListener("click", async function () {
+          const nome = novaNome ? novaNome.value.trim() : "";
+          if (!nome) {
+            alert("Informe o nome da nova turma.");
+            return;
+          }
+          if (!window.CEPKApi || typeof window.CEPKApi.createClass !== "function") {
+            alert("Não foi possível cadastrar a turma agora.");
+            return;
+          }
+          novaSalvar.disabled = true;
+          const result = await window.CEPKApi.createClass({ name: nome });
+          novaSalvar.disabled = false;
+          if (!result.ok) {
+            alert(window.CEPKApi.errorMessage(result, "Não foi possível cadastrar a turma."));
+            return;
+          }
+          const criada = result.data && result.data.class ? result.data.class.name : nome;
+          if (novaNome) novaNome.value = "";
+          if (novaBox) novaBox.hidden = true;
+          if (adminTurmaSelect) {
+            await adminTurmaSelect.refresh(criada);
+            adminTurmaSelect.setValue(criada);
+          }
+        });
+      }
+    }
+
     function openAdminSlotEditor(cell) {
       const lab = cell.dataset.lab;
       const weekday = Number(cell.dataset.weekday);
@@ -1355,11 +1446,22 @@
       document.getElementById("admin-slot-professor").value = entry ? entry.professor : "";
       document.getElementById("admin-slot-subject").value = entry ? entry.subject : "";
       document.getElementById("admin-slot-clear").style.display = entry ? "" : "none";
+      initAdminTurmaSelect();
+      const novaBox = document.getElementById("admin-slot-nova");
+      const novaNome = document.getElementById("admin-slot-nova-nome");
+      if (novaBox) novaBox.hidden = true;
+      if (novaNome) novaNome.value = "";
+      if (adminTurmaSelect) {
+        const turmaAtual = entry ? (entry.turma || entry.className || "") : "";
+        adminTurmaSelect.setValue(turmaAtual);
+        adminTurmaSelect.refresh(turmaAtual);
+      }
       const modal = document.getElementById("admin-slot-modal");
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
       document.getElementById("admin-slot-professor").focus();
     }
+
 
     function closeAdminSlotEditor() {
       const modal = document.getElementById("admin-slot-modal");
@@ -1393,6 +1495,7 @@
         alert("Informe o professor e a matéria.");
         return;
       }
+      const turma = adminTurmaSelect ? adminTurmaSelect.value() : "";
       const button = document.getElementById("admin-slot-save");
       button.disabled = true;
       button.textContent = "Salvando...";
@@ -1401,8 +1504,10 @@
         weekday: adminSlotEditing.weekday,
         period: adminSlotEditing.period,
         professor: professor,
-        subject: subject
+        subject: subject,
+        turma: turma
       });
+
       button.disabled = false;
       button.textContent = "Salvar";
       if (!result.ok) {
