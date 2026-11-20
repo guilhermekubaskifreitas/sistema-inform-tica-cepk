@@ -18,7 +18,7 @@ O sistema substitui controles manuais (cadernos e planilhas) por uma **agenda di
 ## 🗺️ Fluxograma do Sistema
 
 📌 **Acesse o fluxograma completo do projeto aqui:**  
-👉 [**Visualizar Fluxograma do Sistema**](INSIRA_AQUI_O_LINK_DO_SEU_FLUXOGRAMA)
+👉 [**Visualizar Fluxograma do Sistema**](https://github.com/guilhermekubaskifreitas/sistema-inform-tica-cepk/blob/main/fluxograma-sistema-cepk.png)
 
 ---
 
